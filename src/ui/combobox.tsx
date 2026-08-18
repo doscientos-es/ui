@@ -1,34 +1,40 @@
-import { Combobox as ComboboxPrimitive } from "@base-ui/react";
 import { Fragment } from "react";
+import {
+  ComboBox as AriaComboBox,
+  ComboBoxValue,
+  Input,
+  ListBox,
+  ListBoxItem,
+  Popover,
+  type ComboBoxProps,
+  type InputProps,
+  type ListBoxItemProps,
+  type ListBoxProps,
+} from "react-aria-components";
 import { cn } from "../lib/cn";
 import { getTextMatchParts } from "../lib/text-match";
 
-export const Combobox = ComboboxPrimitive.Root;
-export const ComboboxValue = ComboboxPrimitive.Value;
-export const ComboboxCollection = ComboboxPrimitive.Collection;
+export const Combobox = AriaComboBox;
+export { ComboBoxValue as ComboboxValue };
 
-export function ComboboxInput({ className, ...props }: ComboboxPrimitive.Input.Props) {
-  return <ComboboxPrimitive.Input data-slot="combobox-input" className={cn("h-8 w-full rounded-lg border border-border bg-background px-2.5 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-3 focus-visible:ring-ring/50", className)} {...props} />;
+export type { ComboBoxProps };
+
+export function ComboboxInput({ className, ...props }: InputProps) {
+  return <Input data-slot="combobox-input" className={cn("h-8 w-full rounded-lg border border-border bg-background px-2.5 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-3 focus-visible:ring-ring/50", className)} {...props} />;
 }
 
-export function ComboboxContent({ className, side = "bottom", sideOffset = 6, align = "start", ...props }: ComboboxPrimitive.Popup.Props & Pick<ComboboxPrimitive.Positioner.Props, "side" | "sideOffset" | "align">) {
-  return <ComboboxPrimitive.Portal><ComboboxPrimitive.Positioner side={side} sideOffset={sideOffset} align={align} className="z-50">
-    <ComboboxPrimitive.Popup data-slot="combobox-content" className={cn("max-h-72 w-(--anchor-width) overflow-hidden rounded-xl border border-border bg-background p-1.5 text-foreground shadow-lg", className)} {...props} />
-  </ComboboxPrimitive.Positioner></ComboboxPrimitive.Portal>;
+export function ComboboxContent({ className, ...props }: React.ComponentProps<typeof Popover>) {
+  return <Popover data-slot="combobox-content" className={cn("max-h-72 w-(--trigger-width) overflow-hidden rounded-xl border border-border bg-background p-1.5 text-foreground shadow-lg", className)} {...props} />;
 }
 
-export function ComboboxList({ className, ...props }: ComboboxPrimitive.List.Props) {
-  return <ComboboxPrimitive.List data-slot="combobox-list" className={cn("max-h-64 overflow-y-auto", className)} {...props} />;
+export function ComboboxList<T extends object>({ className, emptyState, ...props }: ListBoxProps<T> & { emptyState?: React.ReactNode }) {
+  return <ListBox data-slot="combobox-list" className={cn("max-h-64 overflow-y-auto", className)} renderEmptyState={emptyState ? () => emptyState : undefined} {...props} />;
 }
 
-export function ComboboxItem({ className, children, ...props }: ComboboxPrimitive.Item.Props) {
-  return <ComboboxPrimitive.Item data-slot="combobox-item" className={cn("flex w-full cursor-default items-center justify-between rounded-md px-2 py-1.5 text-sm outline-none data-highlighted:bg-muted data-disabled:pointer-events-none data-disabled:opacity-50", className)} {...props}>
-    {children}<ComboboxPrimitive.ItemIndicator aria-hidden="true">✓</ComboboxPrimitive.ItemIndicator>
-  </ComboboxPrimitive.Item>;
-}
-
-export function ComboboxEmpty({ className, ...props }: ComboboxPrimitive.Empty.Props) {
-  return <ComboboxPrimitive.Empty data-slot="combobox-empty" className={cn("px-3 py-7 text-center text-sm text-muted-foreground", className)} {...props} />;
+export function ComboboxItem<T extends object>({ className, children, ...props }: ListBoxItemProps<T>) {
+  return <ListBoxItem data-slot="combobox-item" className={cn("flex w-full cursor-default items-center justify-between rounded-md px-2 py-1.5 text-sm outline-none data-focused:bg-muted data-disabled:pointer-events-none data-disabled:opacity-50", className)} {...props}>
+    {children}
+  </ListBoxItem>;
 }
 
 /** Accent-insensitive visual highlighting for suggestion labels. */

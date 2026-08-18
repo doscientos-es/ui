@@ -8,10 +8,14 @@ Primitives React accesibles, rápidas y temables para los productos de Dosciento
 - Controles: botón, input, textarea, label, badge y skeleton.
 - Formularios: `Field`, descripción y errores accesibles.
 - Overlays: `Dialog` y `ConfirmDialog` controlado.
-- Búsqueda: `Combobox` composable sobre Base UI y `HighlightMatch` sin distinción de mayúsculas o acentos.
+- Búsqueda: `Combobox` composable sobre React Aria y `HighlightMatch` sin distinción de mayúsculas o acentos.
 - Hooks: debounce, cambios no guardados y autosave sin acoplamiento a transporte o datos.
 
 Los componentes de dominio, llamadas API, navegación, toasts y layouts permanecen en cada aplicación.
+
+La única foundation de comportamiento interactivo es `react-aria-components`.
+Los consumidores importan exclusivamente `@doscientos/ui`: React Aria queda
+encapsulado para que las APIs, tokens y accesibilidad sean consistentes.
 
 ## Uso en una aplicación React con Tailwind v4
 
@@ -37,10 +41,11 @@ Los proyectos pueden reemplazar los tokens semánticos en `:root` o `.dark`; no 
 El combobox es composable: la aplicación controla datos, peticiones y caché; la UI resuelve el teclado, foco, filtrado, popup y selección accesible. `HighlightMatch` mantiene el texto original y encuentra coincidencias aunque cambien mayúsculas o acentos.
 
 ```tsx
-<Combobox items={clients} itemToStringLabel={(client) => client.name}>
+<Combobox items={clients} inputValue={query} onInputChange={setQuery}>
   <ComboboxInput placeholder="Busca un cliente…" />
-  <ComboboxContent><ComboboxEmpty>Sin resultados.</ComboboxEmpty>
-    <ComboboxList>{(client) => <ComboboxItem value={client}>
+  <ComboboxContent>
+    <ComboboxList emptyState="Sin resultados.">{(client) => <ComboboxItem
+      id={client.id} textValue={client.name}>
       <HighlightMatch text={client.name} query={query} />
     </ComboboxItem>}</ComboboxList>
   </ComboboxContent>

@@ -1,20 +1,44 @@
-import { Dialog as DialogPrimitive } from "radix-ui";
-import type * as React from "react";
+import { createContext, useContext } from "react";
+import {
+  Dialog as AriaDialog,
+  Heading,
+  Modal,
+  ModalOverlay,
+  Text,
+  type DialogProps as AriaDialogProps,
+  type ModalOverlayProps,
+} from "react-aria-components";
 import { cn } from "../lib/cn";
 import { Button } from "./button";
 
-export const Dialog = DialogPrimitive.Root;
-export const DialogTrigger = DialogPrimitive.Trigger;
-export const DialogClose = DialogPrimitive.Close;
+const DialogCloseContext = createContext<(() => void) | null>(null);
 
-export function DialogContent({ className, children, showCloseButton = true, ...props }: React.ComponentProps<typeof DialogPrimitive.Content> & { showCloseButton?: boolean }) {
-  return <DialogPrimitive.Portal>
-    <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/20 backdrop-blur-[1px]" />
-    <DialogPrimitive.Content data-slot="dialog-content" className={cn("fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-background p-5 text-foreground shadow-xl outline-none", className)} {...props}>
-      {children}
-      {showCloseButton && <DialogPrimitive.Close asChild><Button aria-label="Cerrar diálogo" variant="ghost" size="icon" className="absolute top-2 right-2">×</Button></DialogPrimitive.Close>}
-    </DialogPrimitive.Content>
-  </DialogPrimitive.Portal>;
+export type DialogProps = Omit<ModalOverlayProps, "children" | "className" | "isOpen"> & {
+  children: React.ReactNode;
+  open: boolean;
+};
+
+/** Controlled overlay root. Use `DialogContent` for its accessible surface. */
+export function Dialog({ open, children, ...props }: DialogProps) {
+  return <ModalOverlay isOpen={open} className="fixed inset-0 z-50 grid place-items-center bg-black/20 p-4 backdrop-blur-[1px]" {...props}>
+    {children}
+  </ModalOverlay>;
+}
+
+export function DialogClose({ onPress, ...props }: React.ComponentProps<typeof Button>) {
+  const close = useContext(DialogCloseContext);
+  return <Button onPress={(event) => { onPress?.(event); close?.(); }} {...props} />;
+}
+
+export function DialogContent({ className, children, showCloseButton = true, ...props }: AriaDialogProps & { showCloseButton?: boolean }) {
+  return <Modal className="w-full max-w-md outline-none">
+    <AriaDialog data-slot="dialog-content" className={cn("relative grid max-h-[calc(100dvh-2rem)] gap-4 overflow-y-auto rounded-xl bg-background p-5 text-foreground shadow-xl outline-none", className)} {...props}>
+      {({ close }) => <DialogCloseContext.Provider value={close}>
+        {typeof children === "function" ? children({ close }) : children}
+        {showCloseButton && <DialogClose aria-label="Cerrar diálogo" variant="ghost" size="icon" className="absolute top-2 right-2">×</DialogClose>}
+      </DialogCloseContext.Provider>}
+    </AriaDialog>
+  </Modal>;
 }
 
 export function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
@@ -23,9 +47,9 @@ export function DialogHeader({ className, ...props }: React.ComponentProps<"div"
 export function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
   return <div data-slot="dialog-footer" className={cn("flex flex-col-reverse gap-2 sm:flex-row sm:justify-end", className)} {...props} />;
 }
-export function DialogTitle({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>) {
-  return <DialogPrimitive.Title className={cn("text-base font-semibold", className)} {...props} />;
+export function DialogTitle({ className, ...props }: React.ComponentProps<typeof Heading>) {
+  return <Heading slot="title" className={cn("text-base font-semibold", className)} {...props} />;
 }
-export function DialogDescription({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Description>) {
-  return <DialogPrimitive.Description className={cn("text-sm text-muted-foreground", className)} {...props} />;
+export function DialogDescription({ className, ...props }: React.ComponentProps<typeof Text>) {
+  return <Text slot="description" className={cn("text-sm text-muted-foreground", className)} {...props} />;
 }

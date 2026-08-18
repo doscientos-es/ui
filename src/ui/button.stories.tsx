@@ -16,4 +16,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 export const Destructive: Story = { args: { children: "Eliminar", variant: "destructive" } };
-export const Disabled: Story = { args: { disabled: true } };
+export const Disabled: Story = { args: { isDisabled: true } };

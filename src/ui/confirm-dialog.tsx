@@ -20,8 +20,8 @@ export function ConfirmDialog({ open, onOpenChange, title, description, confirmL
     <DialogContent showCloseButton={false}>
       <DialogHeader><DialogTitle>{title}</DialogTitle>{description && <DialogDescription>{description}</DialogDescription>}</DialogHeader>
       <DialogFooter>
-        <Button variant="outline" disabled={pending} onClick={() => onOpenChange(false)}>{cancelLabel}</Button>
-        <Button variant={destructive ? "destructive" : "default"} disabled={pending} onClick={onConfirm}>{confirmLabel}</Button>
+        <Button variant="outline" isDisabled={pending} onPress={() => onOpenChange(false)}>{cancelLabel}</Button>
+        <Button variant={destructive ? "destructive" : "default"} isDisabled={pending} onPress={onConfirm}>{confirmLabel}</Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>;
