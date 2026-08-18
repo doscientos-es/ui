@@ -34,7 +34,7 @@ export function ProfileName() {
 }
 ```
 
-Los proyectos pueden reemplazar los tokens semánticos en `:root` o `.dark`; no deben modificar los componentes para aplicar una marca cliente.
+Los proyectos pueden definir los tokens semánticos en `:root` o `.dark` para aplicar la marca del cliente; no deben modificar los componentes. `@doscientos/ui` no sobrescribe esos tokens y usa los valores del tema del backoffice como fallback cuando falte alguno.
 
 ## Sugerencias y autocompletado
 

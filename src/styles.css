@@ -3,67 +3,71 @@
 @source "./";
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Consume a host application's semantic tokens without redefining them.
+ * Each alias falls back to the backoffice theme when the host omits a token.
+ */
 :root {
-  --radius: 0.625rem;
-  --background: #fafafa;
-  --foreground: #171717;
-  --card: #ffffff;
-  --background-foreground: #2d2d2d;
-  --primary: #2a4227;
-  --primary-foreground: #ffffff;
-  --secondary: #f3f4f6;
-  --secondary-foreground: #171717;
-  --muted: #f5f5f5;
-  --muted-foreground: #737373;
-  --accent: #bdff7b;
-  --accent-foreground: #1a2e18;
-  --destructive: #ef4444;
-  --success: #16a34a;
-  --warning: #ca8a04;
-  --border: #d4d4d4;
-  --ring: oklch(0.871 0.006 286.286);
+  --ui-radius: var(--radius, 0.625rem);
+  --ui-background: var(--background, #fafafa);
+  --ui-foreground: var(--foreground, #171717);
+  --ui-card: var(--card, #ffffff);
+  --ui-background-foreground: var(--background-foreground, #2d2d2d);
+  --ui-primary: var(--primary, #2a4227);
+  --ui-primary-foreground: var(--primary-foreground, #ffffff);
+  --ui-secondary: var(--secondary, #f3f4f6);
+  --ui-secondary-foreground: var(--secondary-foreground, #171717);
+  --ui-muted: var(--muted, #f5f5f5);
+  --ui-muted-foreground: var(--muted-foreground, #737373);
+  --ui-accent: var(--accent, #bdff7b);
+  --ui-accent-foreground: var(--accent-foreground, #1a2e18);
+  --ui-destructive: var(--destructive, #ef4444);
+  --ui-success: var(--success, #16a34a);
+  --ui-warning: var(--warning, #ca8a04);
+  --ui-border: var(--border, #d4d4d4);
+  --ui-ring: var(--ring, oklch(0.871 0.006 286.286));
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --background-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: #bdff7b;
-  --accent-foreground: #1a2e18;
-  --destructive: oklch(0.704 0.191 22.216);
-  --success: #22c55e;
-  --warning: #eab308;
-  --border: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --ui-background: var(--background, oklch(0.145 0 0));
+  --ui-foreground: var(--foreground, oklch(0.985 0 0));
+  --ui-card: var(--card, oklch(0.205 0 0));
+  --ui-background-foreground: var(--background-foreground, oklch(0.985 0 0));
+  --ui-primary: var(--primary, oklch(0.922 0 0));
+  --ui-primary-foreground: var(--primary-foreground, oklch(0.205 0 0));
+  --ui-secondary: var(--secondary, oklch(0.269 0 0));
+  --ui-secondary-foreground: var(--secondary-foreground, oklch(0.985 0 0));
+  --ui-muted: var(--muted, oklch(0.269 0 0));
+  --ui-muted-foreground: var(--muted-foreground, oklch(0.708 0 0));
+  --ui-accent: var(--accent, #bdff7b);
+  --ui-accent-foreground: var(--accent-foreground, #1a2e18);
+  --ui-destructive: var(--destructive, oklch(0.704 0.191 22.216));
+  --ui-success: var(--success, #22c55e);
+  --ui-warning: var(--warning, #eab308);
+  --ui-border: var(--border, oklch(1 0 0 / 15%));
+  --ui-ring: var(--ring, oklch(0.556 0 0));
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-background-foreground: var(--background-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-success: var(--success);
-  --color-warning: var(--warning);
-  --color-border: var(--border);
-  --color-ring: var(--ring);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
+  --color-background: var(--ui-background);
+  --color-foreground: var(--ui-foreground);
+  --color-card: var(--ui-card);
+  --color-background-foreground: var(--ui-background-foreground);
+  --color-primary: var(--ui-primary);
+  --color-primary-foreground: var(--ui-primary-foreground);
+  --color-secondary: var(--ui-secondary);
+  --color-secondary-foreground: var(--ui-secondary-foreground);
+  --color-muted: var(--ui-muted);
+  --color-muted-foreground: var(--ui-muted-foreground);
+  --color-accent: var(--ui-accent);
+  --color-accent-foreground: var(--ui-accent-foreground);
+  --color-destructive: var(--ui-destructive);
+  --color-success: var(--ui-success);
+  --color-warning: var(--ui-warning);
+  --color-border: var(--ui-border);
+  --color-ring: var(--ui-ring);
+  --radius-sm: calc(var(--ui-radius) * 0.6);
+  --radius-md: calc(var(--ui-radius) * 0.8);
+  --radius-lg: var(--ui-radius);
+  --radius-xl: calc(var(--ui-radius) * 1.4);
 }
