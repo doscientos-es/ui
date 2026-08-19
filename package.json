@@ -43,7 +43,7 @@
   },
   "packageManager": "pnpm@9.15.2",
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
