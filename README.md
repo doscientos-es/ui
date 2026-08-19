@@ -66,11 +66,9 @@ Un componente entra cuando ya resuelve dos contextos reales o una necesidad tran
 
 ## Releases
 
-Este paquete usa **Release Please** y Conventional Commits. Los PRs requieren
-un título como `feat(ui): add command menu` o `fix: prevent focus loss` y deben
-fusionarse con *squash merge* conservando ese título. Release Please abrirá un
-PR con la versión y `CHANGELOG.md`; al fusionarlo, crea el tag, GitHub Release y
-publica el paquete con npm Trusted Publishing y provenance.
+Cada push directo a `main` valida el paquete, incrementa automáticamente la
+versión de parche, crea el commit y tag `vX.Y.Z`, y publica ese artefacto en npm
+con Trusted Publishing y provenance. No modifiques `version` manualmente.
 
 Antes de activar este flujo, `modules/ui` debe vivir en su propio repositorio
 GitHub y el publisher de npm debe vincular ese repositorio con
@@ -78,6 +76,5 @@ GitHub y el publisher de npm debe vincular ese repositorio con
 activen al trasladar el módulo a ese repositorio; no hace falta guardar un token
 de npm en GitHub.
 
-Proteged `main` para exigir CI y el check de título convencional, y permitid
-solo *squash merge*: así el título validado se conserva como el commit que
-Release Please analiza.
+Proteged `main` para exigir CI. El commit de versión se realiza con
+`github-actions[bot]` y el workflow lo ignora para evitar un ciclo de publicación.
