@@ -4,6 +4,10 @@
   "private": false,
   "description": "Accessible, themeable React primitives for Doscientos products.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/doscientos-es/ui"
+  },
   "type": "module",
   "sideEffects": [
     "./dist/styles.css"
