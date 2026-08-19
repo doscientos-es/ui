@@ -5,9 +5,9 @@ Primitives React accesibles, rápidas y temables para los productos de Dosciento
 ## Alcance de la primera versión
 
 - Tokens CSS del backoffice y tema claro/oscuro.
-- Controles: botón, input, textarea, label, badge y skeleton.
+- Controles: botón, input, textarea, label, badge, separadores, atajos de teclado y skeleton.
 - Formularios: `Field`, descripción y errores accesibles.
-- Overlays: `Dialog` y `ConfirmDialog` controlado.
+- Navegación y overlays: tabs, tooltip, popover, `Dialog` y `ConfirmDialog` controlado.
 - Búsqueda: `Combobox` composable sobre React Aria y `HighlightMatch` sin distinción de mayúsculas o acentos.
 - Hooks: debounce, cambios no guardados y autosave sin acoplamiento a transporte o datos.
 
