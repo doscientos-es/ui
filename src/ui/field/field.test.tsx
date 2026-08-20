@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Field, FieldError, FieldLabel } from "./field";
-import { Input } from "./input";
+import { Input } from "../input/input";
 
 describe("Field", () => {
   it("connects native labels and exposes validation feedback as an alert", () => {

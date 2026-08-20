@@ -1,6 +1,6 @@
 import type * as React from "react";
-import { cn } from "../lib/cn";
-import { Label } from "./label";
+import { cn } from "../../lib/cn";
+import { Label } from "../label/label";
 
 export function Field({ className, ...props }: React.ComponentProps<"div">) {
   return <div data-slot="field" className={cn("flex w-full flex-col gap-2", className)} {...props} />;

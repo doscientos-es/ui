@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { Input as AriaInput, type InputProps as AriaInputProps } from "react-aria-components";
-import { cn } from "../lib/cn";
+import { cn } from "../../lib/cn";
 
 type CompatibleRef<T> = ((instance: T | null) => unknown) | { readonly current: T | null } | null;
 

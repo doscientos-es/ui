@@ -11,7 +11,7 @@ import {
   type TabProps as AriaTabProps,
   type TabsProps as AriaTabsProps,
 } from "react-aria-components";
-import { cn } from "../lib/cn";
+import { cn } from "../../lib/cn";
 
 export type TabsProps = AriaTabsProps;
 export type TabProps = AriaTabProps;

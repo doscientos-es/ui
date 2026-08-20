@@ -6,7 +6,7 @@ import {
   type MenuItemProps,
   type MenuProps,
 } from "react-aria-components";
-import { cn } from "../lib/cn";
+import { cn } from "../../lib/cn";
 
 export const MenuTrigger = AriaMenuTrigger;
 

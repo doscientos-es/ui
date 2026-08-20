@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { Button } from "./button";
-import { Checkbox } from "./checkbox";
-import { Menu, MenuContent, MenuItem, MenuTrigger } from "./menu";
-import { SearchClearButton, SearchField, SearchInput } from "./search-field";
-import { Select, SelectContent, SelectItem, SelectList, SelectTrigger, SelectValue } from "./select";
-import { Switch } from "./switch";
+import { Button } from "../button/button";
+import { Checkbox } from "../checkbox/checkbox";
+import { Menu, MenuContent, MenuItem, MenuTrigger } from "../menu/menu";
+import { SearchClearButton, SearchField, SearchInput } from "../search-field/search-field";
+import { Select, SelectContent, SelectItem, SelectList, SelectTrigger, SelectValue } from "../select/select";
+import { Switch } from "../switch/switch";
 
 const priorities = [
   { id: "low", name: "Baja" },
@@ -13,7 +13,7 @@ const priorities = [
   { id: "high", name: "Alta" },
 ];
 
-const meta = { title: "Forms/Controls" } satisfies Meta;
+const meta = { title: "Patterns/Controls" } satisfies Meta;
 export default meta;
 type Story = StoryObj<typeof meta>;
 

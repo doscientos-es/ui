@@ -4,7 +4,7 @@ import {
   type DialogTriggerProps,
   type PopoverProps as AriaPopoverProps,
 } from "react-aria-components";
-import { cn } from "../lib/cn";
+import { cn } from "../../lib/cn";
 
 export type PopoverProps = Omit<AriaPopoverProps, "className"> & { className?: string };
 export type { DialogTriggerProps as PopoverTriggerProps };

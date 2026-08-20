@@ -1,5 +1,5 @@
 import type * as React from "react";
-import { cn } from "../lib/cn";
+import { cn } from "../../lib/cn";
 
 /** Presentational table primitives. Sorting, pagination and data state stay in the application. */
 export function Table({ className, ...props }: React.ComponentProps<"table">) {

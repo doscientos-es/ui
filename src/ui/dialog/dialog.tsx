@@ -1,4 +1,5 @@
 import { createContext, useContext } from "react";
+import { XIcon } from "@phosphor-icons/react";
 import {
   Dialog as AriaDialog,
   Heading,
@@ -8,8 +9,8 @@ import {
   type DialogProps as AriaDialogProps,
   type ModalOverlayProps,
 } from "react-aria-components";
-import { cn } from "../lib/cn";
-import { Button } from "./button";
+import { cn } from "../../lib/cn";
+import { Button } from "../button/button";
 
 const DialogCloseContext = createContext<(() => void) | null>(null);
 
@@ -35,7 +36,7 @@ export function DialogContent({ className, children, showCloseButton = true, ...
     <AriaDialog data-slot="dialog-content" className={cn("relative grid max-h-[calc(100dvh-2rem)] gap-4 overflow-y-auto rounded-xl bg-background p-5 text-foreground shadow-xl outline-none", className)} {...props}>
       {({ close }) => <DialogCloseContext.Provider value={close}>
         {typeof children === "function" ? children({ close }) : children}
-        {showCloseButton && <DialogClose aria-label="Cerrar diálogo" variant="ghost" size="icon" className="absolute top-2 right-2">×</DialogClose>}
+        {showCloseButton && <DialogClose aria-label="Cerrar diálogo" variant="ghost" size="icon" className="absolute top-2 right-2"><XIcon aria-hidden="true" weight="bold" className="size-4" /></DialogClose>}
       </DialogCloseContext.Provider>}
     </AriaDialog>
   </Modal>;

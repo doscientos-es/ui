@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, userEvent, within } from "storybook/test";
-import { Combobox, ComboboxContent, ComboboxInput, ComboboxItem, ComboboxList, HighlightMatch } from "./combobox";
+import { AutocompleteCombobox, Combobox, ComboboxContent, ComboboxInput, ComboboxItem, ComboboxList, HighlightMatch } from "./combobox";
 
 const fruits = ["Manzana", "Mandarina", "Melocotón", "Pera", "Plátano"].map((name) => ({ id: name.toLowerCase(), name }));
-const meta = { title: "Forms/Combobox", tags: ["test:ui"] } satisfies Meta;
+const meta = { title: "Components/Forms/Combobox", tags: ["test:ui"] } satisfies Meta;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
@@ -38,3 +38,8 @@ export const Suggestions: Story = {
     await expect(input).toHaveValue("Melocotón");
   },
 };
+
+const users = [{ id: "ana", name: "Ana García", email: "ana@doscientos.com", role: "Administración" }, { id: "bruno", name: "Bruno López", email: "bruno@doscientos.com", role: "Ventas" }, { id: "carla", name: "Carla Martín", email: "carla@doscientos.com", role: "Operaciones" }];
+export const EntitySearch: Story = { render: () => <div className="w-96"><AutocompleteCombobox aria-label="Asignar responsable" label="Responsable" description="Escribe un nombre, email o usa las flechas para navegar." placeholder="Busca una persona…" items={users} getItemKey={(user) => user.id} getItemLabel={(user) => user.name} renderItem={(user, query) => <div className="flex min-w-0 items-center gap-2"><div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-medium text-accent-foreground">{user.name.split(" ").map((part) => part[0]).join("")}</div><div className="min-w-0"><p className="truncate font-medium"><HighlightMatch text={user.name} query={query} /></p><p className="truncate text-xs text-muted-foreground">{user.email} · {user.role}</p></div></div>} /></div> };
+const contracts = [{ id: "1", number: "CON-2026-001", price: "1.250,00 €" }, { id: "2", number: "CON-2026-014", price: "4.800,00 €" }, { id: "3", number: "CON-2025-088", price: "950,00 €" }];
+export const ContractSearch: Story = { render: () => <div className="w-96"><AutocompleteCombobox aria-label="Contrato" label="Contrato" placeholder="Número de contrato…" items={contracts} getItemKey={(contract) => contract.id} getItemLabel={(contract) => contract.number} renderItem={(contract, query) => <div className="flex w-full items-center justify-between gap-4"><HighlightMatch text={contract.number} query={query} /><span className="text-xs text-muted-foreground">{contract.price}</span></div>} /></div> };

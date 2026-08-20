@@ -1,5 +1,5 @@
 import { Separator as AriaSeparator, type SeparatorProps as AriaSeparatorProps } from "react-aria-components";
-import { cn } from "../lib/cn";
+import { cn } from "../../lib/cn";
 
 export type SeparatorProps = Omit<AriaSeparatorProps, "className"> & { className?: string };
 

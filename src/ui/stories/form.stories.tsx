@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Field, FieldDescription, FieldError, FieldLabel } from "./field";
-import { Input } from "./input";
-import { Textarea } from "./textarea";
+import { Field, FieldDescription, FieldError, FieldLabel } from "../field/field";
+import { Input } from "../input/input";
+import { Textarea } from "../textarea/textarea";
 
-const meta = { title: "Forms/Field" } satisfies Meta;
+const meta = { title: "Patterns/Form States" } satisfies Meta;
 export default meta;
 type Story = StoryObj<typeof meta>;
 

@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { TextArea as AriaTextArea, type TextAreaProps as AriaTextAreaProps } from "react-aria-components";
-import { cn } from "../lib/cn";
+import { cn } from "../../lib/cn";
 
 type CompatibleRef<T> = ((instance: T | null) => unknown) | { readonly current: T | null } | null;
 

@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { Button } from "./button";
-import { ConfirmDialog } from "./confirm-dialog";
+import { Button } from "../button/button";
+import { ConfirmDialog } from "../confirm-dialog/confirm-dialog";
 
-const meta = { title: "Overlays/ConfirmDialog" } satisfies Meta;
+const meta = { title: "Components/Overlays/ConfirmDialog" } satisfies Meta;
 export default meta;
 type Story = StoryObj<typeof meta>;
 

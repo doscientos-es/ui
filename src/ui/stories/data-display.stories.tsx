@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Badge } from "./badge";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./card";
-import { EmptyState, EmptyStateDescription, EmptyStateTitle } from "./empty-state";
-import { Skeleton } from "./skeleton";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./table";
+import { Badge } from "../badge/badge";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../card/card";
+import { EmptyState, EmptyStateDescription, EmptyStateTitle } from "../empty-state/empty-state";
+import { Skeleton } from "../skeleton/skeleton";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../table/table";
 
-const meta = { title: "Data display/Patterns" } satisfies Meta;
+const meta = { title: "Patterns/Data Display" } satisfies Meta;
 export default meta;
 type Story = StoryObj<typeof meta>;
 

@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button } from "./button";
-import { Kbd, KbdGroup } from "./kbd";
-import { Popover, PopoverTrigger } from "./popover";
-import { Separator } from "./separator";
-import { Tabs, TabsContent, TabsList, TabsPanels, TabsTrigger } from "./tabs";
-import { Tooltip, TooltipTrigger } from "./tooltip";
+import { Button } from "../button/button";
+import { Kbd, KbdGroup } from "../kbd/kbd";
+import { Popover, PopoverTrigger } from "../popover/popover";
+import { Separator } from "../separator/separator";
+import { Tabs, TabsContent, TabsList, TabsPanels, TabsTrigger } from "../tabs/tabs";
+import { Tooltip, TooltipTrigger } from "../tooltip/tooltip";
 
-const meta = { title: "Navigation/Primitives" } satisfies Meta;
+const meta = { title: "Patterns/Navigation" } satisfies Meta;
 export default meta;
 type Story = StoryObj<typeof meta>;
 

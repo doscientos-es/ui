@@ -9,7 +9,8 @@ export const doscientosTheme = create({
   fontCode: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
   brandTitle: "doscientos UI",
   brandUrl: "https://doscientos.es",
-  brandImage: "/doscientos-mark.svg",
+  // A horizontal lockup keeps the manager header compact while retaining the brand.
+  brandImage: "/doscientos-ui.svg",
   brandTarget: "_self",
   colorPrimary: "#2a4227",
   colorSecondary: "#2a4227",

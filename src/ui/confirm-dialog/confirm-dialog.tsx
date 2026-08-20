@@ -1,6 +1,6 @@
 import type * as React from "react";
-import { Button } from "./button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "./dialog";
+import { Button } from "../button/button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../dialog/dialog";
 
 export type ConfirmDialogProps = {
   open: boolean;

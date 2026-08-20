@@ -4,7 +4,7 @@ import {
   type TooltipProps as AriaTooltipProps,
   type TooltipTriggerComponentProps,
 } from "react-aria-components";
-import { cn } from "../lib/cn";
+import { cn } from "../../lib/cn";
 
 export type TooltipProps = Omit<AriaTooltipProps, "className"> & { className?: string };
 export type { TooltipTriggerComponentProps };
