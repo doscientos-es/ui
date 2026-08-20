@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 /** Returns a value only after it has been stable for the supplied delay. */
-export function useDebouncedValue<T>(value: T, delay = 250) {
+export function useDebouncedValue<T>(value: T, delay: number = 250) {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
