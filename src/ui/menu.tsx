@@ -11,7 +11,7 @@ import { cn } from "../lib/cn";
 export const MenuTrigger = AriaMenuTrigger;
 
 export function MenuContent({ className, ...props }: React.ComponentProps<typeof Popover>) {
-  return <Popover data-slot="menu-content" className={cn("min-w-40 overflow-hidden rounded-xl border border-border bg-background p-1.5 text-foreground shadow-lg", className)} {...props} />;
+  return <Popover data-slot="menu-content" className={cn("min-w-40 overflow-hidden rounded-xl border border-border bg-background p-1.5 text-foreground shadow-lg motion-safe:data-entering:animate-ui-surface-in motion-safe:data-exiting:animate-ui-surface-out", className)} {...props} />;
 }
 
 export function Menu<T extends object>({ className, ...props }: MenuProps<T>) {

@@ -26,7 +26,10 @@ const preview: Preview = {
   },
   decorators: [
     (Story, context) => (
-      <div className={`${context.globals.theme === "dark" ? "dark " : ""}min-h-80 min-w-80 bg-background p-8 text-foreground`}>
+      <div
+        className={`${context.globals.theme === "dark" ? "dark " : ""}min-h-80 min-w-80 bg-background p-8 text-foreground`}
+        style={{ fontFamily: "ui-sans-serif, system-ui, sans-serif" }}
+      >
         <Story />
       </div>
     ),

@@ -24,7 +24,7 @@ export function SelectValue({ className, ...props }: React.ComponentProps<typeof
 }
 
 export function SelectContent({ className, ...props }: React.ComponentProps<typeof Popover>) {
-  return <Popover data-slot="select-content" className={cn("w-(--trigger-width) overflow-hidden rounded-xl border border-border bg-background p-1.5 text-foreground shadow-lg", className)} {...props} />;
+  return <Popover data-slot="select-content" className={cn("w-(--trigger-width) overflow-hidden rounded-xl border border-border bg-background p-1.5 text-foreground shadow-lg motion-safe:data-entering:animate-ui-surface-in motion-safe:data-exiting:animate-ui-surface-out", className)} {...props} />;
 }
 
 export function SelectList<T extends object>({ className, ...props }: ListBoxProps<T>) {

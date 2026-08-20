@@ -71,3 +71,36 @@
   --radius-lg: var(--ui-radius);
   --radius-xl: calc(var(--ui-radius) * 1.4);
 }
+
+@theme {
+  --animate-ui-surface-in: ui-surface-in 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-ui-surface-out: ui-surface-out 100ms ease-in;
+  --animate-ui-overlay-in: ui-overlay-in 150ms ease-out;
+  --animate-ui-overlay-out: ui-overlay-out 100ms ease-in;
+
+  @keyframes ui-surface-in {
+    from {
+      opacity: 0;
+      transform: translateY(-0.125rem) scale(0.98);
+    }
+  }
+
+  @keyframes ui-surface-out {
+    to {
+      opacity: 0;
+      transform: translateY(-0.0625rem) scale(0.98);
+    }
+  }
+
+  @keyframes ui-overlay-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes ui-overlay-out {
+    to {
+      opacity: 0;
+    }
+  }
+}

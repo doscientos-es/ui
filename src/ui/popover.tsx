@@ -13,7 +13,7 @@ export type { DialogTriggerProps as PopoverTriggerProps };
 export const PopoverTrigger = AriaDialogTrigger;
 
 export function Popover({ className, ...props }: PopoverProps) {
-  return <AriaPopover data-slot="popover" offset={6} className={cn("min-w-48 rounded-xl border border-border bg-background p-1.5 text-foreground shadow-lg outline-none data-entering:animate-in data-entering:fade-in-0 data-entering:zoom-in-95 data-exiting:animate-out data-exiting:fade-out-0 data-exiting:zoom-out-95", className)} {...props} />;
+  return <AriaPopover data-slot="popover" offset={6} className={cn("min-w-48 rounded-xl border border-border bg-background p-1.5 text-foreground shadow-lg outline-none motion-safe:data-entering:animate-ui-surface-in motion-safe:data-exiting:animate-ui-surface-out", className)} {...props} />;
 }
 
 export const PopoverContent = Popover;

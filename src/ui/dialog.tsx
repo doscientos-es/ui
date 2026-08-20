@@ -20,7 +20,7 @@ export type DialogProps = Omit<ModalOverlayProps, "children" | "className" | "is
 
 /** Controlled overlay root. Use `DialogContent` for its accessible surface. */
 export function Dialog({ open, children, ...props }: DialogProps) {
-  return <ModalOverlay isOpen={open} className="fixed inset-0 z-50 grid place-items-center bg-black/20 p-4 backdrop-blur-[1px]" {...props}>
+  return <ModalOverlay isOpen={open} className="fixed inset-0 z-50 grid place-items-center bg-black/20 p-4 backdrop-blur-[1px] motion-safe:data-entering:animate-ui-overlay-in motion-safe:data-exiting:animate-ui-overlay-out" {...props}>
     {children}
   </ModalOverlay>;
 }
@@ -31,7 +31,7 @@ export function DialogClose({ onPress, ...props }: React.ComponentProps<typeof B
 }
 
 export function DialogContent({ className, children, showCloseButton = true, ...props }: AriaDialogProps & { showCloseButton?: boolean }) {
-  return <Modal className="w-full max-w-md outline-none">
+  return <Modal className="w-full max-w-md outline-none motion-safe:data-entering:animate-ui-surface-in motion-safe:data-exiting:animate-ui-surface-out">
     <AriaDialog data-slot="dialog-content" className={cn("relative grid max-h-[calc(100dvh-2rem)] gap-4 overflow-y-auto rounded-xl bg-background p-5 text-foreground shadow-xl outline-none", className)} {...props}>
       {({ close }) => <DialogCloseContext.Provider value={close}>
         {typeof children === "function" ? children({ close }) : children}
