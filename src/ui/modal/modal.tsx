@@ -91,7 +91,7 @@ function Dialog({
               className="absolute top-2 right-2"
               size="sm"
             >
-              <XIcon />
+              <X />
               <span className="sr-only">Close</span>
             </DialogClose>
           )}

@@ -97,7 +97,7 @@ export function SidebarSearch({
 			)}
 			{...props}
 		>
-			<MagnifyingGlassIcon className="size-4 shrink-0" />
+			<Search className="size-4 shrink-0" />
 			<span className="flex-1 text-left">{label}</span>
 			<kbd className="rounded bg-secondary px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
 				{shortcut}
@@ -236,7 +236,7 @@ export function SidebarTrigger({ className, ...props }: ButtonProps) {
 			className={cn("ml-auto", className)}
 			{...props}
 		>
-			{collapsed ? <CaretRightIcon /> : <CaretLeftIcon />}
+			{collapsed ? <ChevronRight /> : <ChevronLeft />}
 		</Button>
 	);
 }
@@ -269,7 +269,7 @@ export function SidebarMore({ className, ...props }: ButtonProps) {
 			className={cn("size-7", className)}
 			{...props}
 		>
-			<DotsThreeIcon />
+			<Ellipsis />
 		</Button>
 	);
 }

@@ -24,9 +24,9 @@ export function FormFeedback({ state, className, pendingLabel = "Guardando…", 
   const error = state.status === "error";
   const success = state.status === "success";
   return <span role={error ? "alert" : "status"} aria-live="polite" className={cn("inline-flex h-5 items-center gap-1.5 text-xs", error && "text-destructive", success && "text-success", state.status === "pending" && "text-muted-foreground", className)}>
-    {state.status === "pending" && <CircleNotchIcon aria-hidden="true" className="size-3.5 animate-spin" />}
-    {success && <CheckCircleIcon aria-hidden="true" className="size-3.5" />}
-    {error && <WarningCircleIcon aria-hidden="true" className="size-3.5" />}
+    {state.status === "pending" && <LoaderCircle aria-hidden="true" className="size-3.5 animate-spin" />}
+    {success && <CheckCircle aria-hidden="true" className="size-3.5" />}
+    {error && <CircleAlert aria-hidden="true" className="size-3.5" />}
     <span>{state.status === "pending" ? pendingLabel : success ? state.message ?? successLabel : state.message}</span>
   </span>;
 }

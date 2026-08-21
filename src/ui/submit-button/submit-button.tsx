@@ -7,5 +7,5 @@ export interface SubmitButtonProps extends Omit<ButtonProps, "type"> { pendingLa
 export function SubmitButton({ pendingLabel = "Guardando…", loading = false, children, isDisabled, size = "sm", ...props }: SubmitButtonProps) {
   const { pending } = useFormStatus();
   const busy = pending || loading;
-  return <Button type="submit" size={size} isDisabled={busy || isDisabled} aria-busy={busy || undefined} {...props}>{busy ? <><CircleNotchIcon aria-hidden="true" className="size-3.5 animate-spin" />{pendingLabel}</> : children}</Button>;
+  return <Button type="submit" size={size} isDisabled={busy || isDisabled} aria-busy={busy || undefined} {...props}>{busy ? <><LoaderCircle aria-hidden="true" className="size-3.5 animate-spin" />{pendingLabel}</> : children}</Button>;
 }

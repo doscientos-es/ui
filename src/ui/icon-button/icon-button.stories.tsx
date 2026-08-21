@@ -18,13 +18,13 @@ export const Default: Story = {
   render: () => (
     <div className="flex items-center gap-2">
       <IconButton label="Descargar PDF" variant="outline">
-        <DownloadSimpleIcon />
+        <Download />
       </IconButton>
       <IconButton label="Enviar email" variant="outline">
-        <EnvelopeSimpleIcon />
+        <Mail />
       </IconButton>
       <IconButton label="Ajustes" variant="ghost">
-        <GearIcon />
+        <Settings />
       </IconButton>
     </div>
   ),

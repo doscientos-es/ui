@@ -36,19 +36,19 @@ export const Default: Story = {
 						<SidebarGroup label="Workspace">
 							<SidebarItem
 								href="#"
-								icon={<HouseIcon />}
+								icon={<House />}
 								label="Inicio"
 								active
 							/>
 							<SidebarItem
 								href="#"
-								icon={<UsersThreeIcon />}
+								icon={<Users />}
 								label="Clientes"
 								badge="12"
 							/>
 						</SidebarGroup>
 						<SidebarGroup label="Sistema">
-							<SidebarItem href="#" icon={<GearIcon />} label="Configuración" />
+							<SidebarItem href="#" icon={<Settings />} label="Configuración" />
 						</SidebarGroup>
 					</SidebarContent>
 					<SidebarFooter>
@@ -73,13 +73,13 @@ export const Collapsed: Story = {
 						<SidebarGroup>
 							<SidebarItem
 								href="#"
-								icon={<HouseIcon />}
+								icon={<House />}
 								label="Inicio"
 								active
 							/>
 							<SidebarItem
 								href="#"
-								icon={<UsersThreeIcon />}
+								icon={<Users />}
 								label="Clientes"
 							/>
 						</SidebarGroup>
