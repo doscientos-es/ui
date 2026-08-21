@@ -1,5 +1,5 @@
 import * as React from "react"
-import { XIcon } from "@phosphor-icons/react"
+import { X } from "lucide-react"
 import {
   Dialog as DialogPrimitive,
   DialogTrigger as DialogTriggerPrimitive,

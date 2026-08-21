@@ -1,4 +1,4 @@
-import { GearIcon, HouseIcon, UsersThreeIcon } from "@phosphor-icons/react";
+import { Settings, House, Users } from "lucide-react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
 	Sidebar,

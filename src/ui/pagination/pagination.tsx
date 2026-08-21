@@ -1,4 +1,4 @@
-import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "../button/button";
 import { cn } from "../../lib/cn";
 export type PaginationProps = { page: number; pageCount: number; onPageChange: (page: number) => void; className?: string };

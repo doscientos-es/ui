@@ -1,5 +1,5 @@
 import { useFormStatus } from "react-dom";
-import { CircleNotchIcon } from "@phosphor-icons/react";
+import { LoaderCircle } from "lucide-react";
 import { Button, type ButtonProps } from "../button/button";
 
 export interface SubmitButtonProps extends Omit<ButtonProps, "type"> { pendingLabel?: string; loading?: boolean; children: React.ReactNode; }

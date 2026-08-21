@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { FunnelIcon, PlusIcon } from "@phosphor-icons/react";
+import { Funnel, Plus } from "lucide-react";
 import { Button } from "../button/button";
 import { Input } from "../input/input";
 import { Toolbar, ToolbarGroup, ToolbarSpacer } from "./toolbar";

@@ -1,8 +1,8 @@
 import {
-  DownloadSimpleIcon,
-  EnvelopeSimpleIcon,
-  GearIcon,
-} from "@phosphor-icons/react";
+  Download,
+  Mail,
+  Settings,
+} from "lucide-react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { IconButton } from "./icon-button";
 

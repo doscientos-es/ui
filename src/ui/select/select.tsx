@@ -10,14 +10,14 @@ import {
   type ListBoxItemProps,
   type ListBoxProps,
 } from "react-aria-components";
-import { CaretDownIcon } from "@phosphor-icons/react";
+import { ChevronDown } from "lucide-react";
 import { cn } from "../../lib/cn";
 
 export const Select = AriaSelect;
 export type { AriaSelectProps as SelectProps };
 
 export function SelectTrigger({ className, children, ...props }: ButtonProps) {
-  return <AriaButton data-slot="select-trigger" className={cn("group/select-trigger flex h-8 w-full min-w-36 items-center gap-2 rounded-lg border border-border bg-background px-2.5 text-left text-sm text-foreground outline-none data-focus-visible:ring-3 data-focus-visible:ring-ring/50 data-disabled:cursor-not-allowed data-disabled:opacity-50", className)} {...props}>{(state) => <>{typeof children === "function" ? children(state) : children}<CaretDownIcon aria-hidden="true" weight="bold" className="ml-auto size-4 text-muted-foreground transition-transform group-data-pressed/select-trigger:rotate-180 motion-reduce:transition-none" /></>}</AriaButton>;
+  return <AriaButton data-slot="select-trigger" className={cn("group/select-trigger flex h-8 w-full min-w-36 items-center gap-2 rounded-lg border border-border bg-background px-2.5 text-left text-sm text-foreground outline-none data-focus-visible:ring-3 data-focus-visible:ring-ring/50 data-disabled:cursor-not-allowed data-disabled:opacity-50", className)} {...props}>{(state) => <>{typeof children === "function" ? children(state) : children}<CaretDownIcon aria-hidden="true" className="ml-auto size-4 text-muted-foreground transition-transform group-data-pressed/select-trigger:rotate-180 motion-reduce:transition-none" /></>}</AriaButton>;
 }
 
 export function SelectValue({ className, ...props }: React.ComponentProps<typeof AriaSelectValue>) {

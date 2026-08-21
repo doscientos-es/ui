@@ -1,9 +1,9 @@
 import {
-	CaretLeftIcon,
-	CaretRightIcon,
-	DotsThreeIcon,
-	MagnifyingGlassIcon,
-} from "@phosphor-icons/react";
+	ChevronLeft,
+	ChevronRight,
+	Ellipsis,
+	Search,
+} from "lucide-react";
 import {
 	createContext,
 	type ReactNode,
@@ -269,7 +269,7 @@ export function SidebarMore({ className, ...props }: ButtonProps) {
 			className={cn("size-7", className)}
 			{...props}
 		>
-			<DotsThreeIcon weight="bold" />
+			<DotsThreeIcon />
 		</Button>
 	);
 }
