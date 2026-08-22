@@ -1,6 +1,6 @@
 import type * as React from "react";
 import { Button } from "../button/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../dialog/dialog";
+import { ModalDialog } from "../modal-dialog/modal-dialog";
 
 export type ConfirmDialogProps = {
   open: boolean;
@@ -15,14 +15,34 @@ export type ConfirmDialogProps = {
 };
 
 /** Controlled confirmation dialog for irreversible actions. */
-export function ConfirmDialog({ open, onOpenChange, title, description, confirmLabel = "Confirmar", cancelLabel = "Cancelar", destructive = false, pending = false, onConfirm }: ConfirmDialogProps) {
-  return <Dialog open={open} onOpenChange={onOpenChange}>
-    <DialogContent showCloseButton={false}>
-      <DialogHeader><DialogTitle>{title}</DialogTitle>{description && <DialogDescription>{description}</DialogDescription>}</DialogHeader>
-      <DialogFooter>
-        <Button variant="outline" isDisabled={pending} onPress={() => onOpenChange(false)}>{cancelLabel}</Button>
-        <Button variant={destructive ? "destructive" : "default"} isDisabled={pending} onPress={onConfirm}>{confirmLabel}</Button>
-      </DialogFooter>
-    </DialogContent>
-  </Dialog>;
+export function ConfirmDialog({
+  open,
+  onOpenChange,
+  title,
+  description,
+  confirmLabel = "Confirmar",
+  cancelLabel = "Cancelar",
+  destructive = false,
+  pending = false,
+  onConfirm,
+}: ConfirmDialogProps) {
+  return (
+    <ModalDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      title={title}
+      description={description}
+      showCloseButton={false}
+      footer={
+        <>
+          <Button variant="outline" isDisabled={pending} onPress={() => onOpenChange(false)}>
+            {cancelLabel}
+          </Button>
+          <Button variant={destructive ? "destructive" : "default"} isDisabled={pending} onPress={onConfirm}>
+            {confirmLabel}
+          </Button>
+        </>
+      }
+    />
+  );
 }
