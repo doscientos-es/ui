@@ -1,21 +1,37 @@
-import { useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { cn } from "../../lib/cn";
 
 export type AvatarProps = React.ComponentProps<"div"> & { size?: "xs" | "sm" | "default" | "lg" };
 
 const sizes = { xs: "size-5 text-[10px]", sm: "size-6 text-xs", default: "size-8 text-sm", lg: "size-10 text-base" };
 
-export function Avatar({ className, size = "default", ...props }: AvatarProps) {
-  return <div data-slot="avatar" data-size={size} className={cn("group/avatar relative flex shrink-0 overflow-hidden rounded-full bg-muted text-muted-foreground", sizes[size], className)} {...props} />;
+type AvatarStatus = "idle" | "loading" | "loaded" | "error";
+const AvatarContext = createContext<{
+  status: AvatarStatus;
+  setStatus: (status: AvatarStatus) => void;
+} | null>(null);
+
+export function Avatar({ className, size = "default", children, ...props }: AvatarProps) {
+  const [status, setStatus] = useState<AvatarStatus>("idle");
+  return <AvatarContext.Provider value={{ status, setStatus }}><div data-slot="avatar" data-size={size} className={cn("group/avatar relative flex shrink-0 overflow-hidden rounded-full bg-muted text-muted-foreground", sizes[size], className)} {...props}>{children}</div></AvatarContext.Provider>;
 }
 
-export function AvatarImage({ className, ...props }: React.ComponentProps<"img">) {
+export function AvatarImage({ className, src, onError, onLoad, ...props }: React.ComponentProps<"img">) {
+  const avatar = useContext(AvatarContext);
   const [failed, setFailed] = useState(false);
-  if (failed) return null;
-  return <img data-slot="avatar-image" className={cn("aspect-square size-full object-cover", className)} onError={() => setFailed(true)} {...props} />;
+
+  useEffect(() => {
+    setFailed(false);
+    avatar?.setStatus(src ? "loading" : "idle");
+  }, [avatar?.setStatus, src]);
+
+  if (failed || avatar?.status === "error") return null;
+  return <img data-slot="avatar-image" src={src} className={cn("aspect-square size-full object-cover", className)} onLoad={(event) => { avatar?.setStatus("loaded"); onLoad?.(event); }} onError={(event) => { setFailed(true); avatar?.setStatus("error"); onError?.(event); }} {...props} />;
 }
 
 export function AvatarFallback({ className, ...props }: React.ComponentProps<"span">) {
+  const avatar = useContext(AvatarContext);
+  if (avatar?.status === "loaded") return null;
   return <span data-slot="avatar-fallback" className={cn("flex size-full items-center justify-center font-medium", className)} {...props} />;
 }
 
