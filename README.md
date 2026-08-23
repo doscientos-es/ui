@@ -2,13 +2,13 @@
 
 Primitives React accesibles, rápidas y temables para los productos de Doscientos. No depende de Next.js, Astro, router, backend ni estado de datos.
 
-## Alcance de la primera versión
+## Alcance
 
-- Tokens CSS del backoffice y tema claro/oscuro.
-- Controles: botón, input, textarea, label, badge, separadores, atajos de teclado y skeleton.
-- Formularios: `Field`, descripción y errores accesibles.
-- Navegación y overlays: tabs, tooltip, popover, `Dialog` y `ConfirmDialog` controlado.
-- Búsqueda: `Combobox` composable sobre React Aria y `HighlightMatch` sin distinción de mayúsculas o acentos.
+- Foundations: tokens CSS, tema claro/oscuro y utilidades de clases y texto.
+- Controles y formularios: botones, campos, selección, feedback, búsqueda y validación accesible.
+- Navegación y overlays: tabs, menús, breadcrumbs, tooltip, popover, dialogs y drawers.
+- Datos y estados: tablas, cards, avatares, badges, skeletons, alertas y estados vacíos.
+- Patrones de aplicación: shell, sidebar, cabeceras, toolbars, paginación, toasts y carga.
 - Hooks: debounce, cambios no guardados y autosave sin acoplamiento a transporte o datos.
 
 Los componentes de dominio, llamadas API, navegación, toasts y layouts permanecen en cada aplicación.
