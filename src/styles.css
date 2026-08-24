@@ -13,19 +13,25 @@
   --ui-background: var(--background, #f4f3f1);
   --ui-foreground: var(--foreground, #202020);
   --ui-card: var(--card, #ffffff);
+  --ui-card-foreground: var(--card-foreground, var(--ui-foreground));
+  --ui-popover: var(--popover, var(--ui-card));
+  --ui-popover-foreground: var(--popover-foreground, var(--ui-foreground));
   --ui-background-foreground: var(--background-foreground, #2d2d2d);
   --ui-primary: var(--primary, #2a4227);
   --ui-primary-foreground: var(--primary-foreground, #ffffff);
   --ui-secondary: var(--secondary, #f1f1ef);
   --ui-secondary-foreground: var(--secondary-foreground, #171717);
   --ui-muted: var(--muted, #fafafa);
-  --ui-muted-foreground: var(--muted-foreground, #77736f);
+  --ui-muted-foreground: var(--muted-foreground, #6d6965);
   --ui-accent: var(--accent, #bdff7b);
   --ui-accent-foreground: var(--accent-foreground, #1a2e18);
-  --ui-destructive: var(--destructive, #ef4444);
-  --ui-success: var(--success, #16a34a);
-  --ui-warning: var(--warning, #ca8a04);
+  --ui-destructive: var(--destructive, #b91c1c);
+  --ui-destructive-foreground: var(--destructive-foreground, #ffffff);
+  --ui-success: var(--success, #166534);
+  --ui-warning: var(--warning, #854d0e);
+  --ui-info: var(--info, #0369a1);
   --ui-border: var(--border, #e7e5e2);
+  --ui-input: var(--input, var(--ui-border));
   --ui-ring: var(--ring, oklch(0.871 0.006 286.286));
 }
 
@@ -33,6 +39,9 @@
   --ui-background: var(--background, oklch(0.145 0 0));
   --ui-foreground: var(--foreground, oklch(0.985 0 0));
   --ui-card: var(--card, oklch(0.205 0 0));
+  --ui-card-foreground: var(--card-foreground, var(--ui-foreground));
+  --ui-popover: var(--popover, var(--ui-card));
+  --ui-popover-foreground: var(--popover-foreground, var(--ui-foreground));
   --ui-background-foreground: var(--background-foreground, oklch(0.985 0 0));
   --ui-primary: var(--primary, oklch(0.922 0 0));
   --ui-primary-foreground: var(--primary-foreground, oklch(0.205 0 0));
@@ -43,9 +52,12 @@
   --ui-accent: var(--accent, #bdff7b);
   --ui-accent-foreground: var(--accent-foreground, #1a2e18);
   --ui-destructive: var(--destructive, oklch(0.704 0.191 22.216));
+  --ui-destructive-foreground: var(--destructive-foreground, #ffffff);
   --ui-success: var(--success, #22c55e);
   --ui-warning: var(--warning, #eab308);
+  --ui-info: var(--info, #38bdf8);
   --ui-border: var(--border, oklch(1 0 0 / 15%));
+  --ui-input: var(--input, var(--ui-border));
   --ui-ring: var(--ring, oklch(0.556 0 0));
 }
 
@@ -53,6 +65,9 @@
   --color-background: var(--ui-background);
   --color-foreground: var(--ui-foreground);
   --color-card: var(--ui-card);
+  --color-card-foreground: var(--ui-card-foreground);
+  --color-popover: var(--ui-popover);
+  --color-popover-foreground: var(--ui-popover-foreground);
   --color-background-foreground: var(--ui-background-foreground);
   --color-primary: var(--ui-primary);
   --color-primary-foreground: var(--ui-primary-foreground);
@@ -63,9 +78,12 @@
   --color-accent: var(--ui-accent);
   --color-accent-foreground: var(--ui-accent-foreground);
   --color-destructive: var(--ui-destructive);
+  --color-destructive-foreground: var(--ui-destructive-foreground);
   --color-success: var(--ui-success);
   --color-warning: var(--ui-warning);
+  --color-info: var(--ui-info);
   --color-border: var(--ui-border);
+  --color-input: var(--ui-input);
   --color-ring: var(--ui-ring);
   --radius-sm: calc(var(--ui-radius) * 0.6);
   --radius-md: calc(var(--ui-radius) * 0.8);
@@ -74,10 +92,32 @@
 }
 
 @theme {
+  --animate-accordion-down: accordion-down 200ms ease-out;
+  --animate-accordion-up: accordion-up 200ms ease-out;
   --animate-ui-surface-in: ui-surface-in 150ms cubic-bezier(0.16, 1, 0.3, 1);
   --animate-ui-surface-out: ui-surface-out 100ms ease-in;
   --animate-ui-overlay-in: ui-overlay-in 150ms ease-out;
   --animate-ui-overlay-out: ui-overlay-out 100ms ease-in;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+
+    to {
+      height: var(--disclosure-panel-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--disclosure-panel-height);
+    }
+
+    to {
+      height: 0;
+    }
+  }
 
   @keyframes ui-surface-in {
     from {

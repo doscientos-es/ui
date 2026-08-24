@@ -7,9 +7,15 @@ import { defineConfig } from "vitest/config";
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      "~": path.resolve(dirname, "src"),
+    },
+  },
   test: {
     projects: [
       {
+        extends: true,
         test: {
           name: "unit",
           environment: "happy-dom",

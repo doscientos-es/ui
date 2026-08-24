@@ -1,5 +1,8 @@
 import type { StorybookConfig } from "@storybook/react-vite";
 import tailwindcss from "@tailwindcss/vite";
+import { fileURLToPath } from "node:url";
+
+const srcDirectory = fileURLToPath(new URL("../src", import.meta.url));
 
 const config: StorybookConfig = {
   stories: ["../src/**/*.stories.@(ts|tsx)"],
@@ -10,7 +13,14 @@ const config: StorybookConfig = {
     options: {},
   },
   viteFinal: async (viteConfig) => {
+    const aliases = viteConfig.resolve?.alias;
     viteConfig.plugins = [...(viteConfig.plugins ?? []), tailwindcss()];
+    viteConfig.resolve = {
+      ...viteConfig.resolve,
+      alias: Array.isArray(aliases)
+        ? [{ find: "~", replacement: srcDirectory }, ...aliases]
+        : { ...aliases, "~": srcDirectory },
+    };
     return viteConfig;
   },
 };

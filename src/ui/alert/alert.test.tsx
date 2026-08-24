@@ -1,4 +1,18 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Alert } from "./alert";
-describe("Alert", () => { it("renders an alert role", () => { render(<Alert>Ha ocurrido un problema</Alert>); expect(screen.getByRole("alert").textContent).toContain("Ha ocurrido"); }); });
+import { Alert, AlertAction, AlertDescription, AlertTitle } from "./alert";
+
+describe("Alert", () => {
+  it("renders structured alert content and action", () => {
+    render(
+      <Alert variant="warning">
+        <AlertTitle>Revisión pendiente</AlertTitle>
+        <AlertDescription>Comprueba los datos.</AlertDescription>
+        <AlertAction>Editar</AlertAction>
+      </Alert>,
+    );
+    const alert = screen.getByRole("alert");
+    expect(alert.textContent).toContain("Revisión pendiente");
+    expect(screen.getByText("Editar").getAttribute("data-slot")).toBe("alert-action");
+  });
+});

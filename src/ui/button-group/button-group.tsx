@@ -1,9 +1,91 @@
+import { cva, type VariantProps } from "class-variance-authority";
+import type * as React from "react";
+
 import { cn } from "../../lib/cn";
+import { Separator } from "../separator/separator";
 
-export function ButtonGroup({ className, ...props }: React.ComponentProps<"div">) {
-  return <div role="group" data-slot="button-group" className={cn("inline-flex items-center gap-2", className)} {...props} />;
+const buttonGroupVariants = cva(
+  "flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 has-[>[data-slot=button-group]]:gap-2 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-lg [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1",
+  {
+    variants: {
+      orientation: {
+        horizontal:
+          "**:data-slot:rounded-r-none [&_[data-slot]~[data-slot]]:rounded-l-none [&_[data-slot]~[data-slot]]:border-l-0 [&>[data-slot]:not(:has(~[data-slot]))]:rounded-r-lg!",
+        vertical:
+          "flex-col **:data-slot:rounded-b-none [&_[data-slot]~[data-slot]]:rounded-t-none [&_[data-slot]~[data-slot]]:border-t-0 [&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-lg!",
+      },
+    },
+    defaultVariants: {
+      orientation: "horizontal",
+    },
+  },
+);
+
+function ButtonGroup({
+  className,
+  orientation,
+  ...props
+}: React.ComponentProps<"div"> & VariantProps<typeof buttonGroupVariants>) {
+  return (
+    // biome-ignore lint/a11y/useSemanticElements: fieldset would impose form semantics on a generic action group.
+    <div
+      role="group"
+      data-slot="button-group"
+      data-orientation={orientation}
+      className={cn(buttonGroupVariants({ orientation }), className)}
+      {...props}
+    />
+  );
 }
 
-export function ButtonGroupText({ className, ...props }: React.ComponentProps<"span">) {
-  return <span data-slot="button-group-text" className={cn("text-sm text-muted-foreground", className)} {...props} />;
+function ButtonGroupText({
+  className,
+  render,
+  ...props
+}: React.ComponentProps<"div"> & {
+  render?: (props: React.HTMLAttributes<HTMLElement>) => React.ReactNode;
+}) {
+  if (render) {
+    const renderProps = {
+      "data-slot": "button-group-text",
+      className: cn(
+        "flex items-center gap-2 rounded-lg border border-border bg-muted px-2.5 text-sm font-medium [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
+        className,
+      ),
+      ...props,
+    };
+
+    return render(renderProps);
+  }
+
+  return (
+    <div
+      data-slot="button-group-text"
+      className={cn(
+        "flex items-center gap-2 rounded-lg border border-border bg-muted px-2.5 text-sm font-medium [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
+        className,
+      )}
+      {...props}
+    />
+  );
 }
+
+function ButtonGroupSeparator({
+  className,
+  orientation = "vertical",
+  ...props
+}: React.ComponentProps<typeof Separator>) {
+  return (
+    <Separator
+      data-slot="button-group-separator"
+      orientation={orientation}
+      className={cn(
+        "relative self-stretch bg-input data-horizontal:mx-px data-horizontal:w-auto data-vertical:my-px data-vertical:h-auto",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+export { ButtonGroup, ButtonGroupSeparator, ButtonGroupText, buttonGroupVariants };

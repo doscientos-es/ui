@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cn } from "./cn";
+import { cn } from "~/lib/cn";
 
 describe("cn", () => {
   it("combines conditional values and keeps the final conflicting utility", () => {
