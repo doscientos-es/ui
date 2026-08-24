@@ -15,6 +15,8 @@ describe("Button", () => {
     expect(onClick).toHaveBeenCalledOnce();
     expect(button.getAttribute("data-slot")).toBe("button");
     expect(button.className).toContain("text-destructive");
+    expect(button.className).toContain("rounded-lg");
+    expect(button.className).not.toContain("rounded-full");
   });
 
   it("renders navigation with button styling as a link", () => {

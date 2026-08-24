@@ -9,4 +9,10 @@ if (!packageJson.dependencies?.["lucide-react"]) {
   );
 }
 
+if (!packageJson.dependencies?.sileo) {
+  throw new Error(
+    "sileo debe declararse en dependencies porque @doscientos/ui lo usa para los toasts.",
+  );
+}
+
 console.log("Las dependencias de producción de @doscientos/ui son válidas.");

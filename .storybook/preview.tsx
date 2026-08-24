@@ -1,5 +1,6 @@
 import type { Preview } from "@storybook/react-vite";
 import "../src/styles.css";
+import "./preview.css";
 import { doscientosTheme } from "./theme";
 
 const preview: Preview = {
@@ -25,14 +26,21 @@ const preview: Preview = {
     docs: { theme: doscientosTheme },
   },
   decorators: [
-    (Story, context) => (
-      <div
-        className={`${context.globals.theme === "dark" ? "dark " : ""}min-h-80 min-w-80 bg-background p-8 text-foreground`}
-        style={{ fontFamily: "ui-sans-serif, system-ui, sans-serif" }}
-      >
-        <Story />
-      </div>
-    ),
+    (Story, context) => {
+      const canvasClassName = [
+        "storybook-canvas",
+        context.globals.theme === "dark" && "dark",
+        context.parameters.layout === "fullscreen" && "storybook-canvas--fullscreen",
+      ]
+        .filter(Boolean)
+        .join(" ");
+
+      return (
+        <div className={canvasClassName}>
+          <Story />
+        </div>
+      );
+    },
   ],
 };
 

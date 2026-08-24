@@ -1,5 +1,6 @@
 @import "tailwindcss/theme" layer(theme);
 @import "tailwindcss/utilities" layer(utilities);
+@import "sileo/styles.css";
 @source "./";
 @custom-variant dark (&:is(.dark *));
 
@@ -9,7 +10,7 @@
  */
 :root {
   /* Reference-led defaults for the backoffice surface system. */
-  --ui-radius: var(--radius, 1rem);
+  --ui-radius: var(--radius, 0.625rem);
   --ui-background: var(--background, #f4f3f1);
   --ui-foreground: var(--foreground, #202020);
   --ui-card: var(--card, #ffffff);
@@ -145,61 +146,6 @@
     }
   }
 
-  --animate-ui-toast-in: ui-toast-in 320ms cubic-bezier(0.22, 1, 0.36, 1);
-  --animate-ui-toast-out: ui-toast-out 180ms cubic-bezier(0.4, 0, 1, 1) forwards;
-  --animate-ui-toast-title: ui-toast-title 220ms 80ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  --animate-ui-toast-description: ui-toast-description 260ms 180ms cubic-bezier(0.22, 1, 0.36, 1) both;
-
-  @keyframes ui-toast-in {
-    from {
-      opacity: 0;
-      transform: translateY(0.5rem) scale(0.96);
-      filter: blur(3px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      filter: blur(0);
-    }
-  }
-
-  @keyframes ui-toast-out {
-    to {
-      opacity: 0;
-      transform: translateY(0.25rem) scale(0.98);
-      filter: blur(2px);
-      max-height: 0;
-      padding-block: 0;
-      border-color: transparent;
-    }
-  }
-
-  @keyframes ui-toast-title {
-    from {
-      opacity: 0;
-      transform: translateY(0.2rem);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes ui-toast-description {
-    from {
-      opacity: 0;
-      max-height: 0;
-      transform: translateY(0.2rem);
-    }
-
-    to {
-      opacity: 1;
-      max-height: 5rem;
-      transform: translateY(0);
-    }
-  }
 }
 
 /* Application shell ---------------------------------------------------------
