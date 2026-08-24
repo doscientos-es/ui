@@ -11,6 +11,7 @@ const config: StorybookConfig = {
     "@storybook/addon-vitest",
     "@storybook/addon-docs",
     "@storybook/addon-mcp",
+    "@chromatic-com/storybook",
   ],
   staticDirs: ["./public"],
   framework: {
