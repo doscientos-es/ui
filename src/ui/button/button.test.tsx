@@ -16,7 +16,9 @@ describe("Button", () => {
     expect(button.getAttribute("data-slot")).toBe("button");
     expect(button.className).toContain("text-destructive");
     expect(button.className).toContain("rounded-lg");
-    expect(button.className).not.toContain("rounded-full");
+    expect(button.className).toContain("data-pressed:after:scale-150");
+    expect(button.className.split(" ")).not.toContain("rounded-full");
+    expect(button.className).not.toContain("translate-y-px");
   });
 
   it("renders navigation with button styling as a link", () => {
@@ -28,6 +30,14 @@ describe("Button", () => {
     const link = screen.getByRole("link", { name: "Ver clientes" });
     expect(link.getAttribute("href")).toBe("/clientes");
     expect(link.getAttribute("data-variant")).toBe("outline");
+  });
+
+  it("hides the ripple for the link variant", () => {
+    render(<Button variant="link">Más información</Button>);
+
+    expect(screen.getByRole("button", { name: "Más información" }).className).toContain(
+      "after:hidden",
+    );
   });
 
   it("uses React Aria disabled semantics", () => {

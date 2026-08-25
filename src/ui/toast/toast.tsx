@@ -49,7 +49,7 @@ export function useToast() { return toast; }
 export function ToastProvider({ children }: { children: ReactNode }) { return <>{children}<Toaster /></>; }
 
 export function Toaster({ position }: { position?: ToastPosition }) {
-  return <SileoToaster position={position} />;
+  return <SileoToaster position={position} options={{ fill: "var(--ui-secondary)" }} />;
 }
 
 export function ToastViewport({ position, visiblePosition, className }: { position: ToastPosition; visiblePosition?: ToastPosition; className?: string }) {

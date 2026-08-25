@@ -148,6 +148,17 @@
 
 }
 
+/* Sileo renders each toast as a morphing SVG surface. Give that surface enough
+ * contrast over the predominantly white product canvases. */
+[data-sileo-canvas] {
+  filter: drop-shadow(0 0.5rem 1rem rgb(0 0 0 / 14%)) drop-shadow(0 0.125rem 0.25rem rgb(0 0 0 / 10%));
+}
+
+:is([data-sileo-pill], [data-sileo-body]) {
+  stroke: var(--ui-border);
+  stroke-width: 1px;
+}
+
 /* Application shell ---------------------------------------------------------
  * Use data slots instead of responsive utility classes so consumer imports
  * cannot change the display order of the shell's desktop/mobile states. */
