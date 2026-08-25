@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
+import { expect, userEvent, within } from "storybook/test";
 import { Select, SelectContent, SelectItem, SelectList, SelectTrigger, SelectValue } from "./select";
 
 const priorities = [
@@ -19,5 +20,14 @@ export const Default: Story = {
       <SelectTrigger><SelectValue /></SelectTrigger>
       <SelectContent><SelectList items={priorities}>{(priority) => <SelectItem id={priority.id} textValue={priority.name}>{priority.name}</SelectItem>}</SelectList></SelectContent>
     </Select>;
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const page = within(canvasElement.ownerDocument.body);
+    const trigger = canvas.getByRole("button");
+
+    await userEvent.click(trigger);
+    await userEvent.click(page.getByRole("option", { name: "Alta" }));
+    await expect(trigger).toHaveTextContent("Alta");
   },
 };

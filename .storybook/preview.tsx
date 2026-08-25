@@ -50,7 +50,6 @@ const preview: Preview = {
       const canvasClassName = [
         "storybook-canvas",
         context.globals.theme === "dark" && "dark",
-        context.parameters.layout === "fullscreen" && "storybook-canvas--fullscreen",
       ]
         .filter(Boolean)
         .join(" ");

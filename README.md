@@ -55,10 +55,27 @@ El combobox es composable: la aplicación controla datos, peticiones y caché; l
 ## Desarrollo
 
 - `pnpm test`: pruebas unitarias y de renderizado.
+- `pnpm test:storybook`: renderizado, accesibilidad e interacciones de todas las stories en Chromium.
 - `pnpm typecheck`: contrato TypeScript.
 - `pnpm build`: distribución JS, tipos y CSS Tailwind compilado.
 - `pnpm storybook`: catálogo local en el puerto 6006.
 - `pnpm build-storybook`: sitio estático en `storybook-static/`, listo para publicar en `ui.doscientos.es`.
+
+Storybook genera documentación automática para todo el catálogo y ofrece temas
+claro/oscuro y viewports móvil, tablet y escritorio. Chromatic captura cada
+story en claro escritorio, oscuro escritorio y claro móvil. Para activar el job
+visual de CI, configura `CHROMATIC_PROJECT_TOKEN` como secreto del repositorio;
+el valor se consume mediante el entorno y nunca se pasa como argumento del CLI.
+
+### Criterio de stories
+
+Cada componente público debe tener una story propia. Cuando apliquen, incluye
+estado por defecto, variantes, disabled o read-only, error, carga o vacío,
+contenido largo y viewport estrecho. Los controles interactivos deben añadir
+un flujo `play` que cubra su comportamiento principal con teclado y foco.
+
+Las stories deben usar datos ficticios y permanecer independientes de rutas,
+APIs, autenticación y estado de producto.
 
 ## Criterio de crecimiento
 

@@ -47,3 +47,28 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test:storybook
+
+  visual-tests:
+    name: Visual Tests / Chromatic
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Publish visual snapshots
+        if: env.CHROMATIC_PROJECT_TOKEN != ''
+        run: pnpm exec chromatic --exit-zero-on-changes --only-changed --auto-accept-changes main
+      - name: Explain skipped visual snapshots
+        if: env.CHROMATIC_PROJECT_TOKEN == ''
+        run: echo "Chromatic omitido; configura el secreto CHROMATIC_PROJECT_TOKEN para activar snapshots visuales."

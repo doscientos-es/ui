@@ -1,0 +1,35 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Introducción" />
+
+# doscientos UI
+
+Catálogo de primitivas React accesibles, temables y sin dependencias de producto.
+Los consumidores importan componentes desde `@doscientos/ui` y los estilos una sola vez.
+
+## Instalación
+
+```css
+@import "tailwindcss";
+@import "@doscientos/ui/styles.css";
+```
+
+```tsx
+import { Button, Field, FieldLabel, Input } from "@doscientos/ui";
+```
+
+## Cómo explorar el catálogo
+
+- Usa **Controls** para comprobar props sin editar el ejemplo.
+- Cambia **Claro/Oscuro** desde la barra superior.
+- Prueba los viewports móvil, tablet y escritorio.
+- Consulta **Accessibility** para revisar cada resultado de axe.
+- Abre **Interactions** para seguir los flujos de teclado y foco.
+
+## Contrato de una story
+
+Cada componente público debe incluir, cuando apliquen: estado por defecto,
+variantes, tamaños, disabled o read-only, error, carga o vacío, contenido largo,
+viewport estrecho y al menos una interacción crítica.
+
+Las stories no deben depender de rutas, APIs, autenticación ni datos de clientes.

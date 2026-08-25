@@ -1,0 +1,29 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Foundations/Guía" />
+
+# Foundations
+
+## Tokens semánticos
+
+Los componentes consumen variables `--ui-*`. Cada aplicación puede proporcionar
+sus tokens de producto (`--background`, `--primary`, `--border`, etc.) y la
+librería aplica valores de respaldo coherentes.
+
+Evita colores fijos en componentes. Usa utilidades semánticas como
+`bg-background`, `text-foreground`, `border-border` o `text-muted-foreground`.
+
+## Tema oscuro
+
+El tema se activa con la clase `.dark` en un ancestro. La barra de Storybook
+aplica esa misma clase al canvas, por lo que los ejemplos reproducen el contrato
+real de las aplicaciones.
+
+Chromatic captura cada story en claro escritorio, oscuro escritorio y claro
+móvil. Los cambios visuales deben revisarse antes de aprobar una pull request.
+
+## Accesibilidad
+
+Las stories completas se ejecutan en Chromium con Vitest. El addon de
+accesibilidad está configurado como error: una infracción bloquea CI.
+Los controles interactivos deben cubrir teclado, foco visible y nombres accesibles.

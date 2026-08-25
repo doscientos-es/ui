@@ -1,72 +1,116 @@
+"use client";
+
+import type * as React from "react";
 import {
-  SwitchButton as AriaSwitchButton,
-  SwitchField as AriaSwitchField,
-  type SwitchButtonRenderProps,
-  type SwitchFieldProps as AriaSwitchProps,
+  Switch as AriaSwitch,
+  type SwitchProps as AriaSwitchProps,
 } from "react-aria-components";
 import { cn } from "../../lib/cn";
 
-export type SwitchProps = Omit<AriaSwitchProps, "className"> & {
-  className?: string | ((values: SwitchButtonRenderProps) => string);
-  size?: "sm" | "md";
-};
-
-const sizeStyles = {
-  sm: { track: "h-5 w-9 p-0.5", thumb: "size-4", travel: "group-data-selected/switch:translate-x-4" },
-  md: { track: "h-6 w-11 p-0.5", thumb: "size-5", travel: "group-data-selected/switch:translate-x-5" },
+const switchSizes = {
+  sm: {
+    control: "h-4 w-[1.875rem] p-0.5",
+    thumb: "h-3 w-4",
+    offset: "0.625rem",
+  },
+  md: {
+    control: "h-5 w-9 p-0.5",
+    thumb: "h-4 w-5",
+    offset: "0.75rem",
+  },
+  lg: {
+    control: "h-6 w-11 p-0.5",
+    thumb: "h-5 w-6",
+    offset: "1rem",
+  },
 } as const;
 
-export function Switch({ className, children, size = "sm", ...props }: SwitchProps) {
-  const styles = sizeStyles[size];
+export type SwitchProps = Omit<AriaSwitchProps, "className"> & {
+  className?: string;
+  size?: keyof typeof switchSizes;
+  description?: React.ReactNode;
+  icon?: React.ReactNode;
+  selectedIcon?: React.ReactNode;
+};
+
+/** Accessible React Aria switch with semantic tokens and a compact capsule thumb. */
+export function Switch({
+  className,
+  children,
+  description,
+  icon,
+  selectedIcon,
+  size = "sm",
+  onKeyDown,
+  ...props
+}: SwitchProps) {
+  const styles = switchSizes[size];
+  const handleKeyDown: NonNullable<AriaSwitchProps["onKeyDown"]> = (event) => {
+    onKeyDown?.(event);
+    if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+
+    const currentTarget = event.currentTarget as HTMLElement;
+    const input = currentTarget instanceof HTMLInputElement
+      ? currentTarget
+      : currentTarget.querySelector<HTMLInputElement>('input[type="checkbox"]');
+    if (!input || event.target !== input || input.disabled) return;
+
+    const nextSelected = event.key === "ArrowRight" ? true : event.key === "ArrowLeft" ? false : null;
+    if (nextSelected === null) return;
+
+    event.preventDefault();
+    if (input.checked !== nextSelected) input.click();
+  };
 
   return (
-    <AriaSwitchField {...props}>
-      <AriaSwitchButton
-        data-slot="switch"
-        data-size={size}
-        className={(state) =>
-          cn(
-            "group/switch inline-flex w-max items-center gap-2 text-sm text-foreground outline-none",
-            "data-disabled:cursor-not-allowed data-disabled:opacity-50",
-            typeof className === "function" ? className(state) : className,
-          )
-        }
-      >
-        {(state) => (
-          <>
+    <AriaSwitch
+      data-slot="switch"
+      data-size={size}
+      onKeyDown={handleKeyDown}
+      className={cn(
+        "group/switch inline-flex cursor-pointer items-center gap-3 text-sm text-foreground outline-none select-none",
+        "data-disabled:cursor-not-allowed data-disabled:opacity-50",
+        className,
+      )}
+      {...props}
+    >
+      {(state) => (
+        <>
+          <span
+            aria-hidden="true"
+            data-slot="switch-control"
+            className={cn(
+              "relative inline-flex shrink-0 items-center overflow-hidden rounded-full border border-border bg-input shadow-inner",
+              "transition-[background-color,border-color,box-shadow] duration-200 ease-out motion-reduce:transition-none",
+              "group-data-hovered/switch:bg-muted-foreground/25",
+              "group-data-selected/switch:border-primary group-data-selected/switch:bg-primary",
+              "group-data-selected/switch:group-data-hovered/switch:bg-primary/85",
+              "group-data-focus-visible/switch:ring-3 group-data-focus-visible/switch:ring-ring/50",
+              styles.control,
+            )}
+          >
             <span
-              aria-hidden="true"
+              data-slot="switch-thumb"
+              style={{ transform: state.isSelected ? `translate3d(${styles.offset}, 0, 0)` : "translate3d(0, 0, 0)" }}
               className={cn(
-                "relative inline-flex shrink-0 items-center rounded-full border border-transparent bg-secondary",
-                "shadow-[inset_0_1px_2px_rgb(0_0_0/0.08)]",
-                "transition-[background-color,box-shadow] duration-200 ease-out",
-                "group-data-selected/switch:bg-primary group-data-hovered/switch:bg-secondary/80",
-                "group-data-selected/switch:group-data-hovered/switch:bg-primary/90",
-                "group-data-focus-visible/switch:ring-3 group-data-focus-visible/switch:ring-ring/40",
-                "group-data-pressed/switch:ring-4 group-data-pressed/switch:ring-primary/10",
-                "motion-reduce:transition-none",
-                styles.track,
+                "grid shrink-0 place-items-center rounded-full border border-border/60 bg-background text-[0.625rem] text-muted-foreground shadow-sm",
+                "will-change-transform transition-[transform,background-color,color,border-color] duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none",
+                "group-data-selected/switch:border-primary-foreground/20",
+                "group-data-selected/switch:bg-primary-foreground group-data-selected/switch:text-primary",
+                styles.thumb,
               )}
             >
-              <span
-                className={cn(
-                  "pointer-events-none block rounded-full bg-background shadow-[0_1px_2px_rgb(0_0_0/0.18)]",
-                  "transition-[transform,background-color,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]",
-                  "group-data-selected/switch:bg-primary-foreground group-data-selected/switch:shadow-[0_1px_3px_rgb(0_0_0/0.22)]",
-                  "group-data-pressed/switch:scale-[0.94] motion-reduce:transition-none",
-                  styles.travel,
-                  styles.thumb,
-                )}
-              />
+              {state.isSelected ? (selectedIcon ?? icon) : icon}
             </span>
-            {children != null && (
-              <span className="select-none font-medium leading-5 text-foreground">
-                {typeof children === "function" ? children(state) : children}
-              </span>
-            )}
-          </>
-        )}
-      </AriaSwitchButton>
-    </AriaSwitchField>
+          </span>
+          {children || description ? (
+            <span className="grid gap-0.5 leading-tight">
+              {children ? <span data-slot="switch-label" className="font-medium">{typeof children === "function" ? children(state) : children}</span> : null}
+              {description ? <span data-slot="switch-description" className="text-xs font-normal text-muted-foreground">{description}</span> : null}
+            </span>
+          ) : null}
+        </>
+      )}
+    </AriaSwitch>
   );
 }
