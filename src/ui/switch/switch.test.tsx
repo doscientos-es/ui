@@ -84,12 +84,19 @@ describe("Switch", () => {
     const thumb = switchRoot?.querySelector<HTMLElement>('[data-slot="switch-thumb"]');
     expect(switchRoot?.getAttribute("data-size")).toBe("lg");
     expect(thumb?.style.transform).toBe("translate3d(0, 0, 0)");
+    expect(thumb?.style.width).toBe("1.25rem");
     expect(screen.getByText("Se puede cambiar después")).toBeTruthy();
     expect(screen.getByText("off")).toBeTruthy();
 
+    await user.hover(switchRoot as HTMLElement);
+    expect(thumb?.style.width).toBe("1.5rem");
     await user.click(switchControl);
     expect(thumb?.style.transform).toBe("translate3d(1rem, 0, 0)");
     expect(screen.getByText("on")).toBeTruthy();
     expect(screen.queryByText("off")).toBeNull();
+
+    await user.unhover(switchRoot as HTMLElement);
+    expect(thumb?.style.width).toBe("1.25rem");
+    expect(thumb?.style.transform).toBe("translate3d(1.25rem, 0, 0)");
   });
 });

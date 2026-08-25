@@ -10,18 +10,27 @@ import { cn } from "../../lib/cn";
 const switchSizes = {
   sm: {
     control: "h-4 w-[1.875rem] p-0.5",
-    thumb: "h-3 w-4",
-    offset: "0.625rem",
+    thumb: "h-3",
+    idleWidth: "0.75rem",
+    activeWidth: "1rem",
+    selectedOffset: "0.875rem",
+    activeSelectedOffset: "0.625rem",
   },
   md: {
     control: "h-5 w-9 p-0.5",
-    thumb: "h-4 w-5",
-    offset: "0.75rem",
+    thumb: "h-4",
+    idleWidth: "1rem",
+    activeWidth: "1.25rem",
+    selectedOffset: "1rem",
+    activeSelectedOffset: "0.75rem",
   },
   lg: {
     control: "h-6 w-11 p-0.5",
-    thumb: "h-5 w-6",
-    offset: "1rem",
+    thumb: "h-5",
+    idleWidth: "1.25rem",
+    activeWidth: "1.5rem",
+    selectedOffset: "1.25rem",
+    activeSelectedOffset: "1rem",
   },
 } as const;
 
@@ -86,8 +95,13 @@ export function Switch({
       )}
       {...props}
     >
-      {(state) => (
-        <>
+      {(state) => {
+        const isThumbActive = state.isHovered || state.isPressed;
+        const thumbOffset = state.isSelected
+          ? isThumbActive ? styles.activeSelectedOffset : styles.selectedOffset
+          : "0";
+
+        return <>
           <span
             aria-hidden="true"
             data-slot="switch-control"
@@ -103,10 +117,13 @@ export function Switch({
           >
             <span
               data-slot="switch-thumb"
-              style={{ transform: state.isSelected ? `translate3d(${styles.offset}, 0, 0)` : "translate3d(0, 0, 0)" }}
+              style={{
+                transform: `translate3d(${thumbOffset}, 0, 0)`,
+                width: isThumbActive ? styles.activeWidth : styles.idleWidth,
+              }}
               className={cn(
                 "grid shrink-0 place-items-center rounded-full border border-border/60 bg-background text-[0.625rem] text-muted-foreground shadow-sm",
-                "will-change-transform transition-[transform,background-color,color,border-color] duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none",
+                "will-change-[transform,width] transition-[transform,width,background-color,color,border-color] duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none",
                 "group-data-selected/switch:border-primary-foreground/20",
                 "group-data-selected/switch:bg-primary-foreground group-data-selected/switch:text-primary",
                 styles.thumb,
@@ -121,8 +138,8 @@ export function Switch({
               {description ? <span data-slot="switch-description" className="text-xs font-normal text-muted-foreground">{description}</span> : null}
             </span>
           ) : null}
-        </>
-      )}
+        </>;
+      }}
     </AriaSwitch>
   );
 }
