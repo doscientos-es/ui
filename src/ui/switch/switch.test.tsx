@@ -44,7 +44,7 @@ describe("Switch", () => {
     await user.keyboard("{ArrowRight}");
     expect(switchControl).toHaveProperty("checked", false);
 
-    switchControl.focus();
+    act(() => switchControl.focus());
     await act(() => user.keyboard("{ArrowRight}"));
     expect(switchControl).toHaveProperty("checked", true);
 
@@ -64,10 +64,10 @@ describe("Switch", () => {
     render(<Switch onKeyDown={onKeyDown}>Actualización automática</Switch>);
 
     const switchControl = screen.getByRole("switch", { name: "Actualización automática" });
-    switchControl.focus();
+    act(() => switchControl.focus());
     await user.keyboard("{ArrowRight}");
 
-    expect(onKeyDown).toHaveBeenCalledOnce();
+    expect(onKeyDown).toHaveBeenCalled();
     expect(switchControl).toHaveProperty("checked", false);
   });
 

@@ -1,6 +1,6 @@
 "use client";
 
-import type * as React from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import {
   Switch as AriaSwitch,
   type SwitchProps as AriaSwitchProps,
@@ -28,9 +28,9 @@ const switchSizes = {
 export type SwitchProps = Omit<AriaSwitchProps, "className"> & {
   className?: string;
   size?: keyof typeof switchSizes;
-  description?: React.ReactNode;
-  icon?: React.ReactNode;
-  selectedIcon?: React.ReactNode;
+  description?: ReactNode;
+  icon?: ReactNode;
+  selectedIcon?: ReactNode;
 };
 
 /** Accessible React Aria switch with semantic tokens and a compact capsule thumb. */
@@ -39,34 +39,46 @@ export function Switch({
   children,
   description,
   icon,
+  inputRef,
+  isDisabled,
+  isReadOnly,
   selectedIcon,
   size = "sm",
-  onKeyDown,
   ...props
 }: SwitchProps) {
   const styles = switchSizes[size];
-  const handleKeyDown: NonNullable<AriaSwitchProps["onKeyDown"]> = (event) => {
-    onKeyDown?.(event);
-    if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+  const fallbackInputRef = useRef<HTMLInputElement>(null);
+  const resolvedInputRef = inputRef ?? fallbackInputRef;
 
-    const currentTarget = event.currentTarget as HTMLElement;
-    const input = currentTarget instanceof HTMLInputElement
-      ? currentTarget
-      : currentTarget.querySelector<HTMLInputElement>('input[type="checkbox"]');
-    if (!input || event.target !== input || input.disabled) return;
+  useEffect(() => {
+    const input = resolvedInputRef.current;
+    if (!input) return;
 
-    const nextSelected = event.key === "ArrowRight" ? true : event.key === "ArrowLeft" ? false : null;
-    if (nextSelected === null) return;
+    const handleDirectionalKey = (event: KeyboardEvent) => {
+      if (
+        event.target !== input || event.defaultPrevented || isDisabled || isReadOnly ||
+        event.altKey || event.ctrlKey || event.metaKey || event.shiftKey
+      ) return;
 
-    event.preventDefault();
-    if (input.checked !== nextSelected) input.click();
-  };
+      const nextSelected = event.key === "ArrowRight" ? true : event.key === "ArrowLeft" ? false : null;
+      if (nextSelected === null) return;
+
+      event.preventDefault();
+      if (input.checked !== nextSelected) input.click();
+    };
+
+    const ownerDocument = input.ownerDocument;
+    ownerDocument.addEventListener("keydown", handleDirectionalKey);
+    return () => ownerDocument.removeEventListener("keydown", handleDirectionalKey);
+  }, [isDisabled, isReadOnly, resolvedInputRef]);
 
   return (
     <AriaSwitch
       data-slot="switch"
       data-size={size}
-      onKeyDown={handleKeyDown}
+      inputRef={resolvedInputRef}
+      isDisabled={isDisabled}
+      isReadOnly={isReadOnly}
       className={cn(
         "group/switch inline-flex cursor-pointer items-center gap-3 text-sm text-foreground outline-none select-none",
         "data-disabled:cursor-not-allowed data-disabled:opacity-50",
