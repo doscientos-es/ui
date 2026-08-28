@@ -4,10 +4,18 @@ body,
   min-height: 100%;
 }
 
-/* React Aria renders popovers and menus in a portal under <body>. Set the
- * canvas font there too so overlays inherit the same sans-serif as triggers. */
+/* React Aria renders overlays under <body>. Match Storybook's native font so
+ * portals and Docs controls inherit the same typeface as the documentation. */
 body {
-  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-family: "Nunito Sans", -apple-system, ".SFNSText-Regular", "San Francisco", BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* Storybook's Docs action buttons do not set a font family themselves. */
+button,
+input,
+select,
+textarea {
+  font: inherit;
 }
 
 .storybook-canvas {

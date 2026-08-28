@@ -21,20 +21,23 @@ describe("Button", () => {
     expect(button.className).not.toContain("translate-y-px");
   });
 
-  it("completes an independent ripple after each click", () => {
+  it("starts the ripple at the pointer and falls back to the center for keyboard clicks", () => {
     render(<Button>Guardar</Button>);
     const button = screen.getByRole("button", { name: "Guardar" });
+    vi.spyOn(button, "getBoundingClientRect").mockReturnValue(new DOMRect(10, 20, 100, 40));
 
-    fireEvent.click(button);
+    fireEvent.click(button, { clientX: 55, clientY: 35, detail: 1 });
     const firstRipple = button.querySelector('[data-slot="button-ripple"]');
     expect(firstRipple?.className).toContain("animate-ui-ripple");
+    expect(firstRipple).toHaveStyle({ left: "45px", top: "15px" });
 
-    fireEvent.click(button);
-    const latestRipple = button.querySelector('[data-slot="button-ripple"]');
-    expect(latestRipple).not.toBe(firstRipple);
-
-    fireEvent.animationEnd(latestRipple!);
+    fireEvent.animationEnd(firstRipple!);
     expect(button.querySelector('[data-slot="button-ripple"]')).toBeNull();
+
+    fireEvent.click(button, { detail: 0 });
+    const keyboardRipple = button.querySelector('[data-slot="button-ripple"]');
+    expect(keyboardRipple).not.toBe(firstRipple);
+    expect(keyboardRipple).toHaveStyle({ left: "50%", top: "50%" });
   });
 
   it("renders navigation with button styling as a link", () => {

@@ -13,24 +13,54 @@ import {
 import { actionRipple } from "../../lib/action-ripple";
 import { cn } from "../../lib/cn";
 
-function useActionRipple(enabled: boolean) {
-  const [rippleId, setRippleId] = useState(0);
+type RipplePosition = {
+  x: string;
+  y: string;
+};
 
-  function triggerRipple() {
-    if (enabled) setRippleId((currentId) => currentId + 1);
+type Ripple = {
+  id: number;
+  position: RipplePosition;
+};
+
+const centeredRipplePosition: RipplePosition = { x: "50%", y: "50%" };
+
+function useActionRipple(enabled: boolean) {
+  const [ripple, setRipple] = useState<Ripple | null>(null);
+
+  function triggerRipple(event: React.MouseEvent<HTMLElement>) {
+    if (!enabled) return;
+
+    const position = event.detail
+      ? (() => {
+        const bounds = event.currentTarget.getBoundingClientRect();
+        return {
+          x: `${event.clientX - bounds.left}px`,
+          y: `${event.clientY - bounds.top}px`,
+        };
+      })()
+      : centeredRipplePosition;
+
+    setRipple((currentRipple) => ({
+      id: (currentRipple?.id ?? 0) + 1,
+      position,
+    }));
   }
 
-  const ripple = rippleId ? (
+  const rippleElement = ripple ? (
     <span
-      key={rippleId}
+      key={ripple.id}
       aria-hidden="true"
       data-slot="button-ripple"
-      className="pointer-events-none absolute top-1/2 left-1/2 aspect-square w-full rounded-full bg-current animate-ui-ripple motion-reduce:hidden"
-      onAnimationEnd={() => setRippleId(0)}
+      className="pointer-events-none absolute aspect-square w-full rounded-full bg-current animate-ui-ripple motion-reduce:hidden"
+      style={{ left: ripple.position.x, top: ripple.position.y }}
+      onAnimationEnd={() =>
+        setRipple((currentRipple) => (currentRipple?.id === ripple.id ? null : currentRipple))
+      }
     />
   ) : null;
 
-  return { ripple, triggerRipple };
+  return { ripple: rippleElement, triggerRipple };
 }
 
 const buttonVariants = cva(
