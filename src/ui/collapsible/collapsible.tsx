@@ -1,8 +1,9 @@
 "use client";
 
-import type * as React from "react";
+import * as React from "react";
 
 type CollapsibleContextValue = { open: boolean; setOpen: (open: boolean) => void };
+type SlottableProps = React.HTMLAttributes<HTMLElement> & { "data-slot"?: string };
 const CollapsibleContext = React.createContext<CollapsibleContextValue | null>(null);
 
 function useCollapsibleContext() {
@@ -52,10 +53,10 @@ export function CollapsibleTrigger({ asChild = false, children, onClick, ...prop
     if (!event.defaultPrevented) setOpen(!open);
   };
 
-  if (asChild && React.isValidElement<React.HTMLAttributes<HTMLElement>>(children)) {
-    const child = children;
+  if (asChild && React.isValidElement<SlottableProps>(children)) {
+    const child = children as React.ReactElement<SlottableProps>;
     return React.cloneElement(child, {
-      ...props,
+      ...(props as React.HTMLAttributes<HTMLElement>),
       "aria-expanded": open,
       "data-slot": "collapsible-trigger",
       "data-state": open ? "open" : "closed",
