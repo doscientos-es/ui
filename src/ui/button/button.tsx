@@ -25,7 +25,7 @@ type Ripple = {
 
 const centeredRipplePosition: RipplePosition = { x: "50%", y: "50%" };
 
-function getRipplePosition(event: React.MouseEvent<HTMLElement>): RipplePosition {
+function getRipplePosition(event: React.MouseEvent<Element>): RipplePosition {
   if (!event.detail) return centeredRipplePosition;
 
   const bounds = event.currentTarget.getBoundingClientRect();
@@ -38,7 +38,7 @@ function getRipplePosition(event: React.MouseEvent<HTMLElement>): RipplePosition
 function useActionRipple(enabled: boolean) {
   const [ripple, setRipple] = useState<Ripple | null>(null);
 
-  function triggerRipple(event: React.MouseEvent<HTMLElement>) {
+  function triggerRipple(event: React.MouseEvent<Element>) {
     if (!enabled) return;
 
     setRipple((currentRipple) => ({
