@@ -7,7 +7,7 @@ import {
   Tooltip as TooltipPrimitive,
   TooltipTrigger as TooltipTriggerPrimitive,
 } from "react-aria-components"
-import { cn } from "~/lib/cn"
+import { cn } from "../../lib/cn"
 
 
 function TooltipTrigger({

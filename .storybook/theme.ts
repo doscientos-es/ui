@@ -1,33 +1,12 @@
 import { create } from "storybook/theming";
 
-/** Shared manager and Docs theme using the approved Doscientos brand tokens. */
+/** Keep Storybook's native light theme and override brand elements only. */
 export const doscientosTheme = create({
   base: "light",
-  // fontCode: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
   brandTitle: "doscientos UI",
   brandUrl: "https://doscientos.es",
   brandImage: "/doscientos-mark.svg",
   brandTarget: "_self",
   colorPrimary: "#2a4227",
   colorSecondary: "#355f31",
-  appBg: "#f8fafc",
-  appContentBg: "#ffffff",
-  appPreviewBg: "#f8fafc",
-  appBorderColor: "#e5e7eb",
-  appBorderRadius: 8,
-  textColor: "#182018",
-  textInverseColor: "#ffffff",
-  textMutedColor: "#687268",
-  barTextColor: "#596359",
-  barHoverColor: "#355f31",
-  barSelectedColor: "#2a4227",
-  barBg: "#ffffff",
-  buttonBg: "#ffffff",
-  buttonBorder: "#e5e7eb",
-  booleanBg: "#f3f4f6",
-  booleanSelectedBg: "#355f31",
-  inputBg: "#ffffff",
-  inputBorder: "#e5e7eb",
-  inputTextColor: "#182018",
-  inputBorderRadius: 10,
 });

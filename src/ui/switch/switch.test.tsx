@@ -36,6 +36,17 @@ describe("Switch", () => {
     expect(switchControl).toHaveProperty("checked", true);
   });
 
+  it("associates an external label through its id", () => {
+    render(
+      <>
+        <label htmlFor="per-platform-copy">Personalizar por red</label>
+        <Switch id="per-platform-copy" />
+      </>,
+    );
+
+    expect(screen.getByRole("switch", { name: "Personalizar por red" })).toBeTruthy();
+  });
+
   it("supports directional arrows only while the switch has focus", async () => {
     const user = userEvent.setup();
     render(<Switch>Sincronización automática</Switch>);

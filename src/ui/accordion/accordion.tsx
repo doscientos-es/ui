@@ -13,7 +13,7 @@ import {
   type DisclosurePanelProps,
   type DisclosureProps,
 } from "react-aria-components"
-import { cn } from "~/lib/cn"
+import { cn } from "../../lib/cn"
 
 
 function Accordion({ className, ...props }: DisclosureGroupProps) {

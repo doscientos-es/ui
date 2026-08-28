@@ -16,7 +16,7 @@ import {
   type MenuItemProps as MenuItemPrimitiveProps,
   type MenuSectionProps as MenuSectionPrimitiveProps,
 } from "react-aria-components"
-import { cn } from "~/lib/cn"
+import { cn } from "../../lib/cn"
 
 
 function DropdownMenuTrigger({
