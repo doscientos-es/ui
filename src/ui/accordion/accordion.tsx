@@ -15,8 +15,8 @@ import {
 } from "react-aria-components"
 import { cn } from "../../lib/cn"
 
-
-function Accordion({ className, ...props }: DisclosureGroupProps) {
+/** Groups related expandable sections and manages their expanded state. */
+export function Accordion({ className, ...props }: DisclosureGroupProps) {
   return (
     <AccordionPrimitive
       data-slot="accordion"
@@ -26,7 +26,8 @@ function Accordion({ className, ...props }: DisclosureGroupProps) {
   )
 }
 
-function AccordionItem({ className, ...props }: DisclosureProps) {
+/** A single expandable section within an {@link Accordion}. */
+export function AccordionItem({ className, ...props }: DisclosureProps) {
   return (
     <AccordionItemPrimitive
       data-slot="accordion-item"
@@ -36,7 +37,8 @@ function AccordionItem({ className, ...props }: DisclosureProps) {
   )
 }
 
-function AccordionTrigger({
+/** Accessible heading button that expands or collapses its {@link AccordionItem}. */
+export function AccordionTrigger({
   className,
   children,
   ...props
@@ -66,7 +68,8 @@ function AccordionTrigger({
   )
 }
 
-function AccordionContent({
+/** Panel revealed when its parent {@link AccordionItem} is expanded. */
+export function AccordionContent({
   className,
   children,
   ...props
@@ -88,5 +91,3 @@ function AccordionContent({
     </AccordionContentPrimitive>
   )
 }
-
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent }

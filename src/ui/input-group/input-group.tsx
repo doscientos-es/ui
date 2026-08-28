@@ -4,6 +4,7 @@ import { Button, type ButtonProps } from "../button/button";
 import { Input } from "../input/input";
 import { Textarea } from "../textarea/textarea";
 
+/** Visually joins an input or textarea with contextual text and actions. */
 export function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     // biome-ignore lint/a11y/useSemanticElements: fieldset cannot preserve this inline control composition.

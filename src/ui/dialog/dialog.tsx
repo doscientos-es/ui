@@ -23,14 +23,19 @@ function useDialogContext() {
   return context;
 }
 
+/** Props for a controlled or uncontrolled dialog state container. */
 type DialogProps = {
   children: React.ReactNode;
+  /** Initial state when the dialog is uncontrolled. */
   defaultOpen?: boolean;
+  /** Called after the open state changes. */
   onOpenChange?: (open: boolean) => void;
+  /** Controlled open state. Use with {@link onOpenChange}. */
   open?: boolean;
 };
 
-function Dialog({ children, defaultOpen = false, onOpenChange, open: controlledOpen }: DialogProps) {
+/** Coordinates the trigger, overlay and content of a modal dialog. */
+export function Dialog({ children, defaultOpen = false, onOpenChange, open: controlledOpen }: DialogProps) {
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen);
   const open = controlledOpen ?? uncontrolledOpen;
   const setOpen = React.useCallback(
@@ -44,9 +49,13 @@ function Dialog({ children, defaultOpen = false, onOpenChange, open: controlledO
   return <DialogContext.Provider value={{ open, setOpen }}>{children}</DialogContext.Provider>;
 }
 
-type DialogTriggerProps = Omit<React.ComponentProps<typeof Button>, "onPress"> & { asChild?: boolean };
+type DialogTriggerProps = Omit<React.ComponentProps<typeof Button>, "onPress"> & {
+  /** Renders and augments the single child instead of rendering a {@link Button}. */
+  asChild?: boolean;
+};
 
-function DialogTrigger({ asChild = false, children, onClick, ...props }: DialogTriggerProps) {
+/** Opens the parent {@link Dialog}. */
+export function DialogTrigger({ asChild = false, children, onClick, ...props }: DialogTriggerProps) {
   const { setOpen } = useDialogContext();
   const handleClick: React.MouseEventHandler<HTMLElement> = (event) => {
     onClick?.(event as React.MouseEvent<HTMLButtonElement>);
@@ -72,7 +81,8 @@ function DialogTrigger({ asChild = false, children, onClick, ...props }: DialogT
   );
 }
 
-function DialogPortal({ children }: { children?: React.ReactNode }) {
+/** Groups dialog content rendered in the overlay layer. */
+export function DialogPortal({ children }: { children?: React.ReactNode }) {
   return <>{children}</>;
 }
 
@@ -81,7 +91,8 @@ type DialogOverlayProps = Omit<ModalOverlayProps, "children" | "className" | "is
   className?: string;
 };
 
-function DialogOverlay({ children, className, ...props }: DialogOverlayProps) {
+/** Dismissable backdrop displayed while the parent {@link Dialog} is open. */
+export function DialogOverlay({ children, className, ...props }: DialogOverlayProps) {
   const { open, setOpen } = useDialogContext();
   if (!open) return null;
 
@@ -109,7 +120,8 @@ type DialogContentProps = Omit<React.ComponentProps<typeof AriaDialog>, "childre
   showCloseButton?: boolean;
 };
 
-function DialogContent({
+/** Focus-managed modal content. Include a {@link DialogTitle} to give it an accessible name. */
+export function DialogContent({
   children,
   className,
   onOverlayClick,
@@ -159,9 +171,13 @@ function DialogContent({
   );
 }
 
-type DialogCloseProps = Omit<React.ComponentProps<typeof Button>, "onPress"> & { asChild?: boolean };
+type DialogCloseProps = Omit<React.ComponentProps<typeof Button>, "onPress"> & {
+  /** Renders and augments the single child instead of rendering a {@link Button}. */
+  asChild?: boolean;
+};
 
-function DialogClose({ asChild = false, children, onClick, ...props }: DialogCloseProps) {
+/** Closes the parent {@link Dialog}. */
+export function DialogClose({ asChild = false, children, onClick, ...props }: DialogCloseProps) {
   const { setOpen } = useDialogContext();
   if (asChild && React.isValidElement<SlottableProps>(children)) {
     const child = children as React.ReactElement<SlottableProps>;
@@ -182,11 +198,13 @@ function DialogClose({ asChild = false, children, onClick, ...props }: DialogClo
   );
 }
 
-function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
+/** Groups the title and description at the top of a dialog. */
+export function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return <div data-slot="dialog-header" className={cn("flex flex-col gap-2", className)} {...props} />;
 }
 
-function DialogFooter({ className, showCloseButton = false, children, ...props }: React.ComponentProps<"div"> & { showCloseButton?: boolean }) {
+/** Groups dialog actions and can add a secondary close action. */
+export function DialogFooter({ className, showCloseButton = false, children, ...props }: React.ComponentProps<"div"> & { showCloseButton?: boolean }) {
   return (
     <div data-slot="dialog-footer" className={cn("-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 sm:flex-row sm:flex-wrap sm:justify-end", className)} {...props}>
       {children}
@@ -195,12 +213,12 @@ function DialogFooter({ className, showCloseButton = false, children, ...props }
   );
 }
 
-function DialogTitle({ className, ...props }: Omit<React.ComponentProps<typeof Heading>, "slot">) {
+/** Title used to give the parent {@link DialogContent} an accessible name. */
+export function DialogTitle({ className, ...props }: Omit<React.ComponentProps<typeof Heading>, "slot">) {
   return <Heading slot="title" data-slot="dialog-title" className={cn("font-heading text-base leading-none font-medium", className)} {...props} />;
 }
 
-function DialogDescription({ className, ...props }: Omit<React.ComponentProps<typeof Text>, "slot">) {
+/** Supporting text announced alongside the parent {@link DialogTitle}. */
+export function DialogDescription({ className, ...props }: Omit<React.ComponentProps<typeof Text>, "slot">) {
   return <Text slot="description" data-slot="dialog-description" className={cn("text-sm text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground", className)} {...props} />;
 }
-
-export { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger };

@@ -5,6 +5,7 @@ import { cn } from "../../lib/cn";
 
 export type SeparatorProps = React.ComponentProps<typeof SeparatorPrimitive>;
 
+/** Semantic horizontal or vertical divider between related content. */
 function Separator({ className, orientation = "horizontal", ...props }: SeparatorProps) {
   return (
     <SeparatorPrimitive

@@ -2,8 +2,12 @@ import type * as React from "react";
 
 import { cn } from "../../lib/cn";
 
-export type CardProps = React.ComponentProps<"div"> & { size?: "default" | "sm" };
+export type CardProps = React.ComponentProps<"div"> & {
+  /** Spacing preset for standard or compact content. */
+  size?: "default" | "sm";
+};
 
+/** Surface for related content with optional header, body, action and footer regions. */
 function Card({ className, size = "default", ...props }: CardProps) {
   return (
     <div

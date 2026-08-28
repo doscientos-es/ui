@@ -48,6 +48,7 @@ export const toast = Object.assign((options: ToastOptions) => create(options), {
 export function useToast() { return toast; }
 export function ToastProvider({ children }: { children: ReactNode }) { return <>{children}<Toaster /></>; }
 
+/** Viewport that renders notifications created with {@link toast}. */
 export function Toaster({ position }: { position?: ToastPosition }) {
   return <SileoToaster position={position} options={{ fill: "var(--ui-secondary)" }} />;
 }

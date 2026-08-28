@@ -1,7 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { cn } from "../../lib/cn";
 
-export type AvatarProps = React.ComponentProps<"div"> & { size?: "xs" | "sm" | "default" | "lg" };
+export type AvatarProps = React.ComponentProps<"div"> & {
+  /** Avatar dimensions and fallback text size. */
+  size?: "xs" | "sm" | "default" | "lg";
+};
 
 const sizes = { xs: "size-5 text-[10px]", sm: "size-6 text-xs", default: "size-8 text-sm", lg: "size-10 text-base" };
 
@@ -11,6 +14,7 @@ const AvatarContext = createContext<{
   setStatus: (status: AvatarStatus) => void;
 } | null>(null);
 
+/** Displays an image or fallback content for a person, organisation or entity. */
 export function Avatar({ className, size = "default", children, ...props }: AvatarProps) {
   const [status, setStatus] = useState<AvatarStatus>("idle");
   return <AvatarContext.Provider value={{ status, setStatus }}><div data-slot="avatar" data-size={size} className={cn("group/avatar relative flex shrink-0 overflow-hidden rounded-full bg-muted text-muted-foreground", sizes[size], className)} {...props}>{children}</div></AvatarContext.Provider>;

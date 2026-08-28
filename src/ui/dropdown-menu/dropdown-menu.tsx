@@ -25,6 +25,7 @@ function DropdownMenuTrigger({
   return <MenuTriggerPrimitive data-slot="dropdown-menu-trigger" {...props} />
 }
 
+/** Floating menu of actions or selections opened by a {@link DropdownMenuTrigger}. */
 function DropdownMenu({
   "data-slot": dataSlot = "dropdown-menu-content",
   placement = "bottom start",

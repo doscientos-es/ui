@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { Button, LinkButton } from "./button";
 
@@ -21,21 +22,27 @@ describe("Button", () => {
     expect(button.className).not.toContain("translate-y-px");
   });
 
-  it("starts the ripple at the pointer and falls back to the center for keyboard clicks", () => {
+  it("starts the ripple at the pointer and falls back to the center for keyboard clicks", async () => {
+    const user = userEvent.setup();
     render(<Button>Guardar</Button>);
     const button = screen.getByRole("button", { name: "Guardar" });
     vi.spyOn(button, "getBoundingClientRect").mockReturnValue(new DOMRect(10, 20, 100, 40));
 
-    fireEvent.click(button, { clientX: 55, clientY: 35, detail: 1 });
+    await user.pointer([
+      { keys: "[MouseLeft>]", target: button, coords: { x: 55, y: 35 } },
+      { keys: "[/MouseLeft]", target: button, coords: { x: 55, y: 35 } },
+    ]);
+    await waitFor(() => expect(button.querySelector('[data-slot="button-ripple"]')).toBeTruthy());
     const firstRipple = button.querySelector('[data-slot="button-ripple"]');
     expect(firstRipple?.className).toContain("animate-ui-ripple");
-    expect((firstRipple as HTMLElement).style.left).toBe("45px");
-    expect((firstRipple as HTMLElement).style.top).toBe("15px");
+    expect((firstRipple as HTMLElement).style.left).toBe("35px");
+    expect((firstRipple as HTMLElement).style.top).toBe("-5px");
 
     fireEvent.animationEnd(firstRipple!);
     expect(button.querySelector('[data-slot="button-ripple"]')).toBeNull();
 
-    fireEvent.click(button, { detail: 0 });
+    button.focus();
+    await user.keyboard("{Enter}");
     const keyboardRipple = button.querySelector('[data-slot="button-ripple"]');
     expect(keyboardRipple).not.toBe(firstRipple);
     expect((keyboardRipple as HTMLElement).style.left).toBe("50%");

@@ -8,6 +8,7 @@ export type AppShellProps = React.ComponentProps<"div"> & {
   sidebarBreakpoint?: AppShellBreakpoint;
 };
 
+/** Application layout foundation for a responsive sidebar, header and content area. */
 export function AppShell({
   className,
   sidebarBreakpoint = "md",

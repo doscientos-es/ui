@@ -18,6 +18,12 @@ const config: StorybookConfig = {
     name: "@storybook/react-vite",
     options: {},
   },
+  typescript: {
+    reactDocgen: "react-docgen-typescript",
+    reactDocgenTypescriptOptions: {
+      propFilter: (prop) => !prop.parent || !prop.parent.fileName.includes("node_modules"),
+    },
+  },
   viteFinal: async (viteConfig) => {
     const aliases = viteConfig.resolve?.alias;
     viteConfig.plugins = [...(viteConfig.plugins ?? []), tailwindcss()];

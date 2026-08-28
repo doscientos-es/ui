@@ -25,25 +25,39 @@ type Ripple = {
 
 const centeredRipplePosition: RipplePosition = { x: "50%", y: "50%" };
 
-function getRipplePosition(event: React.MouseEvent<Element>): RipplePosition {
-  if (!event.detail) return centeredRipplePosition;
+type RippleEvent = {
+  pointerType?: string;
+  target: EventTarget | null;
+  x?: number;
+  y?: number;
+};
 
-  const bounds = event.currentTarget.getBoundingClientRect();
+function getRipplePosition(event: RippleEvent): RipplePosition {
+  if (event.pointerType === "keyboard" || event.pointerType === "virtual") {
+    return centeredRipplePosition;
+  }
+
+  if (!(event.target instanceof Element) || event.x === undefined || event.y === undefined) {
+    return centeredRipplePosition;
+  }
+
+  const bounds = event.target.getBoundingClientRect();
   return {
-    x: `${event.clientX - bounds.left}px`,
-    y: `${event.clientY - bounds.top}px`,
+    x: `${event.x - bounds.left}px`,
+    y: `${event.y - bounds.top}px`,
   };
 }
 
 function useActionRipple(enabled: boolean) {
   const [ripple, setRipple] = useState<Ripple | null>(null);
 
-  function triggerRipple(event: React.MouseEvent<Element>) {
+  function triggerRipple(event: RippleEvent) {
     if (!enabled) return;
 
+    const position = getRipplePosition(event);
     setRipple((currentRipple) => ({
       id: (currentRipple?.id ?? 0) + 1,
-      position: getRipplePosition(event),
+      position,
     }));
   }
 
@@ -103,13 +117,22 @@ const buttonVariants = cva(
   },
 );
 
+/** Props for a button that triggers an in-page action. */
 export type ButtonProps = Omit<ButtonPrimitiveProps, "className"> &
   React.RefAttributes<HTMLButtonElement> &
   VariantProps<typeof buttonVariants> & {
+    /** Visual treatment for the action's priority and intent. */
+    variant?: VariantProps<typeof buttonVariants>["variant"];
+    /** Preset height, spacing and icon dimensions. */
+    size?: VariantProps<typeof buttonVariants>["size"];
     className?: string;
   };
 
-function Button({ className, variant = "default", size = "default", onClick, children, ...props }: ButtonProps) {
+/**
+ * Accessible button with visual variants and a press ripple.
+ * Provide an `aria-label` when it contains only an icon.
+ */
+export function Button({ className, variant = "default", size = "default", children, onClick, onPress, ...props }: ButtonProps) {
   const { ripple, triggerRipple } = useActionRipple(variant !== "link");
 
   return (
@@ -118,8 +141,9 @@ function Button({ className, variant = "default", size = "default", onClick, chi
       data-variant={variant}
       data-size={size}
       className={cn(buttonVariants({ variant, size, className }))}
-      onClick={(event) => {
-        onClick?.(event);
+      onClick={onClick}
+      onPress={(event) => {
+        onPress?.(event);
         triggerRipple(event);
       }}
       {...props}
@@ -134,17 +158,27 @@ function Button({ className, variant = "default", size = "default", onClick, chi
   );
 }
 
+/** Props for a link styled consistently with {@link Button}. */
 export type LinkButtonProps = Omit<LinkPrimitiveProps, "className"> &
   VariantProps<typeof buttonVariants> & {
+    /** Visual treatment for the navigation action's priority and intent. */
+    variant?: VariantProps<typeof buttonVariants>["variant"];
+    /** Preset height, spacing and icon dimensions. */
+    size?: VariantProps<typeof buttonVariants>["size"];
     className?: string;
   };
 
-function LinkButton({
+/**
+ * Navigation link styled as a {@link Button}.
+ * Provide an `aria-label` when it contains only an icon.
+ */
+export function LinkButton({
   className,
   variant = "default",
   size = "default",
-  onClick,
   children,
+  onClick,
+  onPress,
   ...props
 }: LinkButtonProps) {
   const { ripple, triggerRipple } = useActionRipple(variant !== "link");
@@ -155,8 +189,9 @@ function LinkButton({
       data-variant={variant}
       data-size={size}
       className={cn(buttonVariants({ variant, size, className }))}
-      onClick={(event) => {
-        onClick?.(event);
+      onClick={onClick}
+      onPress={(event) => {
+        onPress?.(event);
         triggerRipple(event);
       }}
       {...props}
@@ -171,4 +206,4 @@ function LinkButton({
   );
 }
 
-export { Button, buttonVariants, LinkButton };
+export { buttonVariants };

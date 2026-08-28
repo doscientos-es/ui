@@ -1,6 +1,7 @@
 import { ComboBox as AriaComboBox, Input as AriaInput, ListBox, ListBoxItem, Popover, type ComboBoxProps, type ListBoxItemProps } from "react-aria-components";
 import { cn } from "../../lib/cn";
 
+/** Searchable command palette built from an accessible combobox and option list. */
 export function Command<T extends object>({ className, ...props }: ComboBoxProps<T>) {
   return <AriaComboBox data-slot="command" className={cn("w-full", className)} {...props} />;
 }

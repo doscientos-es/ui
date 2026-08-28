@@ -5,8 +5,10 @@ import {
 } from "react-aria-components";
 import { cn } from "../../lib/cn";
 
+/** Props for an accessible boolean form control. */
 export type CheckboxProps = Omit<AriaCheckboxProps, "className"> & { className?: string };
 
+/** Checkbox that supports controlled and uncontrolled selection. */
 export function Checkbox({ className, children, ...props }: CheckboxProps) {
   return (
     <AriaCheckbox

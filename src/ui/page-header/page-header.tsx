@@ -1,6 +1,7 @@
 import type * as React from "react";
 import { cn } from "../../lib/cn";
 
+/** Page-level heading layout with optional description and actions. */
 export function PageHeader({ className, ...props }: React.ComponentProps<"header">) {
   return <header data-slot="page-header" className={cn("flex flex-col gap-4 py-2 sm:flex-row sm:items-center sm:justify-between", className)} {...props} />;
 }

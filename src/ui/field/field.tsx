@@ -4,12 +4,14 @@ import { cn } from "../../lib/cn";
 import { Label } from "../label/label";
 import { Separator } from "../separator/separator";
 
+/** Semantic fieldset for controls that share a {@link FieldLegend}. */
 export function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
   return (
     <fieldset data-slot="field-set" className={cn("flex flex-col gap-4", className)} {...props} />
   );
 }
 
+/** Label for a {@link FieldSet}, with heading or label styling. */
 export function FieldLegend({
   className,
   variant = "legend",
@@ -28,6 +30,7 @@ export function FieldLegend({
   );
 }
 
+/** Responsive vertical stack for related {@link Field} components. */
 export function FieldGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -57,8 +60,14 @@ export const fieldVariants = cva(
   },
 );
 
-export type FieldProps = React.ComponentProps<"div"> & VariantProps<typeof fieldVariants>;
+/** Props for the layout wrapper of a labelled form control. */
+export type FieldProps = React.ComponentProps<"div"> &
+  VariantProps<typeof fieldVariants> & {
+    /** Layout of the label and control; `responsive` changes at the field-group container breakpoint. */
+    orientation?: VariantProps<typeof fieldVariants>["orientation"];
+  };
 
+/** Groups a form control, its label and descriptive or error text. */
 export function Field({ className, orientation = "vertical", ...props }: FieldProps) {
   return (
     // biome-ignore lint/a11y/useSemanticElements: FieldSet provides native fieldset semantics when they are appropriate.
@@ -72,6 +81,7 @@ export function Field({ className, orientation = "vertical", ...props }: FieldPr
   );
 }
 
+/** Stacks the label, description and validation message for a {@link Field}. */
 export function FieldContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -82,6 +92,7 @@ export function FieldContent({ className, ...props }: React.ComponentProps<"div"
   );
 }
 
+/** Label associated with the control inside a {@link Field}. */
 export function FieldLabel({ className, ...props }: React.ComponentProps<typeof Label>) {
   return (
     <Label
@@ -95,6 +106,7 @@ export function FieldLabel({ className, ...props }: React.ComponentProps<typeof 
   );
 }
 
+/** Short visible title for a {@link Field} that is not a native label. */
 export function FieldTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -105,6 +117,7 @@ export function FieldTitle({ className, ...props }: React.ComponentProps<"div">)
   );
 }
 
+/** Helper text that clarifies how to complete a {@link Field}. */
 export function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
   return (
     <p
@@ -118,6 +131,7 @@ export function FieldDescription({ className, ...props }: React.ComponentProps<"
   );
 }
 
+/** Visual divider between groups of fields, optionally with a text label. */
 export function FieldSeparator({ className, children, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -139,10 +153,13 @@ export function FieldSeparator({ className, children, ...props }: React.Componen
   );
 }
 
+/** Props for a validation message rendered by {@link FieldError}. */
 export type FieldErrorProps = React.ComponentProps<"div"> & {
+  /** Validation errors whose unique messages are rendered when no children are supplied. */
   errors?: Array<{ message?: string } | undefined>;
 };
 
+/** Announced validation message for a {@link Field}. */
 export function FieldError({ className, children, errors, ...props }: FieldErrorProps) {
   const messages = [...new Set(errors?.flatMap((error) => error?.message ?? []) ?? [])];
   const content =

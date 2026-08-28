@@ -14,6 +14,7 @@ export function MenuContent({ className, ...props }: React.ComponentProps<typeof
   return <Popover data-slot="menu-content" className={cn("min-w-40 overflow-hidden rounded-xl border border-border bg-background p-1.5 text-foreground shadow-lg motion-safe:data-entering:animate-ui-surface-in motion-safe:data-exiting:animate-ui-surface-out", className)} {...props} />;
 }
 
+/** Accessible collection of actions or options within a {@link MenuTrigger}. */
 export function Menu<T extends object>({ className, ...props }: MenuProps<T>) {
   return <AriaMenu data-slot="menu" className={cn("outline-none", className)} {...props} />;
 }

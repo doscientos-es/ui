@@ -9,8 +9,8 @@ import {
 } from "react-aria-components"
 import { cn } from "../../lib/cn"
 
-
-function TooltipTrigger({
+/** Couples a focusable trigger with its {@link Tooltip} content. */
+export function TooltipTrigger({
   delay = 0,
   children,
   ...props
@@ -31,7 +31,11 @@ function TooltipTrigger({
   )
 }
 
-function Tooltip({
+/**
+ * Brief contextual information revealed from a {@link TooltipTrigger}.
+ * Do not use it as the only label or as essential content.
+ */
+export function Tooltip({
   className,
   placement = "top",
   offset = 4,
@@ -77,5 +81,3 @@ function Tooltip({
     </TooltipPrimitive>
   )
 }
-
-export { Tooltip, TooltipTrigger }

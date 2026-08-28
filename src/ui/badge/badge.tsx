@@ -25,8 +25,13 @@ export const badgeVariants = cva(
   },
 );
 
-export type BadgeProps = React.ComponentProps<"span"> & VariantProps<typeof badgeVariants>;
+export type BadgeProps = React.ComponentProps<"span"> &
+  VariantProps<typeof badgeVariants> & {
+    /** Visual intent for a compact status or category label. */
+    variant?: VariantProps<typeof badgeVariants>["variant"];
+  };
 
+/** Compact label for statuses, categories and small counts. */
 export function Badge({ className, variant, ...props }: BadgeProps) {
   return (
     <span

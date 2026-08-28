@@ -21,6 +21,7 @@ const buttonGroupVariants = cva(
   },
 );
 
+/** Groups adjacent actions into a single connected control. */
 function ButtonGroup({
   className,
   orientation,

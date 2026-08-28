@@ -1,6 +1,7 @@
 import { Breadcrumb as AriaBreadcrumb, Breadcrumbs as AriaBreadcrumbs, Link as AriaLink } from "react-aria-components";
 import { cn } from "../../lib/cn";
 
+/** Accessible navigation trail showing the current page's hierarchy. */
 export function Breadcrumbs({ className, ...props }: React.ComponentProps<typeof AriaBreadcrumbs>) {
   return <AriaBreadcrumbs data-slot="breadcrumbs" className={cn("flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground", className)} {...props} />;
 }

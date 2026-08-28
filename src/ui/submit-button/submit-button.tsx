@@ -2,8 +2,15 @@ import { useFormStatus } from "react-dom";
 import { LoaderCircle } from "lucide-react";
 import { Button, type ButtonProps } from "../button/button";
 
-export interface SubmitButtonProps extends Omit<ButtonProps, "type"> { pendingLabel?: string; loading?: boolean; children: React.ReactNode; }
+export interface SubmitButtonProps extends Omit<ButtonProps, "type"> {
+  /** Text displayed while the parent form is submitting or loading is set. */
+  pendingLabel?: string;
+  /** Explicit loading state in addition to the parent form status. */
+  loading?: boolean;
+  children: React.ReactNode;
+}
 
+/** Submit button that disables itself and announces progress while a form is pending. */
 export function SubmitButton({ pendingLabel = "Guardando…", loading = false, children, isDisabled, size = "sm", ...props }: SubmitButtonProps) {
   const { pending } = useFormStatus();
   const busy = pending || loading;

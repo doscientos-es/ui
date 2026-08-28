@@ -17,8 +17,17 @@ export function useFormFeedback(options?: { successResetMs?: number }) {
   return { state, pending: state.status === "pending", setPending, setSuccess, setError, reset };
 }
 
-export interface FormFeedbackProps { state: FormFeedbackState; className?: string; pendingLabel?: string; successLabel?: string; }
+export interface FormFeedbackProps {
+  /** Current submission state and optional user-facing result message. */
+  state: FormFeedbackState;
+  className?: string;
+  /** Text announced while the form submission is pending. */
+  pendingLabel?: string;
+  /** Fallback text used when a successful state has no message. */
+  successLabel?: string;
+}
 
+/** Live status message for pending, successful and failed form submissions. */
 export function FormFeedback({ state, className, pendingLabel = "Guardando…", successLabel = "Guardado" }: FormFeedbackProps) {
   if (state.status === "idle") return <span aria-hidden="true" className={cn("inline-flex h-5 items-center", className)} />;
   const error = state.status === "error";

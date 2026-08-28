@@ -56,6 +56,7 @@ function SheetOverlay({
   );
 }
 
+/** Dismissable modal panel that slides in from a screen edge. */
 function Sheet({
   className,
   children,

@@ -2,6 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
 import { cn } from "../../lib/cn";
 
+/** Composes an informative empty result with optional media and a recovery action. */
 export function EmptyState({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
