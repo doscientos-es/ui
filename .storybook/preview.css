@@ -4,8 +4,13 @@ body,
   min-height: 100%;
 }
 
+/* React Aria renders popovers and menus in a portal under <body>. Set the
+ * canvas font there too so overlays inherit the same sans-serif as triggers. */
+body {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
 .storybook-canvas {
   min-width: 20rem;
   color: var(--ui-foreground);
-  /* font-family: ui-sans-serif, system-ui, sans-serif; */
 }
