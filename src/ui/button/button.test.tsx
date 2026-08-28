@@ -29,7 +29,8 @@ describe("Button", () => {
     fireEvent.click(button, { clientX: 55, clientY: 35, detail: 1 });
     const firstRipple = button.querySelector('[data-slot="button-ripple"]');
     expect(firstRipple?.className).toContain("animate-ui-ripple");
-    expect(firstRipple).toHaveStyle({ left: "45px", top: "15px" });
+    expect((firstRipple as HTMLElement).style.left).toBe("45px");
+    expect((firstRipple as HTMLElement).style.top).toBe("15px");
 
     fireEvent.animationEnd(firstRipple!);
     expect(button.querySelector('[data-slot="button-ripple"]')).toBeNull();
@@ -37,7 +38,8 @@ describe("Button", () => {
     fireEvent.click(button, { detail: 0 });
     const keyboardRipple = button.querySelector('[data-slot="button-ripple"]');
     expect(keyboardRipple).not.toBe(firstRipple);
-    expect(keyboardRipple).toHaveStyle({ left: "50%", top: "50%" });
+    expect((keyboardRipple as HTMLElement).style.left).toBe("50%");
+    expect((keyboardRipple as HTMLElement).style.top).toBe("50%");
   });
 
   it("renders navigation with button styling as a link", () => {

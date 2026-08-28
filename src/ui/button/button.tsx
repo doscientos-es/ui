@@ -25,25 +25,25 @@ type Ripple = {
 
 const centeredRipplePosition: RipplePosition = { x: "50%", y: "50%" };
 
+function getRipplePosition(event: React.MouseEvent<HTMLElement>): RipplePosition {
+  if (!event.detail) return centeredRipplePosition;
+
+  const bounds = event.currentTarget.getBoundingClientRect();
+  return {
+    x: `${event.clientX - bounds.left}px`,
+    y: `${event.clientY - bounds.top}px`,
+  };
+}
+
 function useActionRipple(enabled: boolean) {
   const [ripple, setRipple] = useState<Ripple | null>(null);
 
   function triggerRipple(event: React.MouseEvent<HTMLElement>) {
     if (!enabled) return;
 
-    const position = event.detail
-      ? (() => {
-        const bounds = event.currentTarget.getBoundingClientRect();
-        return {
-          x: `${event.clientX - bounds.left}px`,
-          y: `${event.clientY - bounds.top}px`,
-        };
-      })()
-      : centeredRipplePosition;
-
     setRipple((currentRipple) => ({
       id: (currentRipple?.id ?? 0) + 1,
-      position,
+      position: getRipplePosition(event),
     }));
   }
 
@@ -120,7 +120,7 @@ function Button({ className, variant = "default", size = "default", onClick, chi
       className={cn(buttonVariants({ variant, size, className }))}
       onClick={(event) => {
         onClick?.(event);
-        triggerRipple();
+        triggerRipple(event);
       }}
       {...props}
     >
@@ -157,7 +157,7 @@ function LinkButton({
       className={cn(buttonVariants({ variant, size, className }))}
       onClick={(event) => {
         onClick?.(event);
-        triggerRipple();
+        triggerRipple(event);
       }}
       {...props}
     >
