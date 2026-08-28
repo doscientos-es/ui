@@ -7,5 +7,5 @@ body,
 .storybook-canvas {
   min-width: 20rem;
   color: var(--ui-foreground);
-  font-family: ui-sans-serif, system-ui, sans-serif;
+  /* font-family: ui-sans-serif, system-ui, sans-serif; */
 }

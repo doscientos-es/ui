@@ -17,6 +17,7 @@ export * from "./ui/checkbox/checkbox";
 export * from "./ui/combobox/combobox";
 export * from "./ui/command/command";
 export * from "./ui/confirm-dialog/confirm-dialog";
+export * from "./ui/dialog/dialog";
 export * from "./ui/drawer/drawer";
 export * from "./ui/dropdown-menu/dropdown-menu";
 export * from "./ui/empty-state/empty-state";

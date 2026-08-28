@@ -3,7 +3,7 @@ import { create } from "storybook/theming";
 /** Shared manager and Docs theme using the approved Doscientos brand tokens. */
 export const doscientosTheme = create({
   base: "light",
-  fontCode: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+  // fontCode: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
   brandTitle: "doscientos UI",
   brandUrl: "https://doscientos.es",
   brandImage: "/doscientos-mark.svg",
