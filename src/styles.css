@@ -11,7 +11,7 @@
 :root {
   /* Reference-led defaults for the backoffice surface system. */
   --ui-radius: var(--radius, 0.625rem);
-  --ui-background: var(--background, #f4f3f1);
+  --ui-background: var(--background, #ffffff);
   --ui-foreground: var(--foreground, #202020);
   --ui-card: var(--card, #ffffff);
   --ui-card-foreground: var(--card-foreground, var(--ui-foreground));
