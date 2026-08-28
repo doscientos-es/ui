@@ -14,6 +14,7 @@ import { cn } from "../../lib/cn";
 import { Button } from "../button/button";
 
 type DialogContextValue = { open: boolean; setOpen: (open: boolean) => void };
+type SlottableProps = React.HTMLAttributes<HTMLElement> & { "data-slot"?: string };
 const DialogContext = React.createContext<DialogContextValue | null>(null);
 
 function useDialogContext() {
@@ -43,7 +44,7 @@ function Dialog({ children, defaultOpen = false, onOpenChange, open: controlledO
   return <DialogContext.Provider value={{ open, setOpen }}>{children}</DialogContext.Provider>;
 }
 
-type DialogTriggerProps = React.ComponentProps<"button"> & { asChild?: boolean };
+type DialogTriggerProps = Omit<React.ComponentProps<typeof Button>, "onPress"> & { asChild?: boolean };
 
 function DialogTrigger({ asChild = false, children, onClick, ...props }: DialogTriggerProps) {
   const { setOpen } = useDialogContext();
@@ -52,10 +53,10 @@ function DialogTrigger({ asChild = false, children, onClick, ...props }: DialogT
     if (!event.defaultPrevented) setOpen(true);
   };
 
-  if (asChild && React.isValidElement<React.HTMLAttributes<HTMLElement>>(children)) {
-    const child = children;
+  if (asChild && React.isValidElement<SlottableProps>(children)) {
+    const child = children as React.ReactElement<SlottableProps>;
     return React.cloneElement(child, {
-      ...props,
+      ...(props as React.HTMLAttributes<HTMLElement>),
       "data-slot": "dialog-trigger",
       onClick: (event: React.MouseEvent<HTMLElement>) => {
         child.props.onClick?.(event);
@@ -101,7 +102,8 @@ function DialogOverlay({ children, className, ...props }: DialogOverlayProps) {
   );
 }
 
-type DialogContentProps = Omit<React.ComponentProps<typeof AriaDialog>, "className"> & {
+type DialogContentProps = Omit<React.ComponentProps<typeof AriaDialog>, "children" | "className"> & {
+  children?: React.ReactNode;
   className?: string;
   onOverlayClick?: React.MouseEventHandler<HTMLDivElement>;
   showCloseButton?: boolean;
@@ -157,14 +159,14 @@ function DialogContent({
   );
 }
 
-type DialogCloseProps = React.ComponentProps<"button"> & { asChild?: boolean };
+type DialogCloseProps = Omit<React.ComponentProps<typeof Button>, "onPress"> & { asChild?: boolean };
 
 function DialogClose({ asChild = false, children, onClick, ...props }: DialogCloseProps) {
   const { setOpen } = useDialogContext();
-  if (asChild && React.isValidElement<React.HTMLAttributes<HTMLElement>>(children)) {
-    const child = children;
+  if (asChild && React.isValidElement<SlottableProps>(children)) {
+    const child = children as React.ReactElement<SlottableProps>;
     return React.cloneElement(child, {
-      ...props,
+      ...(props as React.HTMLAttributes<HTMLElement>),
       "data-slot": "dialog-close",
       onClick: (event: React.MouseEvent<HTMLElement>) => {
         child.props.onClick?.(event);
