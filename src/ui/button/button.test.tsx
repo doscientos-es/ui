@@ -16,9 +16,25 @@ describe("Button", () => {
     expect(button.getAttribute("data-slot")).toBe("button");
     expect(button.className).toContain("text-destructive");
     expect(button.className).toContain("rounded-lg");
-    expect(button.className).toContain("data-pressed:after:scale-150");
+    expect(button.className).toContain("overflow-hidden");
     expect(button.className.split(" ")).not.toContain("rounded-full");
     expect(button.className).not.toContain("translate-y-px");
+  });
+
+  it("completes an independent ripple after each click", () => {
+    render(<Button>Guardar</Button>);
+    const button = screen.getByRole("button", { name: "Guardar" });
+
+    fireEvent.click(button);
+    const firstRipple = button.querySelector('[data-slot="button-ripple"]');
+    expect(firstRipple?.className).toContain("animate-ui-ripple");
+
+    fireEvent.click(button);
+    const latestRipple = button.querySelector('[data-slot="button-ripple"]');
+    expect(latestRipple).not.toBe(firstRipple);
+
+    fireEvent.animationEnd(latestRipple!);
+    expect(button.querySelector('[data-slot="button-ripple"]')).toBeNull();
   });
 
   it("renders navigation with button styling as a link", () => {
@@ -34,10 +50,11 @@ describe("Button", () => {
 
   it("hides the ripple for the link variant", () => {
     render(<Button variant="link">Más información</Button>);
+    const button = screen.getByRole("button", { name: "Más información" });
 
-    expect(screen.getByRole("button", { name: "Más información" }).className).toContain(
-      "after:hidden",
-    );
+    fireEvent.click(button);
+
+    expect(button.querySelector('[data-slot="button-ripple"]')).toBeNull();
   });
 
   it("uses React Aria disabled semantics", () => {

@@ -1,6 +1,7 @@
 "use client";
 
 import { cva, type VariantProps } from "class-variance-authority";
+import { useState } from "react";
 import type * as React from "react";
 import {
   Button as ButtonPrimitive,
@@ -11,6 +12,26 @@ import {
 
 import { actionRipple } from "../../lib/action-ripple";
 import { cn } from "../../lib/cn";
+
+function useActionRipple(enabled: boolean) {
+  const [rippleId, setRippleId] = useState(0);
+
+  function triggerRipple() {
+    if (enabled) setRippleId((currentId) => currentId + 1);
+  }
+
+  const ripple = rippleId ? (
+    <span
+      key={rippleId}
+      aria-hidden="true"
+      data-slot="button-ripple"
+      className="pointer-events-none absolute top-1/2 left-1/2 aspect-square w-full rounded-full bg-current animate-ui-ripple motion-reduce:hidden"
+      onAnimationEnd={() => setRippleId(0)}
+    />
+  ) : null;
+
+  return { ripple, triggerRipple };
+}
 
 const buttonVariants = cva(
   cn(
@@ -58,15 +79,28 @@ export type ButtonProps = Omit<ButtonPrimitiveProps, "className"> &
     className?: string;
   };
 
-function Button({ className, variant = "default", size = "default", ...props }: ButtonProps) {
+function Button({ className, variant = "default", size = "default", onClick, children, ...props }: ButtonProps) {
+  const { ripple, triggerRipple } = useActionRipple(variant !== "link");
+
   return (
     <ButtonPrimitive
       data-slot="button"
       data-variant={variant}
       data-size={size}
       className={cn(buttonVariants({ variant, size, className }))}
+      onClick={(event) => {
+        onClick?.(event);
+        triggerRipple();
+      }}
       {...props}
-    />
+    >
+      {(renderProps) => (
+        <>
+          {typeof children === "function" ? children(renderProps) : children}
+          {ripple}
+        </>
+      )}
+    </ButtonPrimitive>
   );
 }
 
@@ -79,16 +113,31 @@ function LinkButton({
   className,
   variant = "default",
   size = "default",
+  onClick,
+  children,
   ...props
 }: LinkButtonProps) {
+  const { ripple, triggerRipple } = useActionRipple(variant !== "link");
+
   return (
     <LinkPrimitive
       data-slot="button"
       data-variant={variant}
       data-size={size}
       className={cn(buttonVariants({ variant, size, className }))}
+      onClick={(event) => {
+        onClick?.(event);
+        triggerRipple();
+      }}
       {...props}
-    />
+    >
+      {(renderProps) => (
+        <>
+          {typeof children === "function" ? children(renderProps) : children}
+          {ripple}
+        </>
+      )}
+    </LinkPrimitive>
   );
 }
 

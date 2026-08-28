@@ -99,6 +99,7 @@
   --animate-ui-surface-out: ui-surface-out 100ms ease-in;
   --animate-ui-overlay-in: ui-overlay-in 150ms ease-out;
   --animate-ui-overlay-out: ui-overlay-out 100ms ease-in;
+  --animate-ui-ripple: ui-ripple 400ms ease-out;
 
   @keyframes accordion-down {
     from {
@@ -143,6 +144,18 @@
   @keyframes ui-overlay-out {
     to {
       opacity: 0;
+    }
+  }
+
+  @keyframes ui-ripple {
+    from {
+      opacity: 0.1;
+      transform: translate(-50%, -50%) scale(0);
+    }
+
+    to {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(1.5);
     }
   }
 

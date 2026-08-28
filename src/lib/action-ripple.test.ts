@@ -2,13 +2,12 @@ import { describe, expect, it } from "vitest";
 import { actionRipple } from "./action-ripple";
 
 describe("actionRipple", () => {
-  it("provides reusable press and reduced-motion styles", () => {
+  it("provides reusable clipping and stacking styles", () => {
     const className = actionRipple();
 
     expect(className).toContain("overflow-hidden");
-    expect(className).toContain("active:after:scale-150");
-    expect(className).toContain("data-pressed:after:scale-150");
-    expect(className).toContain("motion-reduce:after:hidden");
+    expect(className).toContain("isolate");
+    expect(className).not.toContain("active:after");
   });
 
   it("accepts additional classes", () => {
