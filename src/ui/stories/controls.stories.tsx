@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "../button/button";
 import { Checkbox } from "../checkbox/checkbox";
 import { Menu, MenuContent, MenuItem, MenuTrigger } from "../menu/menu";
-import { SearchClearButton, SearchField, SearchInput } from "../search-field/search-field";
+import { Input } from "../input/input";
 import { Select, SelectContent, SelectItem, SelectList, SelectTrigger, SelectValue } from "../select/select";
 import { Switch } from "../switch/switch";
 
@@ -32,7 +32,7 @@ export const SelectField: Story = {
 };
 
 export const Search: Story = {
-  render: () => <SearchField aria-label="Buscar clientes" className="relative w-72"><SearchInput placeholder="Buscar clientes…" /><SearchClearButton aria-label="Borrar búsqueda" /></SearchField>,
+  render: () => <Input aria-label="Buscar clientes" className="w-72" placeholder="Buscar clientes…" type="search" />,
 };
 
 export const ActionsMenu: Story = {

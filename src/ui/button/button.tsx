@@ -121,6 +121,8 @@ const buttonVariants = cva(
 export type ButtonProps = Omit<ButtonPrimitiveProps, "className"> &
   React.RefAttributes<HTMLButtonElement> &
   VariantProps<typeof buttonVariants> & {
+    /** HTML-compatible alias for `isDisabled`. */
+    disabled?: boolean;
     /** Visual treatment for the action's priority and intent. */
     variant?: VariantProps<typeof buttonVariants>["variant"];
     /** Preset height, spacing and icon dimensions. */
@@ -132,7 +134,7 @@ export type ButtonProps = Omit<ButtonPrimitiveProps, "className"> &
  * Accessible button with visual variants and a press ripple.
  * Provide an `aria-label` when it contains only an icon.
  */
-export function Button({ className, variant = "default", size = "default", children, onClick, onPress, ...props }: ButtonProps) {
+export function Button({ className, variant = "default", size = "default", children, disabled, isDisabled, onClick, onPress, ...props }: ButtonProps) {
   const { ripple, triggerRipple } = useActionRipple(variant !== "link");
 
   return (
@@ -142,6 +144,7 @@ export function Button({ className, variant = "default", size = "default", child
       data-size={size}
       className={cn(buttonVariants({ variant, size, className }))}
       onClick={onClick}
+      isDisabled={isDisabled ?? disabled}
       onPress={(event) => {
         onPress?.(event);
         triggerRipple(event);

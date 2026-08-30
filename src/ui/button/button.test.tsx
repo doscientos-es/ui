@@ -69,8 +69,10 @@ describe("Button", () => {
     expect(button.querySelector('[data-slot="button-ripple"]')).toBeNull();
   });
 
-  it("uses React Aria disabled semantics", () => {
-    render(<Button isDisabled>No disponible</Button>);
-    expect(screen.getByRole("button", { name: "No disponible" })).toHaveProperty("disabled", true);
+  it("supports React Aria and HTML disabled semantics", () => {
+    render(<Button disabled>No disponible</Button>);
+    const button = screen.getByRole("button", { name: "No disponible" });
+
+    expect(button).toHaveProperty("disabled", true);
   });
 });
