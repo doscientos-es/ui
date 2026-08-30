@@ -37,7 +37,8 @@ describe("Accordion", () => {
       </Accordion>,
     );
     const trigger = screen.getByRole("button", { name: "Detalles" });
-    trigger.focus();
+    await user.tab();
+    expect(document.activeElement).toBe(trigger);
     await user.keyboard("{Enter}");
     expect(trigger.getAttribute("aria-expanded")).toBe("true");
     expect(screen.getByText("Contenido")).toBeTruthy();

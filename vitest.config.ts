@@ -19,6 +19,7 @@ export default defineConfig({
         test: {
           name: "unit",
           environment: "happy-dom",
+          pool: "threads",
           include: ["src/**/*.test.{ts,tsx}"],
           setupFiles: ["./src/test/setup.ts"],
         },

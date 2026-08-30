@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarItem, SidebarProvider, SidebarTrigger } from "./sidebar";
 
@@ -10,9 +11,10 @@ describe("Sidebar", () => {
   });
 
   it("toggles its collapsed state with an accessible trigger", async () => {
+    const user = userEvent.setup();
     render(<SidebarProvider><Sidebar><SidebarTrigger /></Sidebar></SidebarProvider>);
     const trigger = screen.getByRole("button", { name: "Colapsar navegación" });
-    await trigger.click();
+    await user.click(trigger);
     expect(screen.getByRole("button", { name: "Expandir navegación" })).toBeTruthy();
   });
 });

@@ -1,4 +1,4 @@
-import { Dialog as AriaDialog, Modal, ModalOverlay, type ModalOverlayProps } from "react-aria-components";
+import { Dialog as AriaDialog, Heading, Modal, ModalOverlay, type ModalOverlayProps } from "react-aria-components";
 import { cn } from "../../lib/cn";
 
 export interface DrawerProps extends Omit<ModalOverlayProps, "children" | "className"> {
@@ -17,5 +17,5 @@ export function Drawer({ children, side = "right", className, ...props }: Drawer
 
 export function DrawerHeader({ className, ...props }: React.ComponentProps<"div">) { return <div data-slot="drawer-header" className={cn("flex flex-col gap-1.5", className)} {...props} />; }
 export function DrawerFooter({ className, ...props }: React.ComponentProps<"div">) { return <div data-slot="drawer-footer" className={cn("mt-auto flex flex-col-reverse gap-2 pt-4 sm:flex-row sm:justify-end", className)} {...props} />; }
-export function DrawerTitle({ className, ...props }: React.ComponentProps<"h2">) { return <h2 data-slot="drawer-title" className={cn("text-base font-semibold", className)} {...props} />; }
+export function DrawerTitle({ className, ...props }: Omit<React.ComponentProps<typeof Heading>, "slot">) { return <Heading slot="title" data-slot="drawer-title" className={cn("text-base font-semibold", className)} {...props} />; }
 export function DrawerDescription({ className, ...props }: React.ComponentProps<"p">) { return <p data-slot="drawer-description" className={cn("text-sm text-muted-foreground", className)} {...props} />; }
