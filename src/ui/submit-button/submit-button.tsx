@@ -5,6 +5,8 @@ import { Button, type ButtonProps } from '../button/button'
 
 export interface SubmitButtonProps extends Omit<ButtonProps, 'type'> {
   /** Text displayed while the parent form is submitting or loading is set. */
+  loadingLabel?: string
+  /** @deprecated Use `loadingLabel` instead. */
   pendingLabel?: string
   /** Explicit loading state in addition to the parent form status. */
   loading?: boolean
@@ -13,7 +15,8 @@ export interface SubmitButtonProps extends Omit<ButtonProps, 'type'> {
 
 /** Submit button that disables itself and announces progress while a form is pending. */
 export function SubmitButton({
-  pendingLabel = 'Guardando…',
+  loadingLabel,
+  pendingLabel,
   loading = false,
   children,
   isDisabled,
@@ -22,6 +25,7 @@ export function SubmitButton({
 }: SubmitButtonProps) {
   const { pending } = useFormStatus()
   const busy = pending || loading
+  const label = loadingLabel ?? pendingLabel ?? 'Guardando…'
   return (
     <Button
       type="submit"
@@ -33,7 +37,7 @@ export function SubmitButton({
       {busy ? (
         <>
           <LoaderCircle aria-hidden="true" className="size-3.5 animate-spin" />
-          {pendingLabel}
+          {label}
         </>
       ) : (
         children
