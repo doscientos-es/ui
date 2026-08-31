@@ -15,6 +15,7 @@ import {
 
 describe('Dialog', () => {
   it('opens from an asChild trigger and closes from an asChild action', () => {
+    const onCancel = vi.fn()
     render(
       <Dialog>
         <DialogTrigger asChild>
@@ -27,7 +28,9 @@ describe('Dialog', () => {
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
-              <button type="button">Cancelar</button>
+              <button type="button" onClick={onCancel}>
+                Cancelar
+              </button>
             </DialogClose>
           </DialogFooter>
         </DialogContent>
@@ -37,6 +40,7 @@ describe('Dialog', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Abrir' }))
     expect(screen.getByRole('dialog', { name: 'Editar cliente' })).toBeTruthy()
     fireEvent.click(screen.getByRole('button', { name: 'Cancelar' }))
+    expect(onCancel).toHaveBeenCalledOnce()
     expect(screen.queryByRole('dialog')).toBeNull()
   })
 
@@ -67,6 +71,7 @@ describe('Dialog', () => {
     const dialog = screen.getByRole('dialog', { name: 'Enviar factura' })
     expect(dialog.classList.contains('relative')).toBe(true)
     expect(dialog.classList.contains('mx-auto')).toBe(true)
+    expect(dialog.classList.contains('box-border')).toBe(true)
     expect(dialog.classList.contains('max-h-full')).toBe(true)
     expect(dialog.classList.contains('min-h-0')).toBe(true)
     expect(dialog.classList.contains('overflow-x-hidden')).toBe(true)
@@ -85,9 +90,9 @@ describe('Dialog', () => {
         .querySelector('[data-slot="dialog-overlay"]')
         ?.classList.contains('motion-safe:data-entering:animate-ui-overlay-in'),
     ).toBe(true)
-    expect(document.querySelector('[data-slot="dialog-footer"]')?.classList.contains('border-border')).toBe(
-      true,
-    )
+    expect(
+      document.querySelector('[data-slot="dialog-footer"]')?.classList.contains('border-border'),
+    ).toBe(true)
   })
 
   it('applies custom classes only to the dialog content', () => {

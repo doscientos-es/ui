@@ -36,8 +36,8 @@ describe('Button', () => {
     await waitFor(() => expect(button.querySelector('[data-slot="button-ripple"]')).toBeTruthy())
     const firstRipple = button.querySelector('[data-slot="button-ripple"]')
     expect(firstRipple?.className).toContain('animate-ui-ripple')
-    expect((firstRipple as HTMLElement).style.left).toBe('35px')
-    expect((firstRipple as HTMLElement).style.top).toBe('-5px')
+    expect((firstRipple as HTMLElement).style.left).toBe('45px')
+    expect((firstRipple as HTMLElement).style.top).toBe('15px')
 
     fireEvent.animationEnd(firstRipple!)
     expect(button.querySelector('[data-slot="button-ripple"]')).toBeNull()

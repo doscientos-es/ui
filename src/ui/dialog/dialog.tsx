@@ -171,7 +171,7 @@ export function DialogContent({
           <AriaDialog
             data-slot={contentSlot}
             className={cn(
-              'relative mx-auto grid max-h-full min-h-0 w-full max-w-[calc(100%-2rem)] gap-4 overflow-x-hidden overflow-y-auto rounded-xl bg-background p-4 text-sm text-foreground ring-1 ring-foreground/10 outline-none sm:max-w-sm',
+              'relative mx-auto grid box-border max-h-full min-h-0 w-full max-w-[calc(100%-2rem)] gap-4 overflow-x-hidden overflow-y-auto rounded-xl bg-background p-4 text-sm text-foreground ring-1 ring-foreground/10 outline-none sm:max-w-sm',
               className,
             )}
             {...props}

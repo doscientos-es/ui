@@ -10,5 +10,6 @@ describe('Input', () => {
     render(<Input ref={ref} aria-label="Nombre" />)
 
     expect(ref.current).toBeInstanceOf(HTMLInputElement)
+    expect(ref.current?.classList.contains('box-border')).toBe(true)
   })
 })

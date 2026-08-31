@@ -27,7 +27,6 @@ const centeredRipplePosition: RipplePosition = { x: '50%', y: '50%' }
 
 type RippleEvent = {
   pointerType?: string
-  target: EventTarget | null
   x?: number
   y?: number
 }
@@ -37,14 +36,13 @@ function getRipplePosition(event: RippleEvent): RipplePosition {
     return centeredRipplePosition
   }
 
-  if (!(event.target instanceof Element) || event.x === undefined || event.y === undefined) {
+  if (event.x === undefined || event.y === undefined) {
     return centeredRipplePosition
   }
 
-  const bounds = event.target.getBoundingClientRect()
   return {
-    x: `${event.x - bounds.left}px`,
-    y: `${event.y - bounds.top}px`,
+    x: `${event.x}px`,
+    y: `${event.y}px`,
   }
 }
 
@@ -66,7 +64,7 @@ function useActionRipple(enabled: boolean) {
       key={ripple.id}
       aria-hidden="true"
       data-slot="button-ripple"
-      className="animate-ui-ripple pointer-events-none absolute aspect-square w-full rounded-full bg-current motion-reduce:hidden"
+      className="animate-ui-ripple pointer-events-none absolute aspect-square w-full rounded-full motion-reduce:hidden"
       style={{ left: ripple.position.x, top: ripple.position.y }}
       onAnimationEnd={() =>
         setRipple((currentRipple) => (currentRipple?.id === ripple.id ? null : currentRipple))

@@ -24,7 +24,7 @@ export function SelectTrigger({ className, children, ...props }: ButtonProps) {
     <AriaButton
       data-slot="select-trigger"
       className={cn(
-        'group/select-trigger flex h-8 w-full min-w-36 items-center gap-2 rounded-lg border border-border bg-background px-2.5 text-left text-sm text-foreground outline-none data-focus-visible:ring-3 data-focus-visible:ring-ring/50 data-disabled:cursor-not-allowed data-disabled:opacity-50',
+        'group/select-trigger box-border flex h-8 w-full min-w-36 items-center gap-2 rounded-lg border border-border bg-background px-2.5 text-left text-sm text-foreground outline-none data-focus-visible:ring-3 data-focus-visible:ring-ring/50 data-disabled:cursor-not-allowed data-disabled:opacity-50',
         className,
       )}
       {...props}

@@ -149,7 +149,7 @@
 
   @keyframes ui-ripple {
     from {
-      opacity: 0.1;
+      opacity: 1;
       transform: translate(-50%, -50%) scale(0);
     }
 
@@ -158,6 +158,23 @@
       transform: translate(-50%, -50%) scale(1.5);
     }
   }
+}
+
+/* Dialogs can host plain HTML controls as well as package components. Keep their declared width
+ * inclusive of padding and borders even when a consuming application omits Tailwind preflight. */
+[data-slot='dialog-content'],
+[data-slot='dialog-content'] *,
+[data-slot='alert-dialog-content'],
+[data-slot='alert-dialog-content'] * {
+  box-sizing: border-box;
+}
+
+[data-slot='button-ripple'] {
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, currentColor 24%, transparent) 0%,
+    transparent 70%
+  );
 }
 
 /* Sileo renders each toast as a morphing SVG surface. Give that surface enough
