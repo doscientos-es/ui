@@ -31,7 +31,7 @@ describe('ConfirmDialog', () => {
     const onOpenChange = vi.fn()
     render(<ConfirmDialog open onOpenChange={onOpenChange} onConfirm={vi.fn()} title="¿Cerrar?" />)
 
-    fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape' })
+    fireEvent.keyDown(screen.getByRole('alertdialog'), { key: 'Escape' })
     expect(onOpenChange).toHaveBeenCalledWith(false)
   })
 })

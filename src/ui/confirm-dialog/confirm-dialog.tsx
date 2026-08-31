@@ -1,7 +1,14 @@
 import type * as React from 'react'
 
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '../alert-dialog/alert-dialog'
 import { Button } from '../button/button'
-import { ModalDialog } from '../modal-dialog/modal-dialog'
 
 export type ConfirmDialogProps = {
   open: boolean
@@ -28,14 +35,13 @@ export function ConfirmDialog({
   onConfirm,
 }: ConfirmDialogProps) {
   return (
-    <ModalDialog
-      open={open}
-      onOpenChange={onOpenChange}
-      title={title}
-      description={description}
-      showCloseButton={false}
-      footer={
-        <>
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          {description ? <AlertDialogDescription>{description}</AlertDialogDescription> : null}
+        </AlertDialogHeader>
+        <AlertDialogFooter>
           <Button variant="outline" isDisabled={pending} onPress={() => onOpenChange(false)}>
             {cancelLabel}
           </Button>
@@ -46,8 +52,8 @@ export function ConfirmDialog({
           >
             {confirmLabel}
           </Button>
-        </>
-      }
-    />
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   )
 }

@@ -133,7 +133,9 @@ type DialogContentProps = Omit<
 > & {
   children?: React.ReactNode
   className?: string
+  contentSlot?: string
   onOverlayClick?: React.MouseEventHandler<HTMLDivElement>
+  overlaySlot?: string
   showCloseButton?: boolean
 }
 
@@ -141,7 +143,9 @@ type DialogContentProps = Omit<
 export function DialogContent({
   children,
   className,
+  contentSlot = 'dialog-content',
   onOverlayClick,
+  overlaySlot = 'dialog-overlay',
   showCloseButton = true,
   ...props
 }: DialogContentProps) {
@@ -150,12 +154,13 @@ export function DialogContent({
   return (
     <DialogPortal>
       <DialogOverlay
+        data-slot={overlaySlot}
         onClick={(event) => {
           if (event.target === event.currentTarget) onOverlayClick?.(event)
         }}
       >
         <Modal
-          className="motion-safe:data-entering:animate-ui-surface-in motion-safe:data-exiting:animate-ui-surface-out w-full"
+          className="motion-safe:data-entering:animate-ui-surface-in motion-safe:data-exiting:animate-ui-surface-out max-h-[calc(100dvh-2rem)] w-full"
           onClick={(event) => {
             if (event.target === event.currentTarget) {
               setOpen(false)
@@ -164,9 +169,9 @@ export function DialogContent({
           }}
         >
           <AriaDialog
-            data-slot="dialog-content"
+            data-slot={contentSlot}
             className={cn(
-              'relative grid w-full max-w-[calc(100%-2rem)] max-h-[calc(100dvh-2rem)] mx-auto gap-4 overflow-y-auto rounded-xl bg-background p-4 text-sm text-foreground ring-1 ring-foreground/10 outline-none sm:max-w-sm',
+              'relative mx-auto grid max-h-[calc(100dvh-2rem)] w-full max-w-[calc(100%-2rem)] gap-4 overflow-x-hidden overflow-y-auto rounded-xl bg-background p-4 text-sm text-foreground ring-1 ring-foreground/10 outline-none sm:max-w-sm',
               className,
             )}
             {...props}
@@ -236,7 +241,7 @@ export function DialogFooter({
     <div
       data-slot="dialog-footer"
       className={cn(
-        '-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 sm:flex-row sm:flex-wrap sm:justify-end',
+        '-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t border-border bg-muted/50 p-4 sm:flex-row sm:flex-wrap sm:justify-end',
         className,
       )}
       {...props}

@@ -6,7 +6,7 @@ Primitives React accesibles, rápidas y temables para los productos de Dosciento
 
 - Foundations: tokens CSS, tema claro/oscuro y utilidades de clases y texto.
 - Controles y formularios: botones, campos, selección, feedback, búsqueda y validación accesible.
-- Navegación y overlays: tabs, menús, breadcrumbs, tooltip, popover, dialogs y drawers.
+- Navegación y overlays: tabs, menús, breadcrumbs, tooltip, popover, dialogs y sheets.
 - Datos y estados: tablas, cards, avatares, badges, skeletons, alertas y estados vacíos.
 - Patrones de aplicación: shell, sidebar, cabeceras, toolbars, paginación, toasts y carga.
 - Hooks: debounce, cambios no guardados y autosave sin acoplamiento a transporte o datos.
@@ -22,12 +22,12 @@ encapsulado para que las APIs, tokens y accesibilidad sean consistentes.
 Instala el paquete y React como dependencia de tu aplicación. Después, importa una sola vez los estilos compilados en el punto de entrada CSS.
 
 ```css
-@import 'tailwindcss';
-@import '@doscientos/ui/styles.css';
+@import "tailwindcss";
+@import "@doscientos/ui/styles.css";
 ```
 
 ```tsx
-import { Button, Field, FieldLabel, Input } from '@doscientos/ui'
+import { Button, Field, FieldLabel, Input } from "@doscientos/ui";
 
 export function ProfileName() {
   return (
@@ -36,7 +36,7 @@ export function ProfileName() {
       <Input id="name" />
       <Button>Guardar</Button>
     </Field>
-  )
+  );
 }
 ```
 

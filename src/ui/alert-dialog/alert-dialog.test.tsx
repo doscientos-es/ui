@@ -20,7 +20,10 @@ describe('AlertDialog', () => {
       </AlertDialog>,
     )
 
-    expect(screen.getByRole('alertdialog', { name: 'Eliminar cliente' })).toBeTruthy()
+    const dialog = screen.getByRole('alertdialog', { name: 'Eliminar cliente' })
+    expect(dialog).toBeTruthy()
+    expect(dialog.classList.contains('max-h-[calc(100dvh-2rem)]')).toBe(true)
+    expect(dialog.parentElement?.classList.contains('max-h-[calc(100dvh-2rem)]')).toBe(true)
     fireEvent.click(screen.getByRole('button', { name: 'Cancelar' }))
     expect(onOpenChange).toHaveBeenCalledWith(false)
   })

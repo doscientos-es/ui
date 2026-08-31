@@ -9,7 +9,7 @@ const meta = {
   title: 'Components/Overlays/Confirm Dialog',
   component: ConfirmDialog,
   args: {
-    open: true,
+    open: false,
     onOpenChange: fn(),
     title: 'Eliminar cliente',
     description: 'Esta acción no se puede deshacer.',
@@ -17,14 +17,6 @@ const meta = {
     confirmLabel: 'Eliminar',
     onConfirm: fn(),
   },
-} satisfies Meta<typeof ConfirmDialog>
-export default meta
-type Story = StoryObj<typeof meta>
-
-export const Open: Story = {}
-export const Pending: Story = { args: { pending: true, confirmLabel: 'Eliminando…' } }
-export const ConfirmationFlow: Story = {
-  args: { open: false },
   render: function Render(args) {
     const [open, setOpen] = useState(false)
     return (
@@ -36,12 +28,19 @@ export const ConfirmationFlow: Story = {
       </>
     )
   },
+} satisfies Meta<typeof ConfirmDialog>
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const Default: Story = {}
+export const Pending: Story = { args: { pending: true, confirmLabel: 'Eliminando…' } }
+export const ConfirmationFlow: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement)
     const page = within(canvasElement.ownerDocument.body)
     await userEvent.click(canvas.getByRole('button', { name: 'Eliminar cliente' }))
     await waitFor(() =>
-      expect(page.getByRole('dialog', { name: 'Eliminar cliente' })).toBeVisible(),
+      expect(page.getByRole('alertdialog', { name: 'Eliminar cliente' })).toBeVisible(),
     )
     await userEvent.click(page.getByRole('button', { name: 'Eliminar' }))
     await expect(args.onConfirm).toHaveBeenCalledOnce()
