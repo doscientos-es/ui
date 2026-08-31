@@ -1,8 +1,7 @@
 'use client'
 
-import * as React from 'react'
+import type * as React from 'react'
 import {
-  Focusable,
   OverlayArrow,
   Tooltip as TooltipPrimitive,
   TooltipTrigger as TooltipTriggerPrimitive,
@@ -13,17 +12,9 @@ import { cn } from '../../lib/cn'
 /** Couples a focusable trigger with its {@link Tooltip} content. */
 export function TooltipTrigger({
   delay = 0,
-  children,
   ...props
 }: React.ComponentProps<typeof TooltipTriggerPrimitive>) {
-  const [trigger, tooltip] = React.Children.toArray(children)
-
-  return (
-    <TooltipTriggerPrimitive data-slot="tooltip-trigger" delay={delay} {...props}>
-      <Focusable>{trigger as React.ComponentProps<typeof Focusable>['children']}</Focusable>
-      {tooltip}
-    </TooltipTriggerPrimitive>
-  )
+  return <TooltipTriggerPrimitive data-slot="tooltip-trigger" delay={delay} {...props} />
 }
 
 /**
