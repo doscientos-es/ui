@@ -154,7 +154,15 @@ export function DialogContent({
           if (event.target === event.currentTarget) onOverlayClick?.(event)
         }}
       >
-        <Modal className="motion-safe:data-entering:animate-ui-surface-in motion-safe:data-exiting:animate-ui-surface-out w-full">
+        <Modal
+          className="motion-safe:data-entering:animate-ui-surface-in motion-safe:data-exiting:animate-ui-surface-out w-full"
+          onClick={(event) => {
+            if (event.target === event.currentTarget) {
+              setOpen(false)
+              onOverlayClick?.(event)
+            }
+          }}
+        >
           <AriaDialog
             data-slot="dialog-content"
             className={cn(

@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
 import {
@@ -92,5 +93,21 @@ describe('Dialog', () => {
     const dialog = screen.getByRole('dialog', { name: 'Detalle del box' })
     expect(dialog.classList.contains('custom-dialog-card')).toBe(true)
     expect(document.querySelectorAll('.custom-dialog-card')).toHaveLength(1)
+  })
+
+  it('notifies controlled consumers when the area outside its panel is pressed', async () => {
+    const onOpenChange = vi.fn()
+    render(
+      <Dialog open onOpenChange={onOpenChange}>
+        <DialogContent>
+          <DialogTitle>Enviar factura</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    const dialog = screen.getByRole('dialog', { name: 'Enviar factura' })
+    await userEvent.click(dialog.parentElement!)
+
+    expect(onOpenChange).toHaveBeenCalledWith(false)
   })
 })
