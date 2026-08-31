@@ -160,7 +160,7 @@ export function DialogContent({
         }}
       >
         <Modal
-          className="motion-safe:data-entering:animate-ui-surface-in motion-safe:data-exiting:animate-ui-surface-out max-h-[calc(100dvh-2rem)] w-full"
+          className="motion-safe:data-entering:animate-ui-surface-in motion-safe:data-exiting:animate-ui-surface-out max-h-full min-h-0 w-full"
           onClick={(event) => {
             if (event.target === event.currentTarget) {
               setOpen(false)
@@ -171,7 +171,7 @@ export function DialogContent({
           <AriaDialog
             data-slot={contentSlot}
             className={cn(
-              'relative mx-auto grid max-h-[calc(100dvh-2rem)] w-full max-w-[calc(100%-2rem)] gap-4 overflow-x-hidden overflow-y-auto rounded-xl bg-background p-4 text-sm text-foreground ring-1 ring-foreground/10 outline-none sm:max-w-sm',
+              'relative mx-auto grid max-h-full min-h-0 w-full max-w-[calc(100%-2rem)] gap-4 overflow-x-hidden overflow-y-auto rounded-xl bg-background p-4 text-sm text-foreground ring-1 ring-foreground/10 outline-none sm:max-w-sm',
               className,
             )}
             {...props}
@@ -211,6 +211,7 @@ export function DialogClose({ asChild = false, children, onClick, ...props }: Di
       'data-slot': 'dialog-close',
       onClick: (event: React.MouseEvent<HTMLElement>) => {
         child.props.onClick?.(event)
+        onClick?.(event)
         if (!event.defaultPrevented) setOpen(false)
       },
     })

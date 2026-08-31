@@ -67,10 +67,12 @@ describe('Dialog', () => {
     const dialog = screen.getByRole('dialog', { name: 'Enviar factura' })
     expect(dialog.classList.contains('relative')).toBe(true)
     expect(dialog.classList.contains('mx-auto')).toBe(true)
-    expect(dialog.classList.contains('max-h-[calc(100dvh-2rem)]')).toBe(true)
+    expect(dialog.classList.contains('max-h-full')).toBe(true)
+    expect(dialog.classList.contains('min-h-0')).toBe(true)
     expect(dialog.classList.contains('overflow-x-hidden')).toBe(true)
     expect(dialog.parentElement?.classList.contains('w-full')).toBe(true)
-    expect(dialog.parentElement?.classList.contains('max-h-[calc(100dvh-2rem)]')).toBe(true)
+    expect(dialog.parentElement?.classList.contains('max-h-full')).toBe(true)
+    expect(dialog.parentElement?.classList.contains('min-h-0')).toBe(true)
     expect(dialog.parentElement?.classList.contains('contents')).toBe(false)
     expect(
       dialog.parentElement?.classList.contains('motion-safe:data-entering:animate-ui-surface-in'),
