@@ -7,6 +7,7 @@ describe('Textarea', () => {
   it('includes its padding and border within its declared width', () => {
     render(<Textarea aria-label="Notas" />)
 
-    expect(screen.getByRole('textbox', { name: 'Notas' }).classList.contains('box-border')).toBe(true)
+    const textarea = screen.getByRole('textbox', { name: 'Notas' })
+    expect(textarea.classList.contains('box-border')).toBe(true)
   })
 })

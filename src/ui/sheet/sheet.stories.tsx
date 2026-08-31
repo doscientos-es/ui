@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 
 import { Button } from '../button/button'
 import { Input } from '../input/input'
@@ -41,6 +42,15 @@ export const Default: Story = {
       </Sheet>
     </SheetTrigger>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const page = within(canvasElement.ownerDocument.body)
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Editar perfil' }))
+    await waitFor(() => expect(page.getByRole('dialog', { name: 'Editar perfil' })).toBeVisible())
+    await userEvent.click(page.getByRole('button', { name: 'Cerrar' }))
+    await waitFor(() => expect(page.queryByRole('dialog')).not.toBeInTheDocument())
+  },
 }
 
 export const FromLeft: Story = {

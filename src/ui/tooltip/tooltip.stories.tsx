@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { expect, waitFor, within } from 'storybook/test'
+import { CircleHelp } from 'lucide-react'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 
 import { Button } from '../button/button'
 import { Kbd } from '../kbd/kbd'
@@ -13,16 +14,41 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
-    <TooltipTrigger isOpen>
+    <TooltipTrigger>
       <Button variant="outline">Guardar</Button>
+      <Tooltip>Guarda los cambios realizados.</Tooltip>
+    </TooltipTrigger>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const page = within(canvasElement.ownerDocument.body)
+    const trigger = canvas.getByRole('button', { name: 'Guardar' })
+
+    await userEvent.hover(trigger)
+    await waitFor(() => expect(page.getByRole('tooltip')).toBeVisible())
+    await userEvent.unhover(trigger)
+    await waitFor(() => expect(page.queryByRole('tooltip')).not.toBeInTheDocument())
+  },
+}
+
+export const WithShortcut: Story = {
+  render: () => (
+    <TooltipTrigger>
+      <Button variant="outline">Guardar cambios</Button>
       <Tooltip>
         Guardar cambios <Kbd>Ctrl S</Kbd>
       </Tooltip>
     </TooltipTrigger>
   ),
-  play: async ({ canvasElement }) => {
-    await waitFor(() =>
-      expect(within(canvasElement.ownerDocument.body).getByRole('tooltip')).toBeVisible(),
-    )
-  },
+}
+
+export const IconAction: Story = {
+  render: () => (
+    <TooltipTrigger>
+      <Button aria-label="Más información sobre las facturas" size="icon" variant="outline">
+        <CircleHelp />
+      </Button>
+      <Tooltip>Las facturas vencidas requieren seguimiento.</Tooltip>
+    </TooltipTrigger>
+  ),
 }

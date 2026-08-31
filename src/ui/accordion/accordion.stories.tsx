@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { expect, userEvent, within } from 'storybook/test'
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './accordion'
 
@@ -22,6 +23,17 @@ export const Default: Story = {
       </AccordionItem>
     </Accordion>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: '¿Qué incluye?' })
+
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+    await userEvent.click(trigger)
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true')
+    await expect(canvas.getByText('Una respuesta accesible y animable para la sección.')).toBeVisible()
+    await userEvent.click(trigger)
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+  },
 }
 export const Multiple: Story = {
   render: () => (

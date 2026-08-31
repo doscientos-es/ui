@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { ArrowRight, Plus } from 'lucide-react'
+import { expect, fn, userEvent, within } from 'storybook/test'
 
 import { Button, LinkButton } from './button'
 
@@ -7,7 +8,7 @@ const meta = {
   title: 'Components/Actions/Button',
   component: Button,
   tags: ['test:ui'],
-  args: { children: 'Guardar cambios' },
+  args: { children: 'Guardar cambios', onPress: fn() },
   argTypes: {
     variant: {
       control: 'select',
@@ -23,9 +24,23 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {}
+export const Default: Story = {
+  play: async ({ args, canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByRole('button', { name: 'Guardar cambios' }))
+    await expect(args.onPress).toHaveBeenCalledOnce()
+  },
+}
 export const Destructive: Story = { args: { children: 'Eliminar', variant: 'destructive' } }
-export const Disabled: Story = { args: { isDisabled: true } }
+export const Disabled: Story = {
+  args: { isDisabled: true, onPress: fn() },
+  play: async ({ args, canvasElement }) => {
+    const button = within(canvasElement).getByRole('button', { name: 'Guardar cambios' })
+
+    await expect(button).toBeDisabled()
+    await userEvent.click(button)
+    await expect(args.onPress).not.toHaveBeenCalled()
+  },
+}
 export const Variants: Story = {
   render: () => (
     <div className="flex flex-wrap gap-2">

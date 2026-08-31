@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 
 import { Button } from '../button/button'
 import {
@@ -27,4 +28,14 @@ export const Actions: Story = {
       </DropdownMenu>
     </DropdownMenuTrigger>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const page = within(canvasElement.ownerDocument.body)
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Acciones' }))
+    const editItem = await page.findByRole('menuitem', { name: 'Editar' })
+    await expect(editItem).toBeVisible()
+    await userEvent.click(editItem)
+    await waitFor(() => expect(page.queryByRole('menuitem', { name: 'Editar' })).not.toBeInTheDocument())
+  },
 }

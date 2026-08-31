@@ -102,9 +102,9 @@ export function Switch({
       {...props}
     >
       {(state) => {
-        const isThumbActive = state.isHovered || state.isPressed
+        const isThumbPressed = state.isPressed
         const thumbOffset = state.isSelected
-          ? isThumbActive
+          ? isThumbPressed
             ? styles.activeSelectedOffset
             : styles.selectedOffset
           : '0'
@@ -128,7 +128,7 @@ export function Switch({
                 data-slot="switch-thumb"
                 style={{
                   transform: `translate3d(${thumbOffset}, 0, 0)`,
-                  width: isThumbActive ? styles.activeWidth : styles.idleWidth,
+                  width: isThumbPressed ? styles.activeWidth : styles.idleWidth,
                 }}
                 className={cn(
                   'grid shrink-0 place-items-center rounded-full border border-border/60 bg-background text-[0.625rem] text-muted-foreground shadow-sm',
