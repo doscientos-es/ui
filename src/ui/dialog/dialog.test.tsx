@@ -14,6 +14,30 @@ import {
 } from './dialog'
 
 describe('Dialog', () => {
+  it('opens from a default button created from its text trigger', () => {
+    render(
+      <Dialog trigger="Editar cliente" triggerProps={{ variant: 'outline' }}>
+        <DialogTitle>Editar cliente</DialogTitle>
+      </Dialog>,
+    )
+
+    const trigger = screen.getByRole('button', { name: 'Editar cliente' })
+    expect(trigger.className).toContain('border')
+    fireEvent.click(trigger)
+    expect(screen.getByRole('dialog', { name: 'Editar cliente' })).toBeTruthy()
+  })
+
+  it('opens from a custom trigger element in the simple API', () => {
+    render(
+      <Dialog trigger={<button type="button">Editar cliente</button>}>
+        <DialogTitle>Editar cliente</DialogTitle>
+      </Dialog>,
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'Editar cliente' }))
+    expect(screen.getByRole('dialog', { name: 'Editar cliente' })).toBeTruthy()
+  })
+
   it('opens from an asChild trigger and closes from an asChild action', () => {
     const onCancel = vi.fn()
     render(

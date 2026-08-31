@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 
 import { Button } from '../button/button'
 import { Kbd, KbdGroup } from '../kbd/kbd'
-import { Popover, PopoverTrigger } from '../popover/popover'
+import { Popover } from '../popover/popover'
 import { Separator } from '../separator/separator'
 import { Tabs, TabsContent, TabsList, TabsPanels, TabsTrigger } from '../tabs/tabs'
 import { Tooltip } from '../tooltip/tooltip'
@@ -32,12 +32,9 @@ export const Overlays: Story = {
       <Tooltip label="Se muestra al enfocar o pasar el cursor.">
         <Button variant="outline">Información</Button>
       </Tooltip>
-      <PopoverTrigger>
-        <Button>Opciones</Button>
-        <Popover>
-          <div className="p-2 text-sm">Contenido contextual accesible.</div>
-        </Popover>
-      </PopoverTrigger>
+      <Popover trigger={<Button>Opciones</Button>}>
+        <div className="p-2 text-sm">Contenido contextual accesible.</div>
+      </Popover>
     </div>
   ),
 }

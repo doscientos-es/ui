@@ -25,7 +25,7 @@ function useDialogContext() {
 }
 
 /** Props for a controlled or uncontrolled dialog state container. */
-type DialogProps = {
+export type DialogRootProps = {
   children: React.ReactNode
   /** Initial state when the dialog is uncontrolled. */
   defaultOpen?: boolean
@@ -36,12 +36,12 @@ type DialogProps = {
 }
 
 /** Coordinates the trigger, overlay and content of a modal dialog. */
-export function Dialog({
+export function DialogRoot({
   children,
   defaultOpen = false,
   onOpenChange,
   open: controlledOpen,
-}: DialogProps) {
+}: DialogRootProps) {
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen)
   const open = controlledOpen ?? uncontrolledOpen
   const setOpen = React.useCallback(
@@ -55,12 +55,12 @@ export function Dialog({
   return <DialogContext.Provider value={{ open, setOpen }}>{children}</DialogContext.Provider>
 }
 
-type DialogTriggerProps = Omit<React.ComponentProps<typeof Button>, 'onPress'> & {
+export type DialogTriggerProps = Omit<React.ComponentProps<typeof Button>, 'onPress'> & {
   /** Renders and augments the single child instead of rendering a {@link Button}. */
   asChild?: boolean
 }
 
-/** Opens the parent {@link Dialog}. */
+/** Opens the parent {@link Dialog} or {@link DialogRoot}. */
 export function DialogTrigger({
   asChild = false,
   children,
@@ -127,7 +127,7 @@ export function DialogOverlay({ children, className, ...props }: DialogOverlayPr
   )
 }
 
-type DialogContentProps = Omit<
+export type DialogContentProps = Omit<
   React.ComponentProps<typeof AriaDialog>,
   'children' | 'className'
 > & {
@@ -137,6 +137,47 @@ type DialogContentProps = Omit<
   onOverlayClick?: React.MouseEventHandler<HTMLDivElement>
   overlaySlot?: string
   showCloseButton?: boolean
+}
+
+type SimpleDialogProps = DialogRootProps &
+  Omit<DialogContentProps, 'children'> & {
+    /** Text for a default button, or an interactive element that opens the dialog. */
+    trigger: string | React.ReactElement
+    /** Props for the default button rendered when {@link trigger} is text. */
+    triggerProps?: Omit<DialogTriggerProps, 'asChild' | 'children'>
+  }
+
+export type DialogProps = DialogRootProps | SimpleDialogProps
+
+/**
+ * A modal dialog with a simple trigger API.
+ * Omit {@link trigger} and compose {@link DialogRoot}, {@link DialogTrigger} and {@link DialogContent} directly.
+ */
+export function Dialog(props: DialogProps) {
+  if (!('trigger' in props)) return <DialogRoot {...props} />
+
+  const {
+    children,
+    trigger,
+    triggerProps,
+    defaultOpen,
+    onOpenChange,
+    open,
+    ...contentProps
+  } = props
+
+  return (
+    <DialogRoot defaultOpen={defaultOpen} onOpenChange={onOpenChange} open={open}>
+      {typeof trigger === 'string' ? (
+        <DialogTrigger {...triggerProps}>{trigger}</DialogTrigger>
+      ) : (
+        <DialogTrigger asChild {...triggerProps}>
+          {trigger}
+        </DialogTrigger>
+      )}
+      <DialogContent {...contentProps}>{children}</DialogContent>
+    </DialogRoot>
+  )
 }
 
 /** Focus-managed modal content. Include a {@link DialogTitle} to give it an accessible name. */
