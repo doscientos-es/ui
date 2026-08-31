@@ -9,7 +9,7 @@ import {
 
 import { cn } from '../../lib/cn'
 
-/** Couples a focusable trigger with its {@link Tooltip} content. */
+/** Couples a focusable trigger with its {@link TooltipContent} content. */
 export function TooltipTrigger({
   delay = 0,
   ...props
@@ -17,19 +17,45 @@ export function TooltipTrigger({
   return <TooltipTriggerPrimitive data-slot="tooltip-trigger" delay={delay} {...props} />
 }
 
+type TooltipSurfaceProps = Omit<
+  React.ComponentProps<typeof TooltipPrimitive>,
+  'children' | 'className'
+> & { className?: string }
+
+export type TooltipProps = TooltipSurfaceProps & {
+  /** Contextual text or rich content shown when the trigger is focused or hovered. */
+  label: React.ReactNode
+  /** The single focusable element that reveals the tooltip. */
+  children: React.ReactNode
+  /** Delay before revealing the tooltip. */
+  delay?: React.ComponentProps<typeof TooltipTriggerPrimitive>['delay']
+}
+
+/**
+ * Brief contextual information for a focusable child.
+ * Do not use it as the child's only accessible label or as essential content.
+ */
+export function Tooltip({ label, children, delay, ...props }: TooltipProps) {
+  return (
+    <TooltipTrigger delay={delay}>
+      {children}
+      <TooltipContent {...props}>{label}</TooltipContent>
+    </TooltipTrigger>
+  )
+}
+
 /**
  * Brief contextual information revealed from a {@link TooltipTrigger}.
  * Do not use it as the only label or as essential content.
  */
-export function Tooltip({
+export function TooltipContent({
   className,
   placement = 'top',
   offset = 4,
   crossOffset = 0,
   children,
   ...props
-}: Omit<React.ComponentProps<typeof TooltipPrimitive>, 'children' | 'className'> & {
-  className?: string
+}: TooltipSurfaceProps & {
   children?: React.ReactNode
 }) {
   return (

@@ -5,7 +5,7 @@ import { Kbd, KbdGroup } from '../kbd/kbd'
 import { Popover, PopoverTrigger } from '../popover/popover'
 import { Separator } from '../separator/separator'
 import { Tabs, TabsContent, TabsList, TabsPanels, TabsTrigger } from '../tabs/tabs'
-import { Tooltip, TooltipTrigger } from '../tooltip/tooltip'
+import { Tooltip } from '../tooltip/tooltip'
 
 const meta = { title: 'Patterns/Navigation' } satisfies Meta
 export default meta
@@ -29,10 +29,9 @@ export const TabsPattern: Story = {
 export const Overlays: Story = {
   render: () => (
     <div className="flex items-center gap-3">
-      <TooltipTrigger delay={0}>
+      <Tooltip label="Se muestra al enfocar o pasar el cursor.">
         <Button variant="outline">Información</Button>
-        <Tooltip>Se muestra al enfocar o pasar el cursor.</Tooltip>
-      </TooltipTrigger>
+      </Tooltip>
       <PopoverTrigger>
         <Button>Opciones</Button>
         <Popover>

@@ -3,7 +3,7 @@ import { Link } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
 import { Button, type ButtonProps, buttonVariants } from '../button/button'
-import { Tooltip, TooltipTrigger } from '../tooltip/tooltip'
+import { Tooltip } from '../tooltip/tooltip'
 
 export type IconButtonProps = Omit<ButtonProps, 'children'> & {
   /** Accessible name and text shown in the tooltip. */
@@ -25,7 +25,7 @@ export function IconButton({
   const linkClassName = cn(buttonVariants({ variant, size: 'icon' }), className)
 
   return (
-    <TooltipTrigger>
+    <Tooltip label={label}>
       {href ? (
         <Link data-slot="icon-button" aria-label={label} href={href} className={linkClassName}>
           {children}
@@ -42,7 +42,6 @@ export function IconButton({
           {children}
         </Button>
       )}
-      <Tooltip>{label}</Tooltip>
-    </TooltipTrigger>
+    </Tooltip>
   )
 }
