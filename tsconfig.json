@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ES2022"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "strict": true,
     "declaration": true,
     "declarationMap": true,
@@ -13,16 +9,11 @@
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
     "paths": {
-      "~/*": [
-        "./src/*"
-      ]
+      "~/*": ["./src/*"]
     },
     "skipLibCheck": true,
     "noUncheckedIndexedAccess": true,
     "verbatimModuleSyntax": true
   },
-  "include": [
-    "src",
-    ".storybook"
-  ]
+  "include": ["src", ".storybook"]
 }

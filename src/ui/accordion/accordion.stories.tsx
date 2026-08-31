@@ -1,13 +1,14 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./accordion";
+import type { Meta, StoryObj } from '@storybook/react-vite'
+
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './accordion'
 
 const meta = {
-  title: "Components/Disclosure/Accordion",
+  title: 'Components/Disclosure/Accordion',
   component: Accordion,
-  tags: ["test:ui"],
-} satisfies Meta<typeof Accordion>;
-export default meta;
-type Story = StoryObj<typeof meta>;
+  tags: ['test:ui'],
+} satisfies Meta<typeof Accordion>
+export default meta
+type Story = StoryObj<typeof meta>
 export const Default: Story = {
   render: () => (
     <Accordion className="w-96">
@@ -21,10 +22,10 @@ export const Default: Story = {
       </AccordionItem>
     </Accordion>
   ),
-};
+}
 export const Multiple: Story = {
   render: () => (
-    <Accordion className="w-96" allowsMultipleExpanded defaultExpandedKeys={["billing", "support"]}>
+    <Accordion className="w-96" allowsMultipleExpanded defaultExpandedKeys={['billing', 'support']}>
       <AccordionItem id="billing">
         <AccordionTrigger>Facturación</AccordionTrigger>
         <AccordionContent>Consulta y descarga todas tus facturas.</AccordionContent>
@@ -35,4 +36,4 @@ export const Multiple: Story = {
       </AccordionItem>
     </Accordion>
   ),
-};
+}

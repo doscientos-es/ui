@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button } from "../button/button";
-import { Input } from "../input/input";
+import type { Meta, StoryObj } from '@storybook/react-vite'
+
+import { Button } from '../button/button'
+import { Input } from '../input/input'
 import {
   Sheet,
   SheetDescription,
@@ -8,16 +9,16 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "./sheet";
+} from './sheet'
 
 const meta = {
-  title: "Components/Overlays/Sheet",
+  title: 'Components/Overlays/Sheet',
   component: Sheet,
-  tags: ["test:ui"],
+  tags: ['test:ui'],
   args: { children: null },
-} satisfies Meta<typeof Sheet>;
-export default meta;
-type Story = StoryObj<typeof meta>;
+} satisfies Meta<typeof Sheet>
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
@@ -40,7 +41,7 @@ export const Default: Story = {
       </Sheet>
     </SheetTrigger>
   ),
-};
+}
 
 export const FromLeft: Story = {
   render: () => (
@@ -54,4 +55,4 @@ export const FromLeft: Story = {
       </Sheet>
     </SheetTrigger>
   ),
-};
+}

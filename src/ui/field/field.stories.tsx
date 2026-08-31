@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Input } from "../input/input";
+import type { Meta, StoryObj } from '@storybook/react-vite'
+
+import { Input } from '../input/input'
 import {
   Field,
   FieldContent,
@@ -10,15 +11,15 @@ import {
   FieldLegend,
   FieldSeparator,
   FieldSet,
-} from "./field";
+} from './field'
 
 const meta = {
-  title: "Components/Forms/Field",
+  title: 'Components/Forms/Field',
   component: Field,
-  tags: ["test:ui"],
-} satisfies Meta<typeof Field>;
-export default meta;
-type Story = StoryObj<typeof meta>;
+  tags: ['test:ui'],
+} satisfies Meta<typeof Field>
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
@@ -28,7 +29,7 @@ export const Default: Story = {
       <FieldDescription>Se mostrará a los miembros del equipo.</FieldDescription>
     </Field>
   ),
-};
+}
 export const Invalid: Story = {
   render: () => (
     <Field className="w-80" data-invalid="true">
@@ -37,7 +38,7 @@ export const Invalid: Story = {
       <FieldError>Introduce un email válido.</FieldError>
     </Field>
   ),
-};
+}
 export const Horizontal: Story = {
   render: () => (
     <Field orientation="horizontal" className="w-96">
@@ -48,7 +49,7 @@ export const Horizontal: Story = {
       </FieldContent>
     </Field>
   ),
-};
+}
 export const Grouped: Story = {
   render: () => (
     <FieldSet className="w-96">
@@ -66,4 +67,4 @@ export const Grouped: Story = {
       </FieldGroup>
     </FieldSet>
   ),
-};
+}

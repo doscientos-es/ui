@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Badge } from "../badge/badge";
+import type { Meta, StoryObj } from '@storybook/react-vite'
+
+import { Badge } from '../badge/badge'
 import {
   Table,
   TableBody,
@@ -9,15 +10,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./table";
+} from './table'
 
 const meta = {
-  title: "Components/Data Display/Table",
+  title: 'Components/Data Display/Table',
   component: Table,
-  tags: ["test:ui"],
-} satisfies Meta<typeof Table>;
-export default meta;
-type Story = StoryObj<typeof meta>;
+  tags: ['test:ui'],
+} satisfies Meta<typeof Table>
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
@@ -57,4 +58,4 @@ export const Default: Story = {
       </TableFooter>
     </Table>
   ),
-};
+}

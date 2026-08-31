@@ -1,5 +1,6 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { render, screen } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
+
 import {
   Card,
   CardAction,
@@ -8,10 +9,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "./card";
+} from './card'
 
-describe("Card", () => {
-  it("composes its regions and size", () => {
+describe('Card', () => {
+  it('composes its regions and size', () => {
     render(
       <Card size="sm">
         <CardHeader>
@@ -22,11 +23,11 @@ describe("Card", () => {
         <CardContent>Contenido</CardContent>
         <CardFooter>Total</CardFooter>
       </Card>,
-    );
-    const card = screen.getByText("Factura").closest('[data-slot="card"]');
-    expect(card?.getAttribute("data-size")).toBe("sm");
-    expect(card?.className).toContain("border-border");
-    expect(screen.getByText("Acción").getAttribute("data-slot")).toBe("card-action");
-    expect(screen.getByText("Total").getAttribute("data-slot")).toBe("card-footer");
-  });
-});
+    )
+    const card = screen.getByText('Factura').closest('[data-slot="card"]')
+    expect(card?.getAttribute('data-size')).toBe('sm')
+    expect(card?.className).toContain('border-border')
+    expect(screen.getByText('Acción').getAttribute('data-slot')).toBe('card-action')
+    expect(screen.getByText('Total').getAttribute('data-slot')).toBe('card-footer')
+  })
+})

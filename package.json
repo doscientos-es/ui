@@ -8,12 +8,12 @@
     "type": "git",
     "url": "https://github.com/doscientos-es/ui"
   },
+  "files": [
+    "dist"
+  ],
   "type": "module",
   "sideEffects": [
     "./dist/styles.css"
-  ],
-  "files": [
-    "dist"
   ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -25,6 +25,9 @@
       "require": "./dist/index.cjs"
     },
     "./styles.css": "./dist/styles.css"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "pnpm build:js && pnpm build:css",
@@ -38,15 +41,12 @@
     "test:storybook": "vitest run --project storybook",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "release:check": "pnpm typecheck && pnpm test && pnpm build"
-  },
-  "peerDependencies": {
-    "react": ">=18.3.0",
-    "react-dom": ">=18.3.0"
-  },
-  "packageManager": "pnpm@9.15.2",
-  "publishConfig": {
-    "access": "public"
+    "format": "oxfmt -c node_modules/@doscientos/configs/oxfmt.json --write .",
+    "format:check": "oxfmt -c node_modules/@doscientos/configs/oxfmt.json --check .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix --fix-suggestions",
+    "quality": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test",
+    "release:check": "pnpm quality && pnpm build && npm pack --dry-run"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
@@ -58,6 +58,7 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.3.0",
+    "@doscientos/configs": "^0.1.5",
     "@storybook/addon-a11y": "^10.5.9",
     "@storybook/addon-docs": "^10.5.9",
     "@storybook/addon-mcp": "^0.7.0",
@@ -74,6 +75,9 @@
     "@vitest/browser-playwright": "^4.1.11",
     "@vitest/coverage-v8": "4.1.11",
     "happy-dom": "^20.11.2",
+    "oxfmt": "^0.65.0",
+    "oxlint": "^1.75.0",
+    "oxlint-tsgolint": "^7.0.2001",
     "playwright": "^1.62.1",
     "react": "^19.2.8",
     "react-docgen-typescript": "^2.4.0",
@@ -83,5 +87,10 @@
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "vitest": "^4.1.11"
-  }
+  },
+  "peerDependencies": {
+    "react": ">=18.3.0",
+    "react-dom": ">=18.3.0"
+  },
+  "packageManager": "pnpm@9.15.2"
 }

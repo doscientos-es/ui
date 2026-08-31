@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Copy, Search } from "lucide-react";
+import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Copy, Search } from 'lucide-react'
+
 import {
   InputGroup,
   InputGroupAddon,
@@ -7,15 +8,15 @@ import {
   InputGroupInput,
   InputGroupText,
   InputGroupTextarea,
-} from "./input-group";
+} from './input-group'
 
 const meta = {
-  title: "Components/Forms/Input Group",
+  title: 'Components/Forms/Input Group',
   component: InputGroup,
-  tags: ["test:ui"],
-} satisfies Meta<typeof InputGroup>;
-export default meta;
-type Story = StoryObj<typeof meta>;
+  tags: ['test:ui'],
+} satisfies Meta<typeof InputGroup>
+export default meta
+type Story = StoryObj<typeof meta>
 export const Currency: Story = {
   render: () => (
     <InputGroup className="max-w-xs">
@@ -25,7 +26,7 @@ export const Currency: Story = {
       <InputGroupInput aria-label="Precio" placeholder="0,00" />
     </InputGroup>
   ),
-};
+}
 export const SearchField: Story = {
   render: () => (
     <InputGroup className="max-w-sm">
@@ -38,7 +39,7 @@ export const SearchField: Story = {
       </InputGroupAddon>
     </InputGroup>
   ),
-};
+}
 export const WithButton: Story = {
   render: () => (
     <InputGroup className="max-w-sm">
@@ -50,7 +51,7 @@ export const WithButton: Story = {
       </InputGroupAddon>
     </InputGroup>
   ),
-};
+}
 export const Textarea: Story = {
   render: () => (
     <InputGroup className="max-w-sm">
@@ -60,4 +61,4 @@ export const Textarea: Story = {
       </InputGroupAddon>
     </InputGroup>
   ),
-};
+}

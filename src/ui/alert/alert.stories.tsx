@@ -1,11 +1,12 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { CircleCheck, Info, TriangleAlert } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "./alert";
+import type { Meta, StoryObj } from '@storybook/react-vite'
+import { CircleCheck, Info, TriangleAlert } from 'lucide-react'
+
+import { Alert, AlertDescription, AlertTitle } from './alert'
 
 const meta = {
-  title: "Components/Feedback/Alert",
+  title: 'Components/Feedback/Alert',
   component: Alert,
-  tags: ["test:ui"],
+  tags: ['test:ui'],
   args: {
     children: (
       <>
@@ -17,17 +18,17 @@ const meta = {
   },
   argTypes: {
     variant: {
-      control: "select",
-      options: ["default", "info", "success", "warning", "destructive"],
+      control: 'select',
+      options: ['default', 'info', 'success', 'warning', 'destructive'],
     },
   },
-} satisfies Meta<typeof Alert>;
-export default meta;
-type Story = StoryObj<typeof meta>;
-export const Default: Story = {};
+} satisfies Meta<typeof Alert>
+export default meta
+type Story = StoryObj<typeof meta>
+export const Default: Story = {}
 export const Success: Story = {
   args: {
-    variant: "success",
+    variant: 'success',
     children: (
       <>
         <CircleCheck />
@@ -36,10 +37,10 @@ export const Success: Story = {
       </>
     ),
   },
-};
+}
 export const Warning: Story = {
   args: {
-    variant: "warning",
+    variant: 'warning',
     children: (
       <>
         <TriangleAlert />
@@ -48,10 +49,10 @@ export const Warning: Story = {
       </>
     ),
   },
-};
+}
 export const Destructive: Story = {
   args: {
-    variant: "destructive",
+    variant: 'destructive',
     children: (
       <>
         <TriangleAlert />
@@ -60,4 +61,4 @@ export const Destructive: Story = {
       </>
     ),
   },
-};
+}

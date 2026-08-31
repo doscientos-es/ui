@@ -7,7 +7,17 @@ body,
 /* React Aria renders overlays under <body>. Match Storybook's native font so
  * portals and Docs controls inherit the same typeface as the documentation. */
 body {
-  font-family: "Nunito Sans", -apple-system, ".SFNSText-Regular", "San Francisco", BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family:
+    'Nunito Sans',
+    -apple-system,
+    '.SFNSText-Regular',
+    'San Francisco',
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Helvetica Neue',
+    Helvetica,
+    Arial,
+    sans-serif;
 }
 
 /* Storybook's Docs action buttons do not set a font family themselves. */

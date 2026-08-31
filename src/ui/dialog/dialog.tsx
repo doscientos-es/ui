@@ -1,7 +1,7 @@
-"use client";
+'use client'
 
-import { XIcon } from "lucide-react";
-import * as React from "react";
+import { XIcon } from 'lucide-react'
+import * as React from 'react'
 import {
   Dialog as AriaDialog,
   Heading,
@@ -9,92 +9,106 @@ import {
   ModalOverlay,
   type ModalOverlayProps,
   Text,
-} from "react-aria-components";
-import { cn } from "../../lib/cn";
-import { Button } from "../button/button";
+} from 'react-aria-components'
 
-type DialogContextValue = { open: boolean; setOpen: (open: boolean) => void };
-type SlottableProps = React.HTMLAttributes<HTMLElement> & { "data-slot"?: string };
-const DialogContext = React.createContext<DialogContextValue | null>(null);
+import { cn } from '../../lib/cn'
+import { Button } from '../button/button'
+
+type DialogContextValue = { open: boolean; setOpen: (open: boolean) => void }
+type SlottableProps = React.HTMLAttributes<HTMLElement> & { 'data-slot'?: string }
+const DialogContext = React.createContext<DialogContextValue | null>(null)
 
 function useDialogContext() {
-  const context = React.useContext(DialogContext);
-  if (!context) throw new Error("Dialog components must be rendered within Dialog.");
-  return context;
+  const context = React.useContext(DialogContext)
+  if (!context) throw new Error('Dialog components must be rendered within Dialog.')
+  return context
 }
 
 /** Props for a controlled or uncontrolled dialog state container. */
 type DialogProps = {
-  children: React.ReactNode;
+  children: React.ReactNode
   /** Initial state when the dialog is uncontrolled. */
-  defaultOpen?: boolean;
+  defaultOpen?: boolean
   /** Called after the open state changes. */
-  onOpenChange?: (open: boolean) => void;
+  onOpenChange?: (open: boolean) => void
   /** Controlled open state. Use with {@link onOpenChange}. */
-  open?: boolean;
-};
-
-/** Coordinates the trigger, overlay and content of a modal dialog. */
-export function Dialog({ children, defaultOpen = false, onOpenChange, open: controlledOpen }: DialogProps) {
-  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen);
-  const open = controlledOpen ?? uncontrolledOpen;
-  const setOpen = React.useCallback(
-    (nextOpen: boolean) => {
-      if (controlledOpen === undefined) setUncontrolledOpen(nextOpen);
-      onOpenChange?.(nextOpen);
-    },
-    [controlledOpen, onOpenChange],
-  );
-
-  return <DialogContext.Provider value={{ open, setOpen }}>{children}</DialogContext.Provider>;
+  open?: boolean
 }
 
-type DialogTriggerProps = Omit<React.ComponentProps<typeof Button>, "onPress"> & {
+/** Coordinates the trigger, overlay and content of a modal dialog. */
+export function Dialog({
+  children,
+  defaultOpen = false,
+  onOpenChange,
+  open: controlledOpen,
+}: DialogProps) {
+  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen)
+  const open = controlledOpen ?? uncontrolledOpen
+  const setOpen = React.useCallback(
+    (nextOpen: boolean) => {
+      if (controlledOpen === undefined) setUncontrolledOpen(nextOpen)
+      onOpenChange?.(nextOpen)
+    },
+    [controlledOpen, onOpenChange],
+  )
+
+  return <DialogContext.Provider value={{ open, setOpen }}>{children}</DialogContext.Provider>
+}
+
+type DialogTriggerProps = Omit<React.ComponentProps<typeof Button>, 'onPress'> & {
   /** Renders and augments the single child instead of rendering a {@link Button}. */
-  asChild?: boolean;
-};
+  asChild?: boolean
+}
 
 /** Opens the parent {@link Dialog}. */
-export function DialogTrigger({ asChild = false, children, onClick, ...props }: DialogTriggerProps) {
-  const { setOpen } = useDialogContext();
+export function DialogTrigger({
+  asChild = false,
+  children,
+  onClick,
+  ...props
+}: DialogTriggerProps) {
+  const { setOpen } = useDialogContext()
   const handleClick: React.MouseEventHandler<HTMLElement> = (event) => {
-    onClick?.(event as React.MouseEvent<HTMLButtonElement>);
-    if (!event.defaultPrevented) setOpen(true);
-  };
+    onClick?.(event as React.MouseEvent<HTMLButtonElement>)
+    if (!event.defaultPrevented) setOpen(true)
+  }
 
   if (asChild && React.isValidElement<SlottableProps>(children)) {
-    const child = children as React.ReactElement<SlottableProps>;
+    const child = children as React.ReactElement<SlottableProps>
     return React.cloneElement(child, {
       ...(props as React.HTMLAttributes<HTMLElement>),
-      "data-slot": "dialog-trigger",
+      'data-slot': 'dialog-trigger',
       onClick: (event: React.MouseEvent<HTMLElement>) => {
-        child.props.onClick?.(event);
-        handleClick(event);
+        child.props.onClick?.(event)
+        handleClick(event)
       },
-    });
+    })
   }
 
   return (
     <Button data-slot="dialog-trigger" onPress={() => setOpen(true)} {...props}>
       {children}
     </Button>
-  );
+  )
 }
 
 /** Groups dialog content rendered in the overlay layer. */
 export function DialogPortal({ children }: { children?: React.ReactNode }) {
-  return <>{children}</>;
+  return <>{children}</>
 }
 
-type DialogOverlayProps = Omit<ModalOverlayProps, "children" | "className" | "isOpen" | "onOpenChange"> & {
-  children?: React.ReactNode;
-  className?: string;
-};
+type DialogOverlayProps = Omit<
+  ModalOverlayProps,
+  'children' | 'className' | 'isOpen' | 'onOpenChange'
+> & {
+  children?: React.ReactNode
+  className?: string
+}
 
 /** Dismissable backdrop displayed while the parent {@link Dialog} is open. */
 export function DialogOverlay({ children, className, ...props }: DialogOverlayProps) {
-  const { open, setOpen } = useDialogContext();
-  if (!open) return null;
+  const { open, setOpen } = useDialogContext()
+  if (!open) return null
 
   return (
     <ModalOverlay
@@ -103,22 +117,25 @@ export function DialogOverlay({ children, className, ...props }: DialogOverlayPr
       isOpen={open}
       onOpenChange={setOpen}
       className={cn(
-        "fixed inset-0 isolate z-50 grid place-items-center bg-black/10 p-4 duration-100 supports-backdrop-filter:backdrop-blur-xs data-entering:animate-ui-overlay-in data-exiting:animate-ui-overlay-out",
+        'fixed inset-0 isolate z-50 grid place-items-center bg-black/10 p-4 supports-backdrop-filter:backdrop-blur-xs motion-safe:data-entering:animate-ui-overlay-in motion-safe:data-exiting:animate-ui-overlay-out',
         className,
       )}
       {...props}
     >
       {children}
     </ModalOverlay>
-  );
+  )
 }
 
-type DialogContentProps = Omit<React.ComponentProps<typeof AriaDialog>, "children" | "className"> & {
-  children?: React.ReactNode;
-  className?: string;
-  onOverlayClick?: React.MouseEventHandler<HTMLDivElement>;
-  showCloseButton?: boolean;
-};
+type DialogContentProps = Omit<
+  React.ComponentProps<typeof AriaDialog>,
+  'children' | 'className'
+> & {
+  children?: React.ReactNode
+  className?: string
+  onOverlayClick?: React.MouseEventHandler<HTMLDivElement>
+  showCloseButton?: boolean
+}
 
 /** Focus-managed modal content. Include a {@link DialogTitle} to give it an accessible name. */
 export function DialogContent({
@@ -128,25 +145,20 @@ export function DialogContent({
   showCloseButton = true,
   ...props
 }: DialogContentProps) {
-  const { setOpen } = useDialogContext();
+  const { setOpen } = useDialogContext()
 
   return (
     <DialogPortal>
       <DialogOverlay
         onClick={(event) => {
-          if (event.target === event.currentTarget) onOverlayClick?.(event);
+          if (event.target === event.currentTarget) onOverlayClick?.(event)
         }}
       >
-        <Modal
-          className={cn(
-            "w-full max-w-[calc(100%-2rem)] max-h-[calc(100dvh-2rem)] outline-none sm:max-w-sm",
-            className,
-          )}
-        >
+        <Modal className="motion-safe:data-entering:animate-ui-surface-in motion-safe:data-exiting:animate-ui-surface-out w-full">
           <AriaDialog
             data-slot="dialog-content"
             className={cn(
-              "grid max-h-[calc(100dvh-2rem)] gap-4 overflow-y-auto rounded-xl bg-background p-4 text-sm text-foreground ring-1 ring-foreground/10 outline-none",
+              'relative grid w-full max-w-[calc(100%-2rem)] max-h-[calc(100dvh-2rem)] mx-auto gap-4 overflow-y-auto rounded-xl bg-background p-4 text-sm text-foreground ring-1 ring-foreground/10 outline-none sm:max-w-sm',
               className,
             )}
             {...props}
@@ -168,57 +180,94 @@ export function DialogContent({
         </Modal>
       </DialogOverlay>
     </DialogPortal>
-  );
+  )
 }
 
-type DialogCloseProps = Omit<React.ComponentProps<typeof Button>, "onPress"> & {
+type DialogCloseProps = Omit<React.ComponentProps<typeof Button>, 'onPress'> & {
   /** Renders and augments the single child instead of rendering a {@link Button}. */
-  asChild?: boolean;
-};
+  asChild?: boolean
+}
 
 /** Closes the parent {@link Dialog}. */
 export function DialogClose({ asChild = false, children, onClick, ...props }: DialogCloseProps) {
-  const { setOpen } = useDialogContext();
+  const { setOpen } = useDialogContext()
   if (asChild && React.isValidElement<SlottableProps>(children)) {
-    const child = children as React.ReactElement<SlottableProps>;
+    const child = children as React.ReactElement<SlottableProps>
     return React.cloneElement(child, {
       ...(props as React.HTMLAttributes<HTMLElement>),
-      "data-slot": "dialog-close",
+      'data-slot': 'dialog-close',
       onClick: (event: React.MouseEvent<HTMLElement>) => {
-        child.props.onClick?.(event);
-        if (!event.defaultPrevented) setOpen(false);
+        child.props.onClick?.(event)
+        if (!event.defaultPrevented) setOpen(false)
       },
-    });
+    })
   }
 
   return (
     <Button data-slot="dialog-close" onPress={() => setOpen(false)} {...props}>
       {children}
     </Button>
-  );
+  )
 }
 
 /** Groups the title and description at the top of a dialog. */
-export function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="dialog-header" className={cn("flex flex-col gap-2", className)} {...props} />;
+export function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div data-slot="dialog-header" className={cn('flex flex-col gap-2', className)} {...props} />
+  )
 }
 
 /** Groups dialog actions and can add a secondary close action. */
-export function DialogFooter({ className, showCloseButton = false, children, ...props }: React.ComponentProps<"div"> & { showCloseButton?: boolean }) {
+export function DialogFooter({
+  className,
+  showCloseButton = false,
+  children,
+  ...props
+}: React.ComponentProps<'div'> & { showCloseButton?: boolean }) {
   return (
-    <div data-slot="dialog-footer" className={cn("-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 sm:flex-row sm:flex-wrap sm:justify-end", className)} {...props}>
+    <div
+      data-slot="dialog-footer"
+      className={cn(
+        '-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 sm:flex-row sm:flex-wrap sm:justify-end',
+        className,
+      )}
+      {...props}
+    >
       {children}
       {showCloseButton ? <DialogClose variant="outline">Cerrar</DialogClose> : null}
     </div>
-  );
+  )
 }
 
 /** Title used to give the parent {@link DialogContent} an accessible name. */
-export function DialogTitle({ className, ...props }: Omit<React.ComponentProps<typeof Heading>, "slot">) {
-  return <Heading slot="title" data-slot="dialog-title" className={cn("font-heading text-base leading-none font-medium", className)} {...props} />;
+export function DialogTitle({
+  className,
+  ...props
+}: Omit<React.ComponentProps<typeof Heading>, 'slot'>) {
+  return (
+    <Heading
+      slot="title"
+      data-slot="dialog-title"
+      className={cn('font-heading text-base leading-none font-medium', className)}
+      {...props}
+    />
+  )
 }
 
 /** Supporting text announced alongside the parent {@link DialogTitle}. */
-export function DialogDescription({ className, ...props }: Omit<React.ComponentProps<typeof Text>, "slot">) {
-  return <Text slot="description" data-slot="dialog-description" className={cn("text-sm text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground", className)} {...props} />;
+export function DialogDescription({
+  className,
+  ...props
+}: Omit<React.ComponentProps<typeof Text>, 'slot'>) {
+  return (
+    <Text
+      slot="description"
+      data-slot="dialog-description"
+      className={cn(
+        'text-sm text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground',
+        className,
+      )}
+      {...props}
+    />
+  )
 }

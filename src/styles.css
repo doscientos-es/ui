@@ -1,6 +1,6 @@
-@import "tailwindcss/theme" layer(theme);
-@import "tailwindcss/utilities" layer(utilities);
-@import "sileo/styles.css";
+@import 'tailwindcss/theme' layer(theme);
+@import 'tailwindcss/utilities' layer(utilities);
+@import 'sileo/styles.css';
 @source "./";
 @custom-variant dark (&:is(.dark *));
 
@@ -158,13 +158,13 @@
       transform: translate(-50%, -50%) scale(1.5);
     }
   }
-
 }
 
 /* Sileo renders each toast as a morphing SVG surface. Give that surface enough
  * contrast over the predominantly white product canvases. */
 [data-sileo-canvas] {
-  filter: drop-shadow(0 0.5rem 1rem rgb(0 0 0 / 14%)) drop-shadow(0 0.125rem 0.25rem rgb(0 0 0 / 10%));
+  filter: drop-shadow(0 0.5rem 1rem rgb(0 0 0 / 14%))
+    drop-shadow(0 0.125rem 0.25rem rgb(0 0 0 / 10%));
 }
 
 :is([data-sileo-pill], [data-sileo-body]) {
@@ -175,7 +175,7 @@
 /* Application shell ---------------------------------------------------------
  * Use data slots instead of responsive utility classes so consumer imports
  * cannot change the display order of the shell's desktop/mobile states. */
-[data-slot="app-shell"] {
+[data-slot='app-shell'] {
   display: flex;
   min-height: 100svh;
   width: 100%;
@@ -183,13 +183,13 @@
   flex-direction: column;
 }
 
-[data-slot="app-shell-sidebar"] {
+[data-slot='app-shell-sidebar'] {
   display: none;
   height: 100%;
   flex-direction: column;
 }
 
-[data-slot="app-shell-main"] {
+[data-slot='app-shell-main'] {
   display: flex;
   min-width: 0;
   min-height: 0;
@@ -197,7 +197,7 @@
   flex-direction: column;
 }
 
-[data-slot="app-shell-header"] {
+[data-slot='app-shell-header'] {
   position: sticky;
   top: 0;
   z-index: 10;
@@ -207,81 +207,81 @@
   backdrop-filter: blur(0.75rem);
 }
 
-[data-slot="app-shell-mobile-header"] {
+[data-slot='app-shell-mobile-header'] {
   display: flex;
 }
 
-[data-slot="app-shell-content"] {
+[data-slot='app-shell-content'] {
   width: 100%;
 }
 
-[data-slot="app-shell-content"][data-size="default"] {
+[data-slot='app-shell-content'][data-size='default'] {
   max-width: 80rem;
 }
 
-[data-slot="app-shell-content"][data-size="wide"] {
+[data-slot='app-shell-content'][data-size='wide'] {
   max-width: 100rem;
 }
 
-[data-slot="app-shell-content"][data-size="default"],
-[data-slot="app-shell-content"][data-size="wide"] {
+[data-slot='app-shell-content'][data-size='default'],
+[data-slot='app-shell-content'][data-size='wide'] {
   margin-inline: auto;
 }
 
-[data-slot="app-shell-content"][data-padded] {
+[data-slot='app-shell-content'][data-padded] {
   padding: 1rem;
 }
 
-[data-slot="app-shell-content"][data-scrollable] {
+[data-slot='app-shell-content'][data-scrollable] {
   min-height: 0;
   flex: 1;
   overflow-y: auto;
 }
 
 @media (min-width: 48rem) {
-  [data-slot="app-shell-content"][data-padded] {
+  [data-slot='app-shell-content'][data-padded] {
     padding: 1.5rem;
   }
 }
 
 @media (min-width: 40rem) {
-  [data-slot="app-shell"][data-sidebar-breakpoint="sm"] {
+  [data-slot='app-shell'][data-sidebar-breakpoint='sm'] {
     flex-direction: row;
   }
 
-  [data-slot="app-shell"][data-sidebar-breakpoint="sm"] [data-slot="app-shell-sidebar"] {
+  [data-slot='app-shell'][data-sidebar-breakpoint='sm'] [data-slot='app-shell-sidebar'] {
     display: flex;
   }
 
-  [data-slot="app-shell"][data-sidebar-breakpoint="sm"] [data-slot="app-shell-mobile-header"] {
+  [data-slot='app-shell'][data-sidebar-breakpoint='sm'] [data-slot='app-shell-mobile-header'] {
     display: none;
   }
 }
 
 @media (min-width: 48rem) {
-  [data-slot="app-shell"][data-sidebar-breakpoint="md"] {
+  [data-slot='app-shell'][data-sidebar-breakpoint='md'] {
     flex-direction: row;
   }
 
-  [data-slot="app-shell"][data-sidebar-breakpoint="md"] [data-slot="app-shell-sidebar"] {
+  [data-slot='app-shell'][data-sidebar-breakpoint='md'] [data-slot='app-shell-sidebar'] {
     display: flex;
   }
 
-  [data-slot="app-shell"][data-sidebar-breakpoint="md"] [data-slot="app-shell-mobile-header"] {
+  [data-slot='app-shell'][data-sidebar-breakpoint='md'] [data-slot='app-shell-mobile-header'] {
     display: none;
   }
 }
 
 @media (min-width: 64rem) {
-  [data-slot="app-shell"][data-sidebar-breakpoint="lg"] {
+  [data-slot='app-shell'][data-sidebar-breakpoint='lg'] {
     flex-direction: row;
   }
 
-  [data-slot="app-shell"][data-sidebar-breakpoint="lg"] [data-slot="app-shell-sidebar"] {
+  [data-slot='app-shell'][data-sidebar-breakpoint='lg'] [data-slot='app-shell-sidebar'] {
     display: flex;
   }
 
-  [data-slot="app-shell"][data-sidebar-breakpoint="lg"] [data-slot="app-shell-mobile-header"] {
+  [data-slot='app-shell'][data-sidebar-breakpoint='lg'] [data-slot='app-shell-mobile-header'] {
     display: none;
   }
 }

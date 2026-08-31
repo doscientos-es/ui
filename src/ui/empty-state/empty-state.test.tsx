@@ -1,5 +1,6 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { render, screen } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
+
 import {
   EmptyState,
   EmptyStateContent,
@@ -7,10 +8,10 @@ import {
   EmptyStateHeader,
   EmptyStateMedia,
   EmptyStateTitle,
-} from "./empty-state";
+} from './empty-state'
 
-describe("EmptyState", () => {
-  it("composes media, copy and actions", () => {
+describe('EmptyState', () => {
+  it('composes media, copy and actions', () => {
     render(
       <EmptyState>
         <EmptyStateHeader>
@@ -20,11 +21,11 @@ describe("EmptyState", () => {
         </EmptyStateHeader>
         <EmptyStateContent>Limpiar filtros</EmptyStateContent>
       </EmptyState>,
-    );
-    expect(screen.getByRole("heading", { name: "Sin resultados" })).toBeTruthy();
-    expect(screen.getByText("!").getAttribute("data-variant")).toBe("icon");
-    expect(screen.getByText("Limpiar filtros").getAttribute("data-slot")).toBe(
-      "empty-state-content",
-    );
-  });
-});
+    )
+    expect(screen.getByRole('heading', { name: 'Sin resultados' })).toBeTruthy()
+    expect(screen.getByText('!').getAttribute('data-variant')).toBe('icon')
+    expect(screen.getByText('Limpiar filtros').getAttribute('data-slot')).toBe(
+      'empty-state-content',
+    )
+  })
+})

@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { SearchX } from "lucide-react";
-import { Button } from "../button/button";
+import type { Meta, StoryObj } from '@storybook/react-vite'
+import { SearchX } from 'lucide-react'
+
+import { Button } from '../button/button'
 import {
   EmptyState,
   EmptyStateContent,
@@ -8,15 +9,15 @@ import {
   EmptyStateHeader,
   EmptyStateMedia,
   EmptyStateTitle,
-} from "./empty-state";
+} from './empty-state'
 
 const meta = {
-  title: "Components/Feedback/Empty State",
+  title: 'Components/Feedback/Empty State',
   component: EmptyState,
-  tags: ["test:ui"],
-} satisfies Meta<typeof EmptyState>;
-export default meta;
-type Story = StoryObj<typeof meta>;
+  tags: ['test:ui'],
+} satisfies Meta<typeof EmptyState>
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
@@ -35,4 +36,4 @@ export const Default: Story = {
       </EmptyStateContent>
     </EmptyState>
   ),
-};
+}

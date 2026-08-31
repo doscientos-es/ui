@@ -22,15 +22,21 @@ encapsulado para que las APIs, tokens y accesibilidad sean consistentes.
 Instala el paquete y React como dependencia de tu aplicación. Después, importa una sola vez los estilos compilados en el punto de entrada CSS.
 
 ```css
-@import "tailwindcss";
-@import "@doscientos/ui/styles.css";
+@import 'tailwindcss';
+@import '@doscientos/ui/styles.css';
 ```
 
 ```tsx
-import { Button, Field, FieldLabel, Input } from "@doscientos/ui";
+import { Button, Field, FieldLabel, Input } from '@doscientos/ui'
 
 export function ProfileName() {
-  return <Field><FieldLabel htmlFor="name">Nombre</FieldLabel><Input id="name" /><Button>Guardar</Button></Field>;
+  return (
+    <Field>
+      <FieldLabel htmlFor="name">Nombre</FieldLabel>
+      <Input id="name" />
+      <Button>Guardar</Button>
+    </Field>
+  )
 }
 ```
 
@@ -44,10 +50,13 @@ El combobox es composable: la aplicación controla datos, peticiones y caché; l
 <Combobox items={clients} inputValue={query} onInputChange={setQuery}>
   <ComboboxInput placeholder="Busca un cliente…" />
   <ComboboxContent>
-    <ComboboxList emptyState="Sin resultados.">{(client) => <ComboboxItem
-      id={client.id} textValue={client.name}>
-      <HighlightMatch text={client.name} query={query} />
-    </ComboboxItem>}</ComboboxList>
+    <ComboboxList emptyState="Sin resultados.">
+      {(client) => (
+        <ComboboxItem id={client.id} textValue={client.name}>
+          <HighlightMatch text={client.name} query={query} />
+        </ComboboxItem>
+      )}
+    </ComboboxList>
   </ComboboxContent>
 </Combobox>
 ```

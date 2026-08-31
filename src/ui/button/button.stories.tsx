@@ -1,30 +1,31 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ArrowRight, Plus } from "lucide-react";
-import { Button, LinkButton } from "./button";
+import type { Meta, StoryObj } from '@storybook/react-vite'
+import { ArrowRight, Plus } from 'lucide-react'
+
+import { Button, LinkButton } from './button'
 
 const meta = {
-  title: "Components/Actions/Button",
+  title: 'Components/Actions/Button',
   component: Button,
-  tags: ["test:ui"],
-  args: { children: "Guardar cambios" },
+  tags: ['test:ui'],
+  args: { children: 'Guardar cambios' },
   argTypes: {
     variant: {
-      control: "select",
-      options: ["default", "secondary", "outline", "ghost", "destructive", "link"],
+      control: 'select',
+      options: ['default', 'secondary', 'outline', 'ghost', 'destructive', 'link'],
     },
     size: {
-      control: "select",
-      options: ["xs", "sm", "default", "lg", "icon", "icon-xs", "icon-sm", "icon-lg"],
+      control: 'select',
+      options: ['xs', 'sm', 'default', 'lg', 'icon', 'icon-xs', 'icon-sm', 'icon-lg'],
     },
   },
-} satisfies Meta<typeof Button>;
+} satisfies Meta<typeof Button>
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
-export const Default: Story = {};
-export const Destructive: Story = { args: { children: "Eliminar", variant: "destructive" } };
-export const Disabled: Story = { args: { isDisabled: true } };
+export const Default: Story = {}
+export const Destructive: Story = { args: { children: 'Eliminar', variant: 'destructive' } }
+export const Disabled: Story = { args: { isDisabled: true } }
 export const Variants: Story = {
   render: () => (
     <div className="flex flex-wrap gap-2">
@@ -36,7 +37,7 @@ export const Variants: Story = {
       <Button variant="link">Link</Button>
     </div>
   ),
-};
+}
 export const Sizes: Story = {
   render: () => (
     <div className="flex items-center gap-2">
@@ -49,7 +50,7 @@ export const Sizes: Story = {
       </Button>
     </div>
   ),
-};
+}
 export const WithIcon: Story = {
   args: {
     children: (
@@ -59,11 +60,11 @@ export const WithIcon: Story = {
       </>
     ),
   },
-};
+}
 export const AsLink: Story = {
   render: () => (
     <LinkButton href="#button-link" variant="outline">
       Abrir sección
     </LinkButton>
   ),
-};
+}

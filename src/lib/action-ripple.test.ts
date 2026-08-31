@@ -1,16 +1,17 @@
-import { describe, expect, it } from "vitest";
-import { actionRipple } from "./action-ripple";
+import { describe, expect, it } from 'vitest'
 
-describe("actionRipple", () => {
-  it("provides reusable clipping and stacking styles", () => {
-    const className = actionRipple();
+import { actionRipple } from './action-ripple'
 
-    expect(className).toContain("overflow-hidden");
-    expect(className).toContain("isolate");
-    expect(className).not.toContain("active:after");
-  });
+describe('actionRipple', () => {
+  it('provides reusable clipping and stacking styles', () => {
+    const className = actionRipple()
 
-  it("accepts additional classes", () => {
-    expect(actionRipple({ className: "rounded-xl" })).toContain("rounded-xl");
-  });
-});
+    expect(className).toContain('overflow-hidden')
+    expect(className).toContain('isolate')
+    expect(className).not.toContain('active:after')
+  })
+
+  it('accepts additional classes', () => {
+    expect(actionRipple({ className: 'rounded-xl' })).toContain('rounded-xl')
+  })
+})

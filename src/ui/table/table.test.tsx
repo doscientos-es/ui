@@ -1,5 +1,6 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { render, screen } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
+
 import {
   Table,
   TableBody,
@@ -9,10 +10,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./table";
+} from './table'
 
-describe("Table", () => {
-  it("preserves native table semantics and regions", () => {
+describe('Table', () => {
+  it('preserves native table semantics and regions', () => {
     render(
       <Table>
         <TableCaption>Facturas recientes</TableCaption>
@@ -32,11 +33,11 @@ describe("Table", () => {
           </TableRow>
         </TableFooter>
       </Table>,
-    );
-    expect(screen.getByRole("table", { name: "Facturas recientes" })).toBeTruthy();
-    expect(screen.getByRole("columnheader", { name: "Cliente" })).toBeTruthy();
-    expect(screen.getByText("Total: 1").closest("tfoot")?.getAttribute("data-slot")).toBe(
-      "table-footer",
-    );
-  });
-});
+    )
+    expect(screen.getByRole('table', { name: 'Facturas recientes' })).toBeTruthy()
+    expect(screen.getByRole('columnheader', { name: 'Cliente' })).toBeTruthy()
+    expect(screen.getByText('Total: 1').closest('tfoot')?.getAttribute('data-slot')).toBe(
+      'table-footer',
+    )
+  })
+})

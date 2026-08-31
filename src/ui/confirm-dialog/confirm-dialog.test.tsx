@@ -1,27 +1,37 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { ConfirmDialog } from "./confirm-dialog";
+import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
-describe("ConfirmDialog", () => {
-  afterEach(cleanup);
+import { ConfirmDialog } from './confirm-dialog'
 
-  it("keeps cancellation separate from the confirmed action", () => {
-    const onOpenChange = vi.fn();
-    const onConfirm = vi.fn();
-    render(<ConfirmDialog open onOpenChange={onOpenChange} onConfirm={onConfirm} title="¿Eliminar?" description="No se puede deshacer." destructive />);
+describe('ConfirmDialog', () => {
+  afterEach(cleanup)
 
-    fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
-    expect(onOpenChange).toHaveBeenCalledWith(false);
-    expect(onConfirm).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByRole("button", { name: "Confirmar" }));
-    expect(onConfirm).toHaveBeenCalledOnce();
-  });
+  it('keeps cancellation separate from the confirmed action', () => {
+    const onOpenChange = vi.fn()
+    const onConfirm = vi.fn()
+    render(
+      <ConfirmDialog
+        open
+        onOpenChange={onOpenChange}
+        onConfirm={onConfirm}
+        title="¿Eliminar?"
+        description="No se puede deshacer."
+        destructive
+      />,
+    )
 
-  it("requests closure when Escape is pressed", () => {
-    const onOpenChange = vi.fn();
-    render(<ConfirmDialog open onOpenChange={onOpenChange} onConfirm={vi.fn()} title="¿Cerrar?" />);
+    fireEvent.click(screen.getByRole('button', { name: 'Cancelar' }))
+    expect(onOpenChange).toHaveBeenCalledWith(false)
+    expect(onConfirm).not.toHaveBeenCalled()
+    fireEvent.click(screen.getByRole('button', { name: 'Confirmar' }))
+    expect(onConfirm).toHaveBeenCalledOnce()
+  })
 
-    fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
-    expect(onOpenChange).toHaveBeenCalledWith(false);
-  });
-});
+  it('requests closure when Escape is pressed', () => {
+    const onOpenChange = vi.fn()
+    render(<ConfirmDialog open onOpenChange={onOpenChange} onConfirm={vi.fn()} title="¿Cerrar?" />)
+
+    fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape' })
+    expect(onOpenChange).toHaveBeenCalledWith(false)
+  })
+})

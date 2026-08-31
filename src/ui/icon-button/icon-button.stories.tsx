@@ -1,20 +1,17 @@
-import {
-  Download,
-  Mail,
-  Settings,
-} from "lucide-react";
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { IconButton } from "./icon-button";
+import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Download, Mail, Settings } from 'lucide-react'
+
+import { IconButton } from './icon-button'
 
 const meta = {
-  title: "Application/IconButton",
+  title: 'Application/IconButton',
   component: IconButton,
-} satisfies Meta<typeof IconButton>;
-export default meta;
-type Story = StoryObj<typeof meta>;
+} satisfies Meta<typeof IconButton>
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
-  args: { label: "Acción" },
+  args: { label: 'Acción' },
   render: () => (
     <div className="flex items-center gap-2">
       <IconButton label="Descargar PDF" variant="outline">
@@ -28,4 +25,4 @@ export const Default: Story = {
       </IconButton>
     </div>
   ),
-};
+}

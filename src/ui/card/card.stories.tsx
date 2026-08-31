@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Badge } from "../badge/badge";
-import { Button } from "../button/button";
+import type { Meta, StoryObj } from '@storybook/react-vite'
+
+import { Badge } from '../badge/badge'
+import { Button } from '../button/button'
 import {
   Card,
   CardAction,
@@ -9,16 +10,16 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "./card";
+} from './card'
 
 const meta = {
-  title: "Components/Data Display/Card",
+  title: 'Components/Data Display/Card',
   component: Card,
-  tags: ["test:ui"],
-  argTypes: { size: { control: "select", options: ["default", "sm"] } },
-} satisfies Meta<typeof Card>;
-export default meta;
-type Story = StoryObj<typeof meta>;
+  tags: ['test:ui'],
+  argTypes: { size: { control: 'select', options: ['default', 'sm'] } },
+} satisfies Meta<typeof Card>
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: (args) => (
@@ -37,7 +38,7 @@ export const Default: Story = {
       </CardFooter>
     </Card>
   ),
-};
+}
 
 export const WithActions: Story = {
   render: () => (
@@ -52,4 +53,4 @@ export const WithActions: Story = {
       </CardFooter>
     </Card>
   ),
-};
+}

@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { ChevronDownIcon, ChevronUpIcon } from "lucide-react"
+import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
+import * as React from 'react'
 import {
   DisclosurePanel as AccordionContentPrimitive,
   Heading as AccordionHeaderPrimitive,
@@ -12,15 +12,16 @@ import {
   type DisclosureGroupProps,
   type DisclosurePanelProps,
   type DisclosureProps,
-} from "react-aria-components"
-import { cn } from "../../lib/cn"
+} from 'react-aria-components'
+
+import { cn } from '../../lib/cn'
 
 /** Groups related expandable sections and manages their expanded state. */
 export function Accordion({ className, ...props }: DisclosureGroupProps) {
   return (
     <AccordionPrimitive
       data-slot="accordion"
-      className={cn("flex w-full flex-col text-foreground", className)}
+      className={cn('flex w-full flex-col text-foreground', className)}
       {...props}
     />
   )
@@ -31,7 +32,7 @@ export function AccordionItem({ className, ...props }: DisclosureProps) {
   return (
     <AccordionItemPrimitive
       data-slot="accordion-item"
-      className={cn("border-border not-last:border-b", className)}
+      className={cn('border-border not-last:border-b', className)}
       {...props}
     />
   )
@@ -42,15 +43,15 @@ export function AccordionTrigger({
   className,
   children,
   ...props
-}: Omit<ButtonProps, "children"> & { children: React.ReactNode }) {
+}: Omit<ButtonProps, 'children'> & { children: React.ReactNode }) {
   return (
     <AccordionHeaderPrimitive className="flex">
       <AccordionTriggerPrimitive
         slot="trigger"
         data-slot="accordion-trigger"
         className={cn(
-          "group/accordion-trigger relative flex flex-1 items-start justify-between gap-3 rounded-lg border border-transparent px-2.5 py-2.5 text-left text-sm font-medium text-foreground transition-colors outline-none hover:bg-muted/50 aria-expanded:bg-muted/50 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 **:data-[slot=accordion-trigger-icon]:ml-auto **:data-[slot=accordion-trigger-icon]:size-4 **:data-[slot=accordion-trigger-icon]:text-muted-foreground",
-          className
+          'group/accordion-trigger relative flex flex-1 items-start justify-between gap-3 rounded-lg border border-transparent px-2.5 py-2.5 text-left text-sm font-medium text-foreground transition-colors outline-none hover:bg-muted/50 aria-expanded:bg-muted/50 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 **:data-[slot=accordion-trigger-icon]:ml-auto **:data-[slot=accordion-trigger-icon]:size-4 **:data-[slot=accordion-trigger-icon]:text-muted-foreground',
+          className,
         )}
         {...props}
       >
@@ -69,21 +70,17 @@ export function AccordionTrigger({
 }
 
 /** Panel revealed when its parent {@link AccordionItem} is expanded. */
-export function AccordionContent({
-  className,
-  children,
-  ...props
-}: DisclosurePanelProps) {
+export function AccordionContent({ className, children, ...props }: DisclosurePanelProps) {
   return (
     <AccordionContentPrimitive
       data-slot="accordion-content"
-      className="h-(--disclosure-panel-height) overflow-clip text-sm text-muted-foreground transition-[height] data-open:animate-accordion-down data-closed:animate-accordion-up"
+      className="text-muted-foreground data-open:animate-accordion-down data-closed:animate-accordion-up h-(--disclosure-panel-height) overflow-clip text-sm transition-[height]"
       {...props}
     >
       <div
         className={cn(
-          "px-2.5 pt-0 pb-3 [&_a]:text-foreground [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-primary [&_p:not(:last-child)]:mb-4",
-          className
+          'px-2.5 pt-0 pb-3 [&_a]:text-foreground [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-primary [&_p:not(:last-child)]:mb-4',
+          className,
         )}
       >
         {children}
