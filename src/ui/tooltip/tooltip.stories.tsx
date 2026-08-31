@@ -24,9 +24,10 @@ export const Default: Story = {
     const page = within(canvasElement.ownerDocument.body)
     const trigger = canvas.getByRole('button', { name: 'Guardar' })
 
-    await userEvent.hover(trigger)
+    await userEvent.tab()
+    await expect(trigger).toHaveFocus()
     await waitFor(() => expect(page.getByRole('tooltip')).toBeVisible())
-    await userEvent.unhover(trigger)
+    await userEvent.keyboard('{Escape}')
     await waitFor(() => expect(page.queryByRole('tooltip')).not.toBeInTheDocument())
   },
 }
@@ -52,3 +53,13 @@ export const IconAction: Story = {
     </TooltipTrigger>
   ),
 }
+
+export const WithCustomPlacement: Story = {
+  render: () => (
+    <TooltipTrigger>
+      <Button variant="outline">Guardar</Button>
+      <Tooltip placement="bottom">Guarda los cambios realizados.</Tooltip>
+    </TooltipTrigger>
+  ),
+}
+

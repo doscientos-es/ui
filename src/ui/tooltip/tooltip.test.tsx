@@ -6,7 +6,7 @@ import { Button } from '../button/button'
 import { Tooltip, TooltipTrigger } from './tooltip'
 
 describe('TooltipTrigger', () => {
-  it('shows contextual information when its trigger is hovered', async () => {
+  it('shows contextual information when its trigger receives keyboard focus', async () => {
     const user = userEvent.setup()
     render(
       <TooltipTrigger>
@@ -15,7 +15,9 @@ describe('TooltipTrigger', () => {
       </TooltipTrigger>,
     )
 
-    await user.hover(screen.getByRole('button', { name: 'Guardar' }))
-    expect(await screen.findByRole('tooltip')).toHaveTextContent('Guarda los cambios realizados.')
+    const trigger = screen.getByRole('button', { name: 'Guardar' })
+    await user.tab()
+    expect(trigger.ownerDocument.activeElement).toBe(trigger)
+    expect((await screen.findByRole('tooltip')).textContent).toBe('Guarda los cambios realizados.')
   })
 })
