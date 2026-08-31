@@ -18,13 +18,24 @@ import {
 } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
+import { Button, type ButtonProps } from '../button/button'
 
 function DropdownMenuTrigger({ ...props }: React.ComponentProps<typeof MenuTriggerPrimitive>) {
   return <MenuTriggerPrimitive data-slot="dropdown-menu-trigger" {...props} />
 }
 
+export type DropdownMenuContentProps = Omit<
+  React.ComponentProps<typeof MenuPrimitive<object>>,
+  'children' | 'className'
+> &
+  Pick<React.ComponentProps<typeof PopoverPrimitive>, 'placement' | 'offset' | 'crossOffset'> & {
+    'data-slot'?: string
+    className?: string
+    children?: React.ReactNode
+  }
+
 /** Floating menu of actions or selections opened by a {@link DropdownMenuTrigger}. */
-function DropdownMenu({
+function DropdownMenuContent({
   'data-slot': dataSlot = 'dropdown-menu-content',
   placement = 'bottom start',
   offset = 4,
@@ -32,12 +43,7 @@ function DropdownMenu({
   className,
   children,
   ...props
-}: Omit<React.ComponentProps<typeof MenuPrimitive<object>>, 'children' | 'className'> &
-  Pick<React.ComponentProps<typeof PopoverPrimitive>, 'placement' | 'offset' | 'crossOffset'> & {
-    'data-slot'?: string
-    className?: string
-    children?: React.ReactNode
-  }) {
+}: DropdownMenuContentProps) {
   return (
     <PopoverPrimitive
       data-slot={dataSlot}
@@ -56,6 +62,42 @@ function DropdownMenu({
         {children}
       </MenuPrimitive>
     </PopoverPrimitive>
+  )
+}
+
+type DropdownMenuTriggerStateProps = Pick<
+  React.ComponentProps<typeof MenuTriggerPrimitive>,
+  'defaultOpen' | 'isOpen' | 'onOpenChange'
+>
+
+type SimpleDropdownMenuProps = DropdownMenuContentProps &
+  DropdownMenuTriggerStateProps & {
+    /** Text for a default button, or an interactive element that opens the menu. */
+    trigger: string | React.ReactElement
+    /** Props for the default button rendered when {@link trigger} is text. */
+    triggerProps?: Omit<ButtonProps, 'children'>
+    children: React.ReactNode
+  }
+
+export type DropdownMenuProps = DropdownMenuContentProps | SimpleDropdownMenuProps
+
+/**
+ * An action menu with a simple trigger API.
+ * Omit {@link trigger} and use {@link DropdownMenuTrigger} plus {@link DropdownMenuContent} for advanced composition.
+ */
+function DropdownMenu(props: DropdownMenuProps) {
+  if (!('trigger' in props)) return <DropdownMenuContent {...props} />
+
+  const { children, trigger, triggerProps, defaultOpen, isOpen, onOpenChange, ...contentProps } =
+    props
+  const triggerElement =
+    typeof trigger === 'string' ? <Button {...triggerProps}>{trigger}</Button> : trigger
+
+  return (
+    <DropdownMenuTrigger defaultOpen={defaultOpen} isOpen={isOpen} onOpenChange={onOpenChange}>
+      {triggerElement}
+      <DropdownMenuContent {...contentProps}>{children}</DropdownMenuContent>
+    </DropdownMenuTrigger>
   )
 }
 
@@ -183,9 +225,9 @@ function DropdownMenuSubContent({
   offset = 0,
   className,
   ...props
-}: React.ComponentProps<typeof DropdownMenu>) {
+}: React.ComponentProps<typeof DropdownMenuContent>) {
   return (
-    <DropdownMenu
+    <DropdownMenuContent
       data-slot="dropdown-menu-sub-content"
       className={cn(
         'w-auto min-w-24 rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-lg',
@@ -228,6 +270,7 @@ function DropdownMenuShortcut({ className, ...props }: React.ComponentProps<'spa
 export {
   DropdownMenuTrigger,
   DropdownMenu,
+  DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuItem,

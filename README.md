@@ -6,7 +6,7 @@ Primitives React accesibles, rápidas y temables para los productos de Dosciento
 
 - Foundations: tokens CSS, tema claro/oscuro y utilidades de clases y texto.
 - Controles y formularios: botones, campos, selección, feedback, búsqueda y validación accesible.
-- Navegación y overlays: tabs, menús, breadcrumbs, tooltip, popover, dialogs y sheets.
+- Navegación y overlays: tabs, menús, breadcrumbs, tooltip, popover, dialogs y drawers.
 - Datos y estados: tablas, cards, avatares, badges, skeletons, alertas y estados vacíos.
 - Patrones de aplicación: shell, sidebar, cabeceras, toolbars, paginación, toasts y carga.
 - Hooks: debounce, cambios no guardados y autosave sin acoplamiento a transporte o datos.

@@ -14,9 +14,7 @@ describe('Popover', () => {
 
   it('opens from a custom trigger element', async () => {
     render(
-      <Popover trigger={<Button variant="ghost">Opciones</Button>}>
-        Contenido del perfil
-      </Popover>,
+      <Popover trigger={<Button variant="ghost">Opciones</Button>}>Contenido del perfil</Popover>,
     )
 
     fireEvent.click(screen.getByRole('button', { name: 'Opciones' }))

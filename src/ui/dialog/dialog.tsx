@@ -156,15 +156,8 @@ export type DialogProps = DialogRootProps | SimpleDialogProps
 export function Dialog(props: DialogProps) {
   if (!('trigger' in props)) return <DialogRoot {...props} />
 
-  const {
-    children,
-    trigger,
-    triggerProps,
-    defaultOpen,
-    onOpenChange,
-    open,
-    ...contentProps
-  } = props
+  const { children, trigger, triggerProps, defaultOpen, onOpenChange, open, ...contentProps } =
+    props
 
   return (
     <DialogRoot defaultOpen={defaultOpen} onOpenChange={onOpenChange} open={open}>

@@ -4,43 +4,41 @@ import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { Button } from '../button/button'
 import { Input } from '../input/input'
 import {
-  Sheet,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
 } from './sheet'
 
 const meta = {
-  title: 'Components/Overlays/Sheet',
-  component: Sheet,
+  title: 'Components/Overlays/Drawer',
+  component: Drawer,
   tags: ['test:ui'],
-  args: { children: null },
-} satisfies Meta<typeof Sheet>
+  args: { children: null, trigger: '' },
+} satisfies Meta<typeof Drawer>
 export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
-    <SheetTrigger>
-      <Button variant="outline">Editar perfil</Button>
-      <Sheet>
-        <SheetHeader>
-          <SheetTitle>Editar perfil</SheetTitle>
-          <SheetDescription>Actualiza los datos públicos de tu cuenta.</SheetDescription>
-        </SheetHeader>
-        <div className="grid gap-3 px-4">
-          <label className="grid gap-1 text-sm" htmlFor="sheet-name">
-            Nombre
-            <Input id="sheet-name" defaultValue="Ana García" />
-          </label>
-        </div>
-        <SheetFooter>
-          <Button slot="close">Guardar cambios</Button>
-        </SheetFooter>
-      </Sheet>
-    </SheetTrigger>
+    <Drawer trigger="Editar perfil" triggerProps={{ variant: 'outline' }}>
+      <DrawerHeader>
+        <DrawerTitle>Editar perfil</DrawerTitle>
+        <DrawerDescription>Actualiza los datos públicos de tu cuenta.</DrawerDescription>
+      </DrawerHeader>
+      <div className="grid gap-3 px-4">
+        <label className="grid gap-1 text-sm" htmlFor="sheet-name">
+          Nombre
+          <Input id="sheet-name" defaultValue="Ana García" />
+        </label>
+      </div>
+      <DrawerFooter>
+        <Button slot="close">Guardar cambios</Button>
+      </DrawerFooter>
+    </Drawer>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
@@ -55,14 +53,22 @@ export const Default: Story = {
 
 export const FromLeft: Story = {
   render: () => (
-    <SheetTrigger>
-      <Button variant="outline">Abrir navegación</Button>
-      <Sheet side="left">
-        <SheetHeader>
-          <SheetTitle>Navegación</SheetTitle>
-          <SheetDescription>Accede a las áreas principales.</SheetDescription>
-        </SheetHeader>
-      </Sheet>
-    </SheetTrigger>
+    <Drawer trigger="Abrir navegación" triggerProps={{ variant: 'outline' }} side="left">
+      <DrawerHeader>
+        <DrawerTitle>Navegación</DrawerTitle>
+        <DrawerDescription>Accede a las áreas principales.</DrawerDescription>
+      </DrawerHeader>
+    </Drawer>
+  ),
+}
+
+export const AdvancedComposition: Story = {
+  render: () => (
+    <DrawerTrigger>
+      <Button variant="outline">Abrir composición avanzada</Button>
+      <DrawerContent>
+        <DrawerTitle>Panel compuesto</DrawerTitle>
+      </DrawerContent>
+    </DrawerTrigger>
   ),
 }

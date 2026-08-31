@@ -115,6 +115,39 @@ function SheetContent({
   )
 }
 
+/** Props for the simple {@link Drawer} API. */
+export type DrawerProps = React.ComponentProps<typeof SheetContent> &
+  Pick<SheetTriggerPrimitiveProps, 'defaultOpen' | 'isOpen' | 'onOpenChange'> & {
+    /** Text for a default button, or an interactive element that opens the drawer. */
+    trigger: string | React.ReactElement
+    /** Props for the default button rendered when {@link trigger} is text. */
+    triggerProps?: Omit<ButtonProps, 'children'>
+  }
+
+/**
+ * A dismissable modal panel with a simple trigger API.
+ * Use {@link DrawerTrigger} plus {@link DrawerContent} for advanced composition.
+ */
+function Drawer({
+  children,
+  trigger,
+  triggerProps,
+  defaultOpen,
+  isOpen,
+  onOpenChange,
+  ...contentProps
+}: DrawerProps) {
+  const triggerElement =
+    typeof trigger === 'string' ? <Button {...triggerProps}>{trigger}</Button> : trigger
+
+  return (
+    <SheetTrigger defaultOpen={defaultOpen} isOpen={isOpen} onOpenChange={onOpenChange}>
+      {triggerElement}
+      <SheetContent {...contentProps}>{children}</SheetContent>
+    </SheetTrigger>
+  )
+}
+
 function SheetHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
@@ -160,7 +193,30 @@ function SheetDescription({
   )
 }
 
+/** Explicit advanced-composition name for {@link SheetTrigger}. */
+const DrawerTrigger = SheetTrigger
+/** Explicit advanced-composition name for {@link Sheet}. */
+const DrawerContent = SheetContent
+/** Explicit advanced-composition name for {@link SheetClose}. */
+const DrawerClose = SheetClose
+/** Explicit advanced-composition name for {@link SheetHeader}. */
+const DrawerHeader = SheetHeader
+/** Explicit advanced-composition name for {@link SheetFooter}. */
+const DrawerFooter = SheetFooter
+/** Explicit advanced-composition name for {@link SheetTitle}. */
+const DrawerTitle = SheetTitle
+/** Explicit advanced-composition name for {@link SheetDescription}. */
+const DrawerDescription = SheetDescription
+
 export {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
   Sheet,
   SheetClose,
   SheetContent,

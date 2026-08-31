@@ -1,10 +1,10 @@
+import type * as React from 'react'
 import {
   DialogTrigger as AriaDialogTrigger,
   Popover as AriaPopover,
   type DialogTriggerProps,
   type PopoverProps as AriaPopoverProps,
 } from 'react-aria-components'
-import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { Button, type ButtonProps } from '../button/button'
@@ -52,7 +52,8 @@ export type PopoverProps = PopoverContentProps | SimplePopoverProps
 export function Popover(props: PopoverProps) {
   if (!('trigger' in props)) return <PopoverContent {...props} />
 
-  const { children, trigger, triggerProps, defaultOpen, isOpen, onOpenChange, ...contentProps } = props
+  const { children, trigger, triggerProps, defaultOpen, isOpen, onOpenChange, ...contentProps } =
+    props
   const triggerElement =
     typeof trigger === 'string' ? <Button {...triggerProps}>{trigger}</Button> : trigger
 
