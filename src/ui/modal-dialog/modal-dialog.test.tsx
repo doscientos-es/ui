@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
 import { ModalDialog } from './modal-dialog'
@@ -27,6 +28,15 @@ describe('ModalDialog', () => {
     expect(dialog.parentElement?.className).toContain('w-[min(calc(100dvw-2rem),24rem)]')
 
     fireEvent.click(screen.getByRole('button', { name: 'Cerrar diálogo' }))
+    expect(onOpenChange).toHaveBeenCalledWith(false)
+  })
+
+  it('notifies consumers when the backdrop is pressed', async () => {
+    const onOpenChange = vi.fn()
+
+    render(<ModalDialog open onOpenChange={onOpenChange} title="Enviar factura" />)
+
+    await userEvent.click(document.querySelector('[data-slot="modal-dialog-overlay"]')!)
     expect(onOpenChange).toHaveBeenCalledWith(false)
   })
 })

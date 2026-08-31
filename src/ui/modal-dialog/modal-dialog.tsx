@@ -59,6 +59,8 @@ export function ModalDialog({
 
   return (
     <ModalOverlay
+      data-slot="modal-dialog-overlay"
+      isDismissable
       isOpen={open}
       onOpenChange={onOpenChange}
       className="motion-safe:data-entering:animate-ui-overlay-in motion-safe:data-exiting:animate-ui-overlay-out fixed inset-0 z-50 grid place-items-center bg-black/20 p-4 backdrop-blur-[1px]"
