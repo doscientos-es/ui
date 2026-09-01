@@ -61,6 +61,7 @@ export function AvatarImage({
     <img
       data-slot="avatar-image"
       src={src}
+      alt=""
       className={cn('aspect-square size-full object-cover', className)}
       onLoad={(event) => {
         avatar?.setStatus('loaded')
