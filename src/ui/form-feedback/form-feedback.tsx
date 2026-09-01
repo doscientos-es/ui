@@ -31,7 +31,7 @@ export function FormFeedback({
   const success = state.status === 'success'
   return (
     <span
-      role={error ? 'alert' : undefined}
+      role={error ? 'alert' : 'status'}
       aria-live="polite"
       className={cn(
         'inline-flex h-5 items-center gap-1.5 text-xs',
