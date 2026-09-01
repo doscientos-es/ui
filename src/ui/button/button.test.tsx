@@ -39,7 +39,8 @@ describe('Button', () => {
     expect((firstRipple as HTMLElement).style.left).toBe('45px')
     expect((firstRipple as HTMLElement).style.top).toBe('15px')
 
-    fireEvent.animationEnd(firstRipple!)
+    if (!firstRipple) throw new Error('Expected the pointer ripple to render.')
+    fireEvent.animationEnd(firstRipple)
     expect(button.querySelector('[data-slot="button-ripple"]')).toBeNull()
 
     button.focus()

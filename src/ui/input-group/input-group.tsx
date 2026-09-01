@@ -4,6 +4,7 @@ import { cn } from '../../lib/cn'
 import { Button, type ButtonProps } from '../button/button'
 import { Input } from '../input/input'
 import { Textarea } from '../textarea/textarea'
+import { inputGroupAddonVariants } from './input-group-addon-variants'
 
 /** Visually joins an input or textarea with contextual text and actions. */
 export function InputGroup({ className, ...props }: React.ComponentProps<'div'>) {
@@ -21,20 +22,6 @@ export function InputGroup({ className, ...props }: React.ComponentProps<'div'>)
   )
 }
 
-export const inputGroupAddonVariants = cva(
-  "flex cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-4",
-  {
-    variants: {
-      align: {
-        'inline-start': 'order-first pl-2',
-        'inline-end': 'order-last pr-2',
-        'block-start': 'order-first w-full justify-start px-2.5 pt-2',
-        'block-end': 'order-last w-full justify-start px-2.5 pb-2',
-      },
-    },
-    defaultVariants: { align: 'inline-start' },
-  },
-)
 export function InputGroupAddon({
   className,
   align = 'inline-start',

@@ -2,7 +2,8 @@ import type { ReactNode } from 'react'
 import { Link } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
-import { Button, type ButtonProps, buttonVariants } from '../button/button'
+import { Button, type ButtonProps } from '../button/button'
+import { buttonVariants } from '../button/button-variants'
 import { Tooltip } from '../tooltip/tooltip'
 
 export type IconButtonProps = Omit<ButtonProps, 'children'> & {

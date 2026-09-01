@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
 import { Button } from '../button/button'
-import { Toaster, toast } from './toast'
+import { Toaster } from './toast'
+import { toast } from './toast-store'
 const meta = { title: 'Application/Toast', component: Toaster } satisfies Meta<typeof Toaster>
 export default meta
 type Story = StoryObj<typeof meta>
@@ -50,13 +51,13 @@ export const PromiseToast: Story = {
   render: () => (
     <>
       <Button
-        onPress={() =>
-          toast.promise(new Promise((resolve) => window.setTimeout(resolve, 1200)), {
+        onPress={() => {
+          void toast.promise(new Promise((resolve) => window.setTimeout(resolve, 1200)), {
             loading: 'Guardando…',
             success: 'Guardado correctamente',
             error: 'No se ha podido guardar',
           })
-        }
+        }}
       >
         Guardar
       </Button>

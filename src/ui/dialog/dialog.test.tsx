@@ -144,7 +144,9 @@ describe('Dialog', () => {
     )
 
     const dialog = screen.getByRole('dialog', { name: 'Enviar factura' })
-    await userEvent.click(dialog.parentElement!)
+    const dialogOverlay = dialog.parentElement
+    if (!dialogOverlay) throw new Error('Expected dialog to have an overlay parent.')
+    await userEvent.click(dialogOverlay)
 
     expect(onOpenChange).toHaveBeenCalledWith(false)
   })

@@ -8,10 +8,9 @@ export function LoadingOverlay({
   label = 'Cargando',
   className,
   ...props
-}: React.ComponentProps<'div'> & { label?: string }) {
+}: React.ComponentProps<'output'> & { label?: string }) {
   return (
-    <div
-      role="status"
+    <output
       aria-live="polite"
       className={cn(
         'absolute inset-0 z-10 flex items-center justify-center bg-background/70 backdrop-blur-[2px]',
@@ -23,6 +22,6 @@ export function LoadingOverlay({
         <LoaderCircle className="animate-spin" aria-hidden="true" />
         <span>{label}</span>
       </div>
-    </div>
+    </output>
   )
 }

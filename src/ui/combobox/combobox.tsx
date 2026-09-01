@@ -11,10 +11,10 @@ import {
   Text,
   type ComboBoxProps,
   type InputProps,
+  type Key,
   type ListBoxItemProps,
   type ListBoxProps,
 } from 'react-aria-components'
-import type { Key } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
 import { getTextMatchParts } from '../../lib/text-match'

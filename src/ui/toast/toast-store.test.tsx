@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { toast } from './toast'
+import { toast } from './toast-store'
 describe('toast API', () => {
   it('returns an id from shorthand methods', () => {
     const id = toast.success('Guardado', { duration: 0 })

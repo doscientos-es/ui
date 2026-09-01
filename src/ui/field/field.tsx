@@ -1,9 +1,10 @@
-import { cva, type VariantProps } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { Label } from '../label/label'
 import { Separator } from '../separator/separator'
+import { fieldVariants } from './field-variants'
 
 /** Semantic fieldset for controls that share a {@link FieldLegend}. */
 export function FieldSet({ className, ...props }: React.ComponentProps<'fieldset'>) {
@@ -44,22 +45,6 @@ export function FieldGroup({ className, ...props }: React.ComponentProps<'div'>)
     />
   )
 }
-
-export const fieldVariants = cva(
-  'group/field flex w-full gap-2 data-[invalid=true]:text-destructive',
-  {
-    variants: {
-      orientation: {
-        vertical: 'flex-col *:w-full [&>.sr-only]:w-auto',
-        horizontal:
-          'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto',
-        responsive:
-          'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:*:data-[slot=field-label]:flex-auto',
-      },
-    },
-    defaultVariants: { orientation: 'vertical' },
-  },
-)
 
 /** Props for the layout wrapper of a labelled form control. */
 export type FieldProps = React.ComponentProps<'div'> &

@@ -28,11 +28,16 @@ const config: StorybookConfig = {
   viteFinal: async (viteConfig) => {
     const aliases = viteConfig.resolve?.alias
     viteConfig.plugins = [...(viteConfig.plugins ?? []), tailwindcss()]
-    viteConfig.resolve = {
-      ...viteConfig.resolve,
-      alias: Array.isArray(aliases)
-        ? [{ find: '~', replacement: srcDirectory }, ...aliases]
-        : { ...aliases, '~': srcDirectory },
+    if (Array.isArray(aliases)) {
+      viteConfig.resolve = {
+        ...viteConfig.resolve,
+        alias: [{ find: '~', replacement: srcDirectory }, ...aliases],
+      }
+    } else {
+      viteConfig.resolve = {
+        ...viteConfig.resolve,
+        alias: Object.assign({ '~': srcDirectory }, aliases),
+      }
     }
     return viteConfig
   },

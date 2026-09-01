@@ -18,13 +18,15 @@ export function PageHeader({ className, ...props }: React.ComponentProps<'header
 export function PageHeaderHeading({ className, ...props }: React.ComponentProps<'div'>) {
   return <div data-slot="page-header-heading" className={cn('min-w-0', className)} {...props} />
 }
-export function PageHeaderTitle({ className, ...props }: React.ComponentProps<'h1'>) {
+export function PageHeaderTitle({ className, children, ...props }: React.ComponentProps<'h1'>) {
   return (
     <h1
       data-slot="page-header-title"
       className={cn('truncate text-xl font-semibold tracking-tight md:text-2xl', className)}
       {...props}
-    />
+    >
+      {children}
+    </h1>
   )
 }
 export function PageHeaderDescription({ className, ...props }: React.ComponentProps<'p'>) {

@@ -1,22 +1,10 @@
 import { ChevronLeft, ChevronRight, Ellipsis, Search } from 'lucide-react'
-import { createContext, type ReactNode, useContext, useMemo, useState } from 'react'
+import { type ReactNode, useMemo, useState } from 'react'
 import { Link, type LinkProps } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
 import { Button, type ButtonProps } from '../button/button'
-
-type SidebarContextValue = {
-  collapsed: boolean
-  setCollapsed: (value: boolean) => void
-  toggle: () => void
-}
-const SidebarContext = createContext<SidebarContextValue | null>(null)
-
-export function useSidebar() {
-  const context = useContext(SidebarContext)
-  if (!context) throw new Error('useSidebar must be used inside SidebarProvider')
-  return context
-}
+import { SidebarContext, useSidebar } from './sidebar-context'
 
 /** Provides the expanded or collapsed state required by sidebar components. */
 export function SidebarProvider({

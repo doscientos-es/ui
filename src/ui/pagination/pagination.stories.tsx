@@ -8,12 +8,13 @@ const meta = { title: 'Application/Pagination', component: Pagination } satisfie
 >
 export default meta
 type Story = StoryObj<typeof meta>
+function PaginationStory() {
+  const [page, setPage] = useState(2)
+  return <Pagination page={page} pageCount={8} onPageChange={setPage} />
+}
 export const Default: Story = {
   args: { page: 2, pageCount: 8, onPageChange: () => undefined },
-  render: () => {
-    const [page, setPage] = useState(2)
-    return <Pagination page={page} pageCount={8} onPageChange={setPage} />
-  },
+  render: () => <PaginationStory />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     await userEvent.click(canvas.getByRole('button', { name: 'Página 3' }))

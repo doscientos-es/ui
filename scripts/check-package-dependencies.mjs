@@ -14,5 +14,3 @@ if (!packageJson.dependencies?.sileo) {
     'sileo debe declararse en dependencies porque @doscientos/ui lo usa para los toasts.',
   )
 }
-
-console.log('Las dependencias de producción de @doscientos/ui son válidas.')

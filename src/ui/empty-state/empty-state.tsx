@@ -1,7 +1,8 @@
-import { cva, type VariantProps } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { emptyStateMediaVariants } from './empty-state-variants'
 
 /** Composes an informative empty result with optional media and a recovery action. */
 export function EmptyState({ className, ...props }: React.ComponentProps<'div'>) {
@@ -27,19 +28,6 @@ export function EmptyStateHeader({ className, ...props }: React.ComponentProps<'
   )
 }
 
-export const emptyStateMediaVariants = cva(
-  'mb-2 flex shrink-0 items-center justify-center [&_svg]:pointer-events-none [&_svg]:shrink-0',
-  {
-    variants: {
-      variant: {
-        default: 'bg-transparent',
-        icon: "size-8 rounded-lg bg-muted text-foreground [&_svg:not([class*='size-'])]:size-4",
-      },
-    },
-    defaultVariants: { variant: 'default' },
-  },
-)
-
 export function EmptyStateMedia({
   className,
   variant = 'default',
@@ -55,13 +43,15 @@ export function EmptyStateMedia({
   )
 }
 
-export function EmptyStateTitle({ className, ...props }: React.ComponentProps<'h3'>) {
+export function EmptyStateTitle({ className, children, ...props }: React.ComponentProps<'h3'>) {
   return (
     <h3
       data-slot="empty-state-title"
       className={cn('text-sm font-medium tracking-tight text-foreground', className)}
       {...props}
-    />
+    >
+      {children}
+    </h3>
   )
 }
 
