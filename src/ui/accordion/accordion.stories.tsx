@@ -30,7 +30,9 @@ export const Default: Story = {
     await expect(trigger).toHaveAttribute('aria-expanded', 'false')
     await userEvent.click(trigger)
     await expect(trigger).toHaveAttribute('aria-expanded', 'true')
-    await expect(canvas.getByText('Una respuesta accesible y animable para la sección.')).toBeVisible()
+    await expect(
+      canvas.getByText('Una respuesta accesible y animable para la sección.'),
+    ).toBeVisible()
     await userEvent.click(trigger)
     await expect(trigger).toHaveAttribute('aria-expanded', 'false')
   },

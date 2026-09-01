@@ -22,12 +22,12 @@ encapsulado para que las APIs, tokens y accesibilidad sean consistentes.
 Instala el paquete y React como dependencia de tu aplicación. Después, importa una sola vez los estilos compilados en el punto de entrada CSS.
 
 ```css
-@import "tailwindcss";
-@import "@doscientos/ui/styles.css";
+@import 'tailwindcss';
+@import '@doscientos/ui/styles.css';
 ```
 
 ```tsx
-import { Button, Field, FieldLabel, Input } from "@doscientos/ui";
+import { Button, Field, FieldLabel, Input } from '@doscientos/ui'
 
 export function ProfileName() {
   return (
@@ -36,7 +36,7 @@ export function ProfileName() {
       <Input id="name" />
       <Button>Guardar</Button>
     </Field>
-  );
+  )
 }
 ```
 

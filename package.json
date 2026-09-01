@@ -45,7 +45,7 @@
     "format:check": "oxfmt -c node_modules/@doscientos/configs/oxfmt.json --check .",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix --fix-suggestions",
-    "quality": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test",
+    "quality": "pnpm format && pnpm lint && pnpm typecheck && pnpm test",
     "release:check": "pnpm quality && pnpm build && npm pack --dry-run"
   },
   "dependencies": {
