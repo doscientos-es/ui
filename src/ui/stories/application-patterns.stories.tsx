@@ -1,30 +1,24 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
 import { Button } from '../button/button'
-import { MetricCard } from '../metric-card/metric-card'
 import {
-  SectionHeader,
-  SectionHeaderActions,
-  SectionHeaderHeading,
-  SectionHeaderTitle,
-} from '../page-header/page-header'
-import {
-  ActiveFilters,
   DataViewState,
   DataViewStateActions,
   DataViewStateDescription,
   DataViewStateTitle,
+} from '../data-view-state/data-view-state'
+import {
   DescriptionDetails,
   DescriptionItem,
   DescriptionList,
   DescriptionTerm,
-  FilterBar,
-  FilterChip,
-  MetricGrid,
-  SelectionToolbar,
-} from './composition'
+} from '../description-list/description-list'
+import { ActiveFilters, FilterBar, FilterChip } from '../filter-bar/filter-bar'
+import { MetricGrid } from '../metric-grid/metric-grid'
+import { SelectionToolbar } from '../selection-toolbar/selection-toolbar'
 
-const meta = { title: 'Application/Composition patterns', tags: ['test:ui'] } satisfies Meta
+const meta = { title: 'Application/Patterns', tags: ['test:ui'] } satisfies Meta
+
 export default meta
 type Story = StoryObj<typeof meta>
 
@@ -49,17 +43,11 @@ export const FiltersAndSelection: Story = {
     </>
   ),
 }
-export const DetailsAndMetrics: Story = {
+
+export const Details: Story = {
   render: () => (
     <>
-      <SectionHeader>
-        <SectionHeaderHeading>
-          <SectionHeaderTitle>Resumen del cliente</SectionHeaderTitle>
-        </SectionHeaderHeading>
-        <SectionHeaderActions>
-          <Button size="sm">Editar</Button>
-        </SectionHeaderActions>
-      </SectionHeader>
+      <h2 className="text-base font-semibold">Resumen del cliente</h2>
       <DescriptionList className="mt-4">
         <DescriptionItem>
           <DescriptionTerm>Email</DescriptionTerm>
@@ -70,13 +58,19 @@ export const DetailsAndMetrics: Story = {
           <DescriptionDetails>Professional</DescriptionDetails>
         </DescriptionItem>
       </DescriptionList>
-      <MetricGrid className="mt-6">
-        <MetricCard label="Ingresos" value="12.400 €" trend="up" delta="+12%" />
-        <MetricCard label="Pendientes" value="3" tone="warning" />
-      </MetricGrid>
     </>
   ),
 }
+
+export const Metrics: Story = {
+  render: () => (
+    <MetricGrid>
+      <div className="rounded-lg border p-4">Ingresos: 12.400 €</div>
+      <div className="rounded-lg border p-4">Pendientes: 3</div>
+    </MetricGrid>
+  ),
+}
+
 export const EmptyDataView: Story = {
   render: () => (
     <DataViewState>

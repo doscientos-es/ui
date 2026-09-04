@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { Button } from '../button/button'
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '../dialog/dialog'
-import { Drawer, DrawerContent, DrawerDescription, DrawerTitle, DrawerTrigger } from './sheet'
+import { Drawer, DrawerContent, DrawerDescription, DrawerTitle, DrawerTrigger } from './drawer'
 
 describe('Drawer', () => {
   it('opens an accessible dialog from its text trigger and closes it', async () => {

@@ -11,7 +11,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from './sheet'
+} from './drawer'
 
 const meta = {
   title: 'Components/Overlays/Drawer',
@@ -30,9 +30,9 @@ export const Default: Story = {
         <DrawerDescription>Actualiza los datos públicos de tu cuenta.</DrawerDescription>
       </DrawerHeader>
       <div className="grid gap-3 px-4">
-        <label className="grid gap-1 text-sm" htmlFor="sheet-name">
+        <label className="grid gap-1 text-sm" htmlFor="drawer-name">
           Nombre
-          <Input id="sheet-name" defaultValue="Ana García" />
+          <Input id="drawer-name" defaultValue="Ana García" />
         </label>
       </div>
       <DrawerFooter>

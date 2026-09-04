@@ -37,7 +37,7 @@ export const Disabled: Story = {
     const button = within(canvasElement).getByRole('button', { name: 'Guardar cambios' })
 
     await expect(button).toBeDisabled()
-    await userEvent.click(button)
+    button.click()
     await expect(args.onPress).not.toHaveBeenCalled()
   },
 }
