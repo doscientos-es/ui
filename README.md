@@ -61,6 +61,36 @@ El combobox es composable: la aplicación controla datos, peticiones y caché; l
 </Combobox>
 ```
 
+## Patrones de aplicación
+
+Las primitivas de composición no conocen rutas, entidades ni transporte: cada frontend conserva esos detalles y reutiliza una UI accesible.
+
+- `FilterBar`, `FilterGroup`, `ActiveFilters` y `FilterChip`: toolbar de filtros. Combínalos con `updateSearchParams`; la app decide cómo escribir la URL.
+- `SelectionToolbar`: muestra selección masiva mediante `count` y recibe las acciones como `children`.
+- `DescriptionList`, `DescriptionItem`, `DescriptionTerm` y `DescriptionDetails`: detalles semánticos de solo lectura con `dl`/`dt`/`dd`.
+- `DataViewState`: estado vacío, de carga o recuperable de una vista de datos; compón título, descripción y acciones.
+- `DetailDrawer`: marco de drawer para fichas; añade `DetailDrawerHeader`, `DetailDrawerBody` y `DetailDrawerFooter`.
+- `SectionHeader`: cabecera de panel con heading y acciones; `PageHeader` se reserva para el `h1` de una página.
+- `MetricGrid` y `MetricCard`: grid responsive de KPIs. `MetricCard` admite `loading`, `loadingLabel`, `trend` y `delta`.
+
+## Estado asíncrono, errores y copia
+
+- `useAsyncAction(action)` evita dobles ejecuciones mientras está pendiente y devuelve `run`, `status`, `isPending`, `data`, `error` y `reset`.
+- `ErrorBoundary` aporta fallback recuperable, `resetKeys` y `onError`; `AsyncBoundary` combina error boundary con `Suspense`.
+- `ErrorState` es el fallback visual componible. La aplicación inyecta su acción de reintento, no el paquete.
+- `useClipboard` y `CopyButton` resuelven copia, feedback y errores sin acoplarse a Sileo; usa `onCopied` u `onCopyError` para analytics/toasts de producto.
+
+## Query params sin router
+
+`toSearchParams`, `updateSearchParams`, `readSearchParam`, `readSearchParamArray`, `readSearchParamInt` y `readSearchParamEnum` son funciones puras. Úsalas con el router de cada app:
+
+```ts
+const next = updateSearchParams(searchParams, { page: 1, status: ['active'], q: query })
+router.replace(`?${next}`)
+```
+
+No añadas hooks de Next, React Router ni TanStack Router al paquete. Las stories documentan componentes visuales; los hooks y utilidades puras se documentan aquí y se cubren con pruebas unitarias.
+
 ## Desarrollo
 
 - `pnpm test`: pruebas unitarias y de renderizado.

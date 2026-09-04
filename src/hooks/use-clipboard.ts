@@ -2,6 +2,10 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 export type ClipboardStatus = 'idle' | 'copied' | 'error'
 
+/**
+ * Copies text and exposes success/error feedback without imposing a toast or analytics provider.
+ * Use `onError` to delegate product-specific feedback.
+ */
 export function useClipboard({
   resetMs = 1500,
   onError,

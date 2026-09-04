@@ -30,8 +30,10 @@ export function CopyButton({
   return (
     <Button
       aria-label={typeof label === 'string' ? label : undefined}
-      onPress={async () => {
-        if (await copy(value)) onCopied?.(value)
+      onPress={() => {
+        void copy(value).then((wasCopied) => {
+          if (wasCopied) onCopied?.(value)
+        })
       }}
       {...props}
     >

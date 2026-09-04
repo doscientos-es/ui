@@ -1,5 +1,5 @@
-import { Component, Suspense } from 'react'
 import type * as React from 'react'
+import { Component, Suspense } from 'react'
 
 import { Button } from '../button/button'
 import {
@@ -58,10 +58,12 @@ class Boundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 }
 
+/** Catches rendering errors and renders a supplied or recoverable default fallback. */
 export function ErrorBoundary(props: ErrorBoundaryProps) {
   return <Boundary {...props} />
 }
 
+/** Adds a Suspense fallback to ErrorBoundary without coupling loading to a data client. */
 export function AsyncBoundary({
   pending = null,
   ...props
