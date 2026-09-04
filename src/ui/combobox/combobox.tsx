@@ -17,6 +17,7 @@ import {
 } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
+import { floatingSurfaceClassName } from '../../lib/floating-surface'
 import { getTextMatchParts } from '../../lib/text-match'
 
 export const Combobox = AriaComboBox
@@ -40,7 +41,8 @@ export function ComboboxContent({ className, ...props }: React.ComponentProps<ty
     <Popover
       data-slot="combobox-content"
       className={cn(
-        'max-h-72 w-(--trigger-width) overflow-hidden rounded-xl border border-border bg-background p-1.5 text-foreground shadow-lg motion-safe:data-entering:animate-ui-surface-in motion-safe:data-exiting:animate-ui-surface-out',
+        floatingSurfaceClassName,
+        'max-h-72 w-(--trigger-width) overflow-hidden rounded-xl border border-border bg-background p-1.5 text-foreground',
         className,
       )}
       {...props}
@@ -115,6 +117,7 @@ export type AutocompleteComboboxProps<T extends object> = Omit<
   | 'selectedKey'
   | 'onSelectionChange'
   | 'defaultFilter'
+  | 'onKeyDown'
 > & {
   items: readonly T[]
   getItemKey: (item: T) => Key
@@ -130,6 +133,8 @@ export type AutocompleteComboboxProps<T extends object> = Omit<
   emptyState?: ReactNode
   suggestion?: boolean
   placeholder?: string
+  /** Keyboard handler for the underlying text input. */
+  onKeyDown?: InputProps['onKeyDown']
 }
 
 /** A safe, keyboard-first autocomplete for users, contracts and other entities. */
@@ -151,7 +156,7 @@ export function AutocompleteCombobox<T extends object>({
   suggestion = true,
   placeholder,
   className,
-  onKeyDown: _onKeyDown,
+  onKeyDown,
   ...props
 }: AutocompleteComboboxProps<T>) {
   const [internalInputValue, setInternalInputValue] = useState('')
@@ -187,6 +192,8 @@ export function AutocompleteCombobox<T extends object>({
     return true
   }
   const handleKeyDown = (event: Parameters<NonNullable<InputProps['onKeyDown']>>[0]) => {
+    onKeyDown?.(event)
+    if (event.defaultPrevented) return
     if ((event.key === 'Tab' || event.key === 'Enter') && acceptSuggestion()) event.preventDefault()
   }
   return (

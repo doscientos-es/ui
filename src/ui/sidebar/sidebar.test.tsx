@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import {
   Sidebar,
@@ -40,5 +40,38 @@ describe('Sidebar', () => {
     const trigger = screen.getByRole('button', { name: 'Colapsar navegación' })
     await user.click(trigger)
     expect(screen.getByRole('button', { name: 'Expandir navegación' })).toBeTruthy()
+  })
+
+  it('composes consumer handlers without losing its toggle behavior', async () => {
+    const user = userEvent.setup()
+    const onPress = vi.fn()
+    render(
+      <SidebarProvider>
+        <Sidebar>
+          <SidebarTrigger onPress={onPress} />
+        </Sidebar>
+      </SidebarProvider>,
+    )
+
+    await user.click(screen.getByRole('button', { name: 'Colapsar navegación' }))
+
+    expect(onPress).toHaveBeenCalledOnce()
+    expect(screen.getByRole('button', { name: 'Expandir navegación' })).toBeTruthy()
+  })
+
+  it('reports state changes in controlled usage', async () => {
+    const user = userEvent.setup()
+    const onCollapsedChange = vi.fn()
+    render(
+      <SidebarProvider collapsed={false} onCollapsedChange={onCollapsedChange}>
+        <Sidebar>
+          <SidebarTrigger />
+        </Sidebar>
+      </SidebarProvider>,
+    )
+
+    await user.click(screen.getByRole('button', { name: 'Colapsar navegación' }))
+
+    expect(onCollapsedChange).toHaveBeenCalledWith(true)
   })
 })

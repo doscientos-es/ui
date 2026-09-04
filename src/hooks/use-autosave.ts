@@ -23,6 +23,7 @@ export function useAutosave<T>({
   const lastSaved = useRef<string | null>(null)
   const saveRef = useRef(onSave)
   const serializeRef = useRef(serialize)
+  const latestSaveId = useRef(0)
 
   useEffect(() => {
     saveRef.current = onSave
@@ -30,13 +31,16 @@ export function useAutosave<T>({
   }, [onSave, serialize])
 
   const save = useCallback(async (value: T) => {
+    const saveId = ++latestSaveId.current
     setStatus('saving')
     setError(null)
     try {
       await saveRef.current(value)
+      if (saveId !== latestSaveId.current) return
       lastSaved.current = serializeRef.current(value)
       setStatus('saved')
     } catch (cause) {
+      if (saveId !== latestSaveId.current) return
       setError(cause instanceof Error ? cause : new Error('No se pudo guardar.'))
       setStatus('error')
     }

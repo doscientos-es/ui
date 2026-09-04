@@ -4,14 +4,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { Button } from '../button/button'
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '../dialog/dialog'
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerTitle,
-  DrawerTrigger,
-  Sheet,
-} from './sheet'
+import { Drawer, DrawerContent, DrawerDescription, DrawerTitle, DrawerTrigger } from './sheet'
 
 describe('Drawer', () => {
   it('opens an accessible dialog from its text trigger and closes it', async () => {
@@ -56,11 +49,11 @@ describe('Drawer', () => {
     expect(screen.getByRole('dialog', { name: 'Filtros' })).toBeTruthy()
   })
 
-  it('keeps a controlled sheet open while interacting with a nested dialog', async () => {
+  it('keeps a controlled drawer open while interacting with a nested dialog', async () => {
     const user = userEvent.setup()
     const onOpenChange = vi.fn()
     render(
-      <Sheet isOpen onOpenChange={onOpenChange} showCloseButton={false}>
+      <Drawer isOpen onOpenChange={onOpenChange} showCloseButton={false}>
         <DrawerTitle>Ficha del lead</DrawerTitle>
         <Dialog>
           <DialogTrigger>Registrar llamada</DialogTrigger>
@@ -69,7 +62,7 @@ describe('Drawer', () => {
             <input aria-label="Notas de la llamada" />
           </DialogContent>
         </Dialog>
-      </Sheet>,
+      </Drawer>,
     )
 
     await user.click(screen.getByRole('button', { name: 'Registrar llamada' }))
@@ -77,5 +70,15 @@ describe('Drawer', () => {
 
     expect(onOpenChange).not.toHaveBeenCalledWith(false)
     expect(screen.getByText('Ficha del lead')).toBeTruthy()
+  })
+
+  it('uses dialogProps to provide an accessible name without a visual title', () => {
+    render(
+      <Drawer isOpen showCloseButton={false} dialogProps={{ 'aria-label': 'Filtros avanzados' }}>
+        <p>Configura los filtros.</p>
+      </Drawer>,
+    )
+
+    expect(screen.getByRole('dialog', { name: 'Filtros avanzados' })).toBeTruthy()
   })
 })

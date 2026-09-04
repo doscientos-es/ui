@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
 import { Pagination } from './pagination'
@@ -21,5 +22,18 @@ describe('Pagination', () => {
       'page',
     )
     expect(screen.getAllByText('…')).toHaveLength(2)
+  })
+
+  it('clamps invalid external pages before rendering or changing pages', async () => {
+    const user = userEvent.setup()
+    const onPageChange = vi.fn()
+    render(<Pagination page={0} pageCount={3} onPageChange={onPageChange} />)
+
+    expect(screen.getByRole('button', { name: 'Página 1' }).getAttribute('aria-current')).toBe(
+      'page',
+    )
+    await user.click(screen.getByRole('button', { name: 'Página siguiente' }))
+
+    expect(onPageChange).toHaveBeenCalledWith(2)
   })
 })

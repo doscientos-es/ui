@@ -32,7 +32,7 @@ export function FormFeedback({
   return (
     <span
       role={error ? 'alert' : 'status'}
-      aria-live="polite"
+      aria-live={error ? 'assertive' : 'polite'}
       className={cn(
         'inline-flex h-5 items-center gap-1.5 text-xs',
         error && 'text-destructive',

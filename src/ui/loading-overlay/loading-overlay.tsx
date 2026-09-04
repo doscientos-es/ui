@@ -19,7 +19,7 @@ export function LoadingOverlay({
       {...props}
     >
       <div className="border-border bg-background flex items-center gap-2 rounded-lg border px-3 py-2 text-sm shadow-sm">
-        <LoaderCircle className="animate-spin" aria-hidden="true" />
+        <LoaderCircle className="motion-safe:animate-spin" aria-hidden="true" />
         <span>{label}</span>
       </div>
     </output>

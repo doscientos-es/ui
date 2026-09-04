@@ -2,11 +2,12 @@ import type * as React from 'react'
 import {
   DialogTrigger as AriaDialogTrigger,
   Popover as AriaPopover,
-  type DialogTriggerProps,
   type PopoverProps as AriaPopoverProps,
+  type DialogTriggerProps,
 } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
+import { floatingSurfaceClassName } from '../../lib/floating-surface'
 import { Button, type ButtonProps } from '../button/button'
 
 export type PopoverContentProps = Omit<AriaPopoverProps, 'className' | 'trigger'> & {
@@ -24,7 +25,8 @@ export function PopoverContent({ className, ...props }: PopoverContentProps) {
       data-slot="popover"
       offset={6}
       className={cn(
-        'z-50 min-w-48 rounded-xl border border-border bg-background p-1.5 text-foreground shadow-lg outline-none motion-safe:data-entering:animate-ui-surface-in motion-safe:data-exiting:animate-ui-surface-out',
+        floatingSurfaceClassName,
+        'min-w-48 rounded-xl border border-border bg-background p-1.5 text-foreground',
         className,
       )}
       {...props}

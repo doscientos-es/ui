@@ -18,6 +18,7 @@ import {
 } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
+import { floatingSurfaceClassName } from '../../lib/floating-surface'
 import { Button, type ButtonProps } from '../button/button'
 
 function DropdownMenuTrigger({ ...props }: React.ComponentProps<typeof MenuTriggerPrimitive>) {
@@ -51,7 +52,8 @@ function DropdownMenuContent({
       offset={offset}
       crossOffset={crossOffset}
       className={cn(
-        'z-50 w-(--trigger-width) min-w-32 origin-(--trigger-anchor-point) overflow-x-hidden overflow-y-auto rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-lg outline-none motion-safe:data-entering:animate-ui-surface-in motion-safe:data-exiting:animate-ui-surface-out',
+        floatingSurfaceClassName,
+        'w-(--trigger-width) min-w-32 origin-(--trigger-anchor-point) overflow-x-hidden overflow-y-auto rounded-lg border border-border bg-popover p-1 text-popover-foreground',
         className,
       )}
     >
@@ -268,15 +270,15 @@ function DropdownMenuShortcut({ className, ...props }: React.ComponentProps<'spa
 }
 
 export {
-  DropdownMenuTrigger,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuLabel,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuSub,
-  DropdownMenuSubTrigger,
   DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
 }

@@ -7,5 +7,8 @@ describe('LoadingOverlay', () => {
     render(<LoadingOverlay label="Cargando clientes" />)
     expect(screen.getByRole('status')).toBeTruthy()
     expect(screen.getByText('Cargando clientes')).toBeTruthy()
+    expect(screen.getByText('Cargando clientes').previousElementSibling?.className).toContain(
+      'motion-safe:animate-spin',
+    )
   })
 })

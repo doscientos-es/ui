@@ -34,4 +34,20 @@ describe('ConfirmDialog', () => {
     fireEvent.keyDown(screen.getByRole('alertdialog'), { key: 'Escape' })
     expect(onOpenChange).toHaveBeenCalledWith(false)
   })
+
+  it('does not allow dismissal while confirmation is pending', () => {
+    const onOpenChange = vi.fn()
+    render(
+      <ConfirmDialog
+        open
+        pending
+        onOpenChange={onOpenChange}
+        onConfirm={vi.fn()}
+        title="¿Cerrar?"
+      />,
+    )
+
+    fireEvent.keyDown(screen.getByRole('alertdialog'), { key: 'Escape' })
+    expect(onOpenChange).not.toHaveBeenCalledWith(false)
+  })
 })

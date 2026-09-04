@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight, Ellipsis, Search } from 'lucide-react'
-import { type ReactNode, useMemo, useState } from 'react'
+import { type ReactNode, useCallback, useMemo, useState } from 'react'
 import { Link, type LinkProps } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
@@ -9,19 +9,34 @@ import { SidebarContext, useSidebar } from './sidebar-context'
 /** Provides the expanded or collapsed state required by sidebar components. */
 export function SidebarProvider({
   defaultCollapsed = false,
+  collapsed: controlledCollapsed,
+  onCollapsedChange,
   children,
 }: {
   defaultCollapsed?: boolean
+  /** Controlled collapsed state for persistence or external navigation. */
+  collapsed?: boolean
+  /** Notifies when a user toggles the sidebar. */
+  onCollapsedChange?: (collapsed: boolean) => void
   children: ReactNode
 }) {
-  const [collapsed, setCollapsed] = useState(defaultCollapsed)
+  const [uncontrolledCollapsed, setUncontrolledCollapsed] = useState(defaultCollapsed)
+  const collapsed = controlledCollapsed ?? uncontrolledCollapsed
+  const setCollapsed = useCallback(
+    (next: boolean) => {
+      if (controlledCollapsed === undefined) setUncontrolledCollapsed(next)
+      onCollapsedChange?.(next)
+    },
+    [controlledCollapsed, onCollapsedChange],
+  )
+  const toggle = useCallback(() => setCollapsed(!collapsed), [collapsed, setCollapsed])
   const value = useMemo(
     () => ({
       collapsed,
       setCollapsed,
-      toggle: () => setCollapsed((current) => !current),
+      toggle,
     }),
-    [collapsed],
+    [collapsed, setCollapsed, toggle],
   )
   return <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>
 }
@@ -176,14 +191,18 @@ export function SidebarSeparator({ className, ...props }: React.ComponentProps<'
 
 export function SidebarTrigger({ className, ...props }: ButtonProps) {
   const { collapsed, toggle } = useSidebar()
+  const { onPress, ...buttonProps } = props
   return (
     <Button
       aria-label={collapsed ? 'Expandir navegación' : 'Colapsar navegación'}
-      onPress={toggle}
+      onPress={(event) => {
+        onPress?.(event)
+        toggle()
+      }}
       size="icon"
       variant="ghost"
       className={cn('ml-auto', className)}
-      {...props}
+      {...buttonProps}
     >
       {collapsed ? <ChevronRight /> : <ChevronLeft />}
     </Button>
@@ -192,16 +211,20 @@ export function SidebarTrigger({ className, ...props }: ButtonProps) {
 
 export function SidebarRail({ className, ...props }: React.ComponentProps<'button'>) {
   const { toggle } = useSidebar()
+  const { onClick, ...buttonProps } = props
   return (
     <button
       type="button"
       aria-label="Alternar navegación"
-      onClick={toggle}
+      onClick={(event) => {
+        onClick?.(event)
+        if (!event.defaultPrevented) toggle()
+      }}
       className={cn(
         'absolute inset-y-0 right-0 z-20 hidden w-1 -translate-x-1/2 cursor-ew-resize bg-transparent transition-colors hover:bg-border lg:block',
         className,
       )}
-      {...props}
+      {...buttonProps}
     />
   )
 }

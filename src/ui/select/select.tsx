@@ -13,6 +13,7 @@ import {
 } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
+import { floatingSurfaceClassName } from '../../lib/floating-surface'
 
 /** State container for an accessible select control and its option collection. */
 export const Select = AriaSelect
@@ -59,7 +60,8 @@ export function SelectContent({ className, ...props }: React.ComponentProps<type
     <Popover
       data-slot="select-content"
       className={cn(
-        'w-(--trigger-width) overflow-hidden rounded-xl border border-border bg-background p-1.5 text-foreground shadow-lg motion-safe:data-entering:animate-ui-surface-in motion-safe:data-exiting:animate-ui-surface-out',
+        floatingSurfaceClassName,
+        'w-(--trigger-width) overflow-hidden rounded-xl border border-border bg-background p-1.5 text-foreground',
         className,
       )}
       {...props}

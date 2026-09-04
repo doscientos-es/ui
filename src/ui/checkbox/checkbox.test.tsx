@@ -14,4 +14,11 @@ describe('Checkbox', () => {
     await user.keyboard(' ')
     expect(checkbox).toHaveProperty('checked', false)
   })
+
+  it('renders a distinct indicator for indeterminate selection', () => {
+    render(<Checkbox isIndeterminate>Seleccionar todos</Checkbox>)
+
+    expect(screen.getByRole('checkbox')).toHaveProperty('indeterminate', true)
+    expect(document.querySelector('[data-slot="checkbox-indeterminate"]')).not.toBeNull()
+  })
 })

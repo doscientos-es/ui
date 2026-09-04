@@ -31,6 +31,7 @@ export function AlertDialog({ children, open, onOpenChange }: AlertDialogProps) 
   )
 }
 
+/** @deprecated AlertDialogContent already provides the required portal. */
 export function AlertDialogPortal({ children }: { children?: React.ReactNode }) {
   return <DialogPortal>{children}</DialogPortal>
 }
@@ -46,6 +47,7 @@ export function AlertDialogTrigger({
   )
 }
 
+/** @deprecated AlertDialogContent already provides the required overlay. */
 export function AlertDialogOverlay({
   className,
   ...props
@@ -55,15 +57,17 @@ export function AlertDialogOverlay({
   return <DialogOverlay data-slot="alert-dialog-overlay" className={className} {...props} />
 }
 
+export type AlertDialogContentProps = {
+  children?: React.ReactNode
+  className?: string
+  size?: 'default' | 'sm'
+}
+
 export function AlertDialogContent({
   className,
   size = 'default',
   children,
-}: {
-  children?: React.ReactNode
-  className?: string
-  size?: 'default' | 'sm'
-}) {
+}: AlertDialogContentProps) {
   return (
     <DialogContent
       contentSlot="alert-dialog-content"

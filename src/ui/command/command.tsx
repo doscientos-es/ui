@@ -9,6 +9,7 @@ import {
 } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
+import { floatingSurfaceClassName } from '../../lib/floating-surface'
 
 /** Searchable command palette built from an accessible combobox and option list. */
 export function Command<T extends object>({ className, ...props }: ComboBoxProps<T>) {
@@ -33,7 +34,8 @@ export function CommandContent({ className, ...props }: React.ComponentProps<typ
     <Popover
       data-slot="command-content"
       className={cn(
-        'w-(--trigger-width) overflow-hidden rounded-xl border border-border bg-background p-1.5 shadow-lg outline-none',
+        floatingSurfaceClassName,
+        'max-h-72 w-(--trigger-width) overflow-hidden rounded-xl border border-border bg-background p-1.5 text-foreground',
         className,
       )}
       {...props}

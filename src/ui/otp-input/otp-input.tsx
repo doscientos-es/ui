@@ -48,7 +48,7 @@ const OtpInputImpl = forwardRef<HTMLInputElement, OtpInputProps>(function OtpInp
   },
   forwardedRef,
 ) {
-  const slotCount = Math.max(1, Math.floor(length))
+  const slotCount = Number.isFinite(length) ? Math.max(1, Math.floor(length)) : 6
   const controlled = value !== undefined
   const [internalValue, setInternalValue] = useState(() => normalizeOtp(defaultValue, slotCount))
   const code = normalizeOtp(controlled ? value : internalValue, slotCount)
@@ -71,7 +71,7 @@ const OtpInputImpl = forwardRef<HTMLInputElement, OtpInputProps>(function OtpInp
     if (!controlled) setInternalValue(nextValue)
     if (nextValue === code) return
     onChange?.(nextValue)
-    if (nextValue.length === slotCount) onComplete?.(nextValue)
+    if (nextValue.length === slotCount && code.length < slotCount) onComplete?.(nextValue)
   }
 
   function handlePointerDown(event: ReactPointerEvent<HTMLDivElement>) {

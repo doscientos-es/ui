@@ -24,6 +24,7 @@ describe('SubmitButton', () => {
     const button = screen.getByRole('button', { name: 'Guardando cambios…' })
     expect(button.hasAttribute('disabled')).toBe(true)
     expect(button.getAttribute('aria-busy')).toBe('true')
+    expect(button.querySelector('svg')?.getAttribute('class')).toContain('motion-safe:animate-spin')
   })
 
   it('keeps pendingLabel as a backwards-compatible alias', () => {

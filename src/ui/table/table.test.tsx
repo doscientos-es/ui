@@ -6,9 +6,11 @@ import {
   TableBody,
   TableCaption,
   TableCell,
+  TableEmpty,
   TableFooter,
   TableHead,
   TableHeader,
+  TableLoading,
   TableRow,
 } from './table'
 
@@ -40,4 +42,17 @@ describe('Table', () => {
       'table-footer',
     )
   })
+})
+
+it('provides semantic empty and loading rows', () => {
+  render(
+    <Table>
+      <TableBody>
+        <TableEmpty colSpan={2} />
+        <TableLoading colSpan={2} />
+      </TableBody>
+    </Table>,
+  )
+  expect(screen.getByText('No hay resultados.').closest('td')?.getAttribute('colspan')).toBe('2')
+  expect(screen.getByText('Cargando…').closest('tr')?.getAttribute('aria-busy')).toBe('true')
 })

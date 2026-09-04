@@ -7,4 +7,9 @@ describe('FormFeedback', () => {
     render(<FormFeedback state={{ status: 'success' }} />)
     expect(screen.getByRole('status').textContent).toContain('Guardado')
   })
+
+  it('announces errors urgently', () => {
+    render(<FormFeedback state={{ status: 'error', message: 'No se pudo guardar.' }} />)
+    expect(screen.getByRole('alert').getAttribute('aria-live')).toBe('assertive')
+  })
 })

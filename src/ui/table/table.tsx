@@ -82,3 +82,53 @@ export function TableFooter({ className, ...props }: React.ComponentProps<'tfoot
     />
   )
 }
+
+export function TableToolbar({ className, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div
+      data-slot="table-toolbar"
+      className={cn('flex flex-wrap items-center justify-between gap-2 py-2', className)}
+      {...props}
+    />
+  )
+}
+export function TableEmpty({
+  colSpan = 1,
+  className,
+  children = 'No hay resultados.',
+}: {
+  colSpan?: number
+  className?: string
+  children?: React.ReactNode
+}) {
+  return (
+    <TableRow data-slot="table-empty">
+      <TableCell
+        colSpan={colSpan}
+        className={cn('h-24 text-center text-muted-foreground', className)}
+      >
+        {children}
+      </TableCell>
+    </TableRow>
+  )
+}
+export function TableLoading({
+  colSpan = 1,
+  className,
+  children = 'Cargando…',
+}: {
+  colSpan?: number
+  className?: string
+  children?: React.ReactNode
+}) {
+  return (
+    <TableRow data-slot="table-loading" aria-busy="true">
+      <TableCell
+        colSpan={colSpan}
+        className={cn('h-24 text-center text-muted-foreground', className)}
+      >
+        {children}
+      </TableCell>
+    </TableRow>
+  )
+}

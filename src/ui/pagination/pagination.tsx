@@ -32,6 +32,15 @@ function visiblePages(page: number, pageCount: number, siblingCount: number) {
     .sort((left, right) => left - right)
 }
 
+function normalizedPageCount(pageCount: number) {
+  return Number.isFinite(pageCount) ? Math.max(0, Math.floor(pageCount)) : 0
+}
+
+function normalizedPage(page: number, pageCount: number) {
+  if (!Number.isFinite(page)) return 1
+  return Math.min(Math.max(1, Math.floor(page)), pageCount)
+}
+
 /** Navigation control for a known number of result pages. */
 export function Pagination({
   page,
@@ -42,20 +51,24 @@ export function Pagination({
   siblingCount = 1,
   className,
 }: PaginationProps) {
-  if (pageCount <= 1) return null
-  const pages = visiblePages(page, pageCount, siblingCount)
+  const totalPages = normalizedPageCount(pageCount)
+  if (totalPages <= 1) return null
+  const currentPage = normalizedPage(page, totalPages)
+  const pages = visiblePages(currentPage, totalPages, siblingCount)
 
   return (
     <nav
       aria-label={ariaLabel}
       className={cn('flex flex-wrap items-center justify-between gap-4', className)}
     >
-      <p className="text-muted-foreground text-sm">{summary ?? `Página ${page} de ${pageCount}`}</p>
+      <p className="text-muted-foreground text-sm">
+        {summary ?? `Página ${currentPage} de ${totalPages}`}
+      </p>
       <div className="flex items-center gap-1">
         <Button
           aria-label="Página anterior"
-          isDisabled={page <= 1}
-          onPress={() => onPageChange(page - 1)}
+          isDisabled={currentPage <= 1}
+          onPress={() => onPageChange(currentPage - 1)}
           size="icon"
           variant="ghost"
         >
@@ -71,7 +84,7 @@ export function Pagination({
                 </span>
               ) : null}
               <Button
-                aria-current={item === page ? 'page' : undefined}
+                aria-current={item === currentPage ? 'page' : undefined}
                 aria-label={`Página ${item}`}
                 onPress={() => onPageChange(item)}
                 size="icon"
@@ -84,8 +97,8 @@ export function Pagination({
         })}
         <Button
           aria-label="Página siguiente"
-          isDisabled={page >= pageCount}
-          onPress={() => onPageChange(page + 1)}
+          isDisabled={currentPage >= totalPages}
+          onPress={() => onPageChange(currentPage + 1)}
           size="icon"
           variant="ghost"
         >

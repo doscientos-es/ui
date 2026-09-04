@@ -19,6 +19,13 @@ describe('OtpInput', () => {
     expect(container.querySelectorAll('input')).toHaveLength(1)
   })
 
+  it('falls back to six slots for invalid lengths', () => {
+    const { container } = render(<OtpInput aria-label="Código" length={Number.NaN} />)
+
+    expect(screen.getByRole('textbox', { name: 'Código' }).getAttribute('maxlength')).toBe('6')
+    expect(container.querySelectorAll('[data-slot="otp-input-slot"]')).toHaveLength(6)
+  })
+
   it('filters non-numeric characters in controlled usage', async () => {
     const user = userEvent.setup()
     function Example() {
@@ -60,6 +67,18 @@ describe('OtpInput', () => {
     expect(input.value).toBe('1234')
     expect(onChange).toHaveBeenLastCalledWith('1234')
     expect(onComplete).toHaveBeenCalledOnce()
+  })
+
+  it('only calls onComplete when the code first becomes complete', () => {
+    const onComplete = vi.fn()
+    render(<OtpInput aria-label="Código" length={4} onComplete={onComplete} />)
+    const input = screen.getByRole('textbox', { name: 'Código' }) as HTMLInputElement
+
+    fireEvent.change(input, { target: { value: '1234' } })
+    fireEvent.change(input, { target: { value: '1235' } })
+
+    expect(onComplete).toHaveBeenCalledOnce()
+    expect(onComplete).toHaveBeenLastCalledWith('1234')
   })
 
   it('reflects disabled and invalid states on its slots', () => {

@@ -1,6 +1,6 @@
 import { LoaderCircle } from 'lucide-react'
-import { useCallback, useLayoutEffect, useRef } from 'react'
 import type * as React from 'react'
+import { useCallback, useLayoutEffect, useRef } from 'react'
 import { useFormStatus } from 'react-dom'
 
 import { Button, type ButtonProps } from '../button/button'
@@ -65,7 +65,7 @@ export function SubmitButton({
     >
       {busy ? (
         <>
-          <LoaderCircle aria-hidden="true" className="size-3.5 animate-spin" />
+          <LoaderCircle aria-hidden="true" className="size-3.5 motion-safe:animate-spin" />
           {label}
         </>
       ) : (
