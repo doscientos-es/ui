@@ -72,26 +72,42 @@ describe('useAutosave', () => {
       { initialProps: { data: 'initial' } },
     )
     rerender({ data: 'edited' })
-    await act(async () => { await result.current.saveNow() })
-    await act(async () => { await vi.advanceTimersByTimeAsync(100) })
+    await act(async () => {
+      await result.current.saveNow()
+    })
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(100)
+    })
     expect(onSave).toHaveBeenCalledTimes(1)
   })
 
   it('persists a revert to the initial value after an in-flight write', async () => {
     vi.useFakeTimers()
     let finish!: () => void
-    const onSave = vi.fn().mockImplementationOnce(() => new Promise<void>((resolve) => {
-      finish = resolve
-    })).mockResolvedValue(undefined)
-    const { rerender } = renderHook(
-      ({ data }) => useAutosave({ data, onSave, debounceMs: 100 }),
-      { initialProps: { data: 'initial' } },
-    )
+    const onSave = vi
+      .fn()
+      .mockImplementationOnce(
+        () =>
+          new Promise<void>((resolve) => {
+            finish = resolve
+          }),
+      )
+      .mockResolvedValue(undefined)
+    const { rerender } = renderHook(({ data }) => useAutosave({ data, onSave, debounceMs: 100 }), {
+      initialProps: { data: 'initial' },
+    })
     rerender({ data: 'edited' })
-    await act(async () => { await vi.advanceTimersByTimeAsync(100) })
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(100)
+    })
     rerender({ data: 'initial' })
-    await act(async () => { await vi.advanceTimersByTimeAsync(100) })
-    await act(async () => { finish(); await vi.advanceTimersByTimeAsync(0) })
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(100)
+    })
+    await act(async () => {
+      finish()
+      await vi.advanceTimersByTimeAsync(0)
+    })
     expect(onSave.mock.calls.map(([value]) => value)).toEqual(['edited', 'initial'])
   })
 })

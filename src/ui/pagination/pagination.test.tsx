@@ -46,7 +46,9 @@ describe('Pagination', () => {
 
   it.each([NaN, Infinity, -1, 1.5])('normalizes siblingCount %s to integer pages', (siblings) => {
     render(<Pagination page={4} pageCount={8} siblingCount={siblings} onPageChange={vi.fn()} />)
-    expect(screen.getByRole('button', { name: 'Página 4' }).getAttribute('aria-current')).toBe('page')
+    expect(screen.getByRole('button', { name: 'Página 4' }).getAttribute('aria-current')).toBe(
+      'page',
+    )
     for (const button of screen.getAllByRole('button')) {
       expect(button.getAttribute('aria-label')).not.toMatch(/Página [0-9]+\.[0-9]+/)
     }

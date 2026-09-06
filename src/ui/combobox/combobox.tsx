@@ -40,11 +40,13 @@ export function ComboboxContent({ className, ...props }: React.ComponentProps<ty
   return (
     <Popover
       data-slot="combobox-content"
-      className={cn(
-        floatingSurfaceClassName,
-        'max-h-72 w-(--trigger-width) overflow-hidden rounded-xl border border-border bg-background p-1.5 text-foreground',
-        className,
-      )}
+      className={(state) =>
+        cn(
+          floatingSurfaceClassName,
+          'max-h-72 w-(--trigger-width) overflow-hidden rounded-xl border border-border bg-background p-1.5 text-foreground',
+          typeof className === 'function' ? className(state) : className,
+        )
+      }
       {...props}
     />
   )
@@ -57,7 +59,12 @@ export function ComboboxList<T extends object>({
   return (
     <ListBox
       data-slot="combobox-list"
-      className={cn('max-h-64 overflow-y-auto', className)}
+      className={(state) =>
+        cn(
+          'max-h-64 overflow-y-auto',
+          typeof className === 'function' ? className(state) : className,
+        )
+      }
       renderEmptyState={emptyState ? () => emptyState : undefined}
       {...props}
     />
@@ -71,10 +78,12 @@ export function ComboboxItem<T extends object>({
   return (
     <ListBoxItem
       data-slot="combobox-item"
-      className={cn(
-        'flex w-full cursor-default items-center justify-between rounded-md px-2 py-2 text-sm outline-none transition-colors data-focused:bg-muted data-focused:text-foreground data-hovered:bg-muted data-disabled:pointer-events-none data-disabled:opacity-50',
-        className,
-      )}
+      className={(state) =>
+        cn(
+          'flex w-full cursor-default items-center justify-between rounded-md px-2 py-2 text-sm outline-none transition-colors data-focused:bg-muted data-focused:text-foreground data-hovered:bg-muted data-disabled:pointer-events-none data-disabled:opacity-50',
+          typeof className === 'function' ? className(state) : className,
+        )
+      }
       {...props}
     >
       {children}
@@ -199,7 +208,12 @@ export function AutocompleteCombobox<T extends object>({
   return (
     <AriaComboBox<T>
       {...props}
-      className={cn('group/combobox flex w-full flex-col gap-1.5', className)}
+      className={(state) =>
+        cn(
+          'group/combobox flex w-full flex-col gap-1.5',
+          typeof className === 'function' ? className(state) : className,
+        )
+      }
       items={filteredItems}
       selectedKey={selectedKey}
       inputValue={inputValue}

@@ -21,7 +21,9 @@ export type PaginationProps = {
 }
 
 function visiblePages(page: number, pageCount: number, siblingCount: number) {
-  const siblings = Number.isFinite(siblingCount) ? Math.min(10, Math.max(0, Math.floor(siblingCount))) : 1
+  const siblings = Number.isFinite(siblingCount)
+    ? Math.min(10, Math.max(0, Math.floor(siblingCount)))
+    : 1
   return [
     ...new Set([
       1,
@@ -34,7 +36,9 @@ function visiblePages(page: number, pageCount: number, siblingCount: number) {
 }
 
 function normalizedPageCount(pageCount: number) {
-  return Number.isFinite(pageCount) ? Math.min(Number.MAX_SAFE_INTEGER, Math.max(0, Math.floor(pageCount))) : 0
+  return Number.isFinite(pageCount)
+    ? Math.min(Number.MAX_SAFE_INTEGER, Math.max(0, Math.floor(pageCount)))
+    : 0
 }
 
 function normalizedPage(page: number, pageCount: number) {

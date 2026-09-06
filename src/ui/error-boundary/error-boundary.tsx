@@ -20,7 +20,9 @@ export type ErrorBoundaryProps = {
 type ErrorBoundaryState = { error: Error | null }
 
 function normalizeError(cause: unknown): Error {
-  return cause instanceof Error ? cause : new Error('No se pudo renderizar este contenido.', { cause })
+  return cause instanceof Error
+    ? cause
+    : new Error('No se pudo renderizar este contenido.', { cause })
 }
 
 function changedResetKeys(previous: readonly unknown[] = [], next: readonly unknown[] = []) {

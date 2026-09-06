@@ -2,12 +2,40 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
-import { AutocompleteCombobox } from './combobox'
+import {
+  AutocompleteCombobox,
+  Combobox,
+  ComboboxContent,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from './combobox'
 const users = [
   { id: '1', name: 'Ana García', email: 'ana@doscientos.com' },
   { id: '2', name: 'Bruno López', email: 'bruno@doscientos.com' },
 ]
 describe('AutocompleteCombobox', () => {
+  it('composes functional className APIs with the built-in styles', async () => {
+    const user = userEvent.setup()
+    render(
+      <Combobox aria-label="Test" items={users}>
+        <ComboboxInput />
+        <ComboboxContent className={() => 'custom-popup'}>
+          <ComboboxList className={() => 'custom-list'}>
+            {(item: (typeof users)[number]) => (
+              <ComboboxItem id={item.id} textValue={item.name} className={() => 'custom-item'}>
+                {item.name}
+              </ComboboxItem>
+            )}
+          </ComboboxList>
+        </ComboboxContent>
+      </Combobox>,
+    )
+    await user.type(screen.getByRole('combobox'), 'Ana')
+    expect(screen.getByRole('listbox').className).toContain('custom-list')
+    expect(screen.getByRole('listbox').parentElement?.className).toContain('custom-popup')
+    expect(screen.getByRole('option', { name: 'Ana García' }).className).toContain('custom-item')
+  })
   it('filters and renders custom items', async () => {
     const user = userEvent.setup()
     render(
