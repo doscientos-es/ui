@@ -9,13 +9,16 @@ const git = (...args) => spawnSync('git', args, { cwd: root, encoding: 'utf8' })
 try {
   const repository = git('rev-parse', '--show-toplevel')
   if (repository.status !== 0 || realpathSync(repository.stdout.trim()) !== root) {
-    throw new Error('Run hooks:install only in an initialized repository root, not a nested package.')
+    throw new Error(
+      'Run hooks:install only in an initialized repository root, not a nested package.',
+    )
   }
   const { scripts = {} } = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'))
   if (!scripts['quality:quick']) throw new Error('Define quality:quick before installing hooks.')
 
   const current = git('config', '--get', 'core.hooksPath')
-  if (current.status !== 0 && current.status !== 1) throw new Error('Cannot inspect Git hooks config.')
+  if (current.status !== 0 && current.status !== 1)
+    throw new Error('Cannot inspect Git hooks config.')
   if (current.status === 0 && current.stdout.trim() !== '.githooks') {
     throw new Error('Existing core.hooksPath preserved. Review and integrate its hooks manually.')
   }
@@ -32,8 +35,8 @@ try {
   if (git('config', '--local', 'core.hooksPath', '.githooks').status !== 0) {
     throw new Error('Cannot configure local Git hooks.')
   }
-  console.log('Pre-commit installed: pnpm quality:quick. No pre-push hook or automatic fixes.')
+  process.stdout.write('Pre-commit installed: pnpm quality:quick. No pre-push hook or automatic fixes.\n')
 } catch (error) {
-  console.error(error.message)
+  process.stderr.write(error instanceof Error ? `${error.message}\n` : 'Hook installation failed.\n')
   process.exitCode = 1
 }

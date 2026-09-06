@@ -117,6 +117,11 @@ No añadas hooks de Next, React Router ni TanStack Router al paquete. Las storie
 ## Desarrollo
 
 - `pnpm quality`: formato, lint, tipos y tests; es el control del paquete en CI.
+- `pnpm quality:quick`: formato y lint sin fixes; feedback rápido, no sustituye `quality`.
+- `pnpm hooks:install`: activa el pre-commit nativo una vez por clon. Rehúsa reemplazar
+  hooks existentes; no instala dependencias ni cambia Git global. Requiere Node/pnpm en
+  PATH también en la GUI. El hook comprueba el árbol de trabajo completo, sin stash,
+  staging automático, tests ni build. CI comprueba el contenido realmente subido.
 - `pnpm test`: pruebas del contrato de empaquetado, unitarias y de renderizado.
 - `pnpm test:storybook`: renderizado, accesibilidad e interacciones de todas las stories en Chromium.
 - `pnpm typecheck`: contrato TypeScript.
