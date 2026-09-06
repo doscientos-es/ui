@@ -16,6 +16,12 @@ if (!packageJson.dependencies?.sileo) {
 }
 
 // Keep the release gate executable when script names change.
+if (packageJson.scripts['quality:quick'] !== 'pnpm format:check && pnpm lint') {
+  throw new Error('quality:quick debe comprobar formato y lint sin modificar archivos')
+}
+if (packageJson.scripts['hooks:install'] !== 'node .githooks/install.mjs') {
+  throw new Error('hooks:install debe instalar la receta local revisada')
+}
 const qualityCommands = packageJson.scripts.quality.split('&&').map((command) => command.trim())
 for (const command of qualityCommands) {
   const match = /^pnpm ([a-z:-]+)$/.exec(command)
