@@ -15,16 +15,17 @@ export type PaginationProps = {
   ariaLabel?: string
   /** Optional description of the slice of results currently visible. */
   summary?: React.ReactNode
-  /** Number of neighbouring pages shown around the current page. */
+  /** Number of neighbouring pages shown around the current page (normalized to 0–10). */
   siblingCount?: number
   className?: string
 }
 
 function visiblePages(page: number, pageCount: number, siblingCount: number) {
+  const siblings = Number.isFinite(siblingCount) ? Math.min(10, Math.max(0, Math.floor(siblingCount))) : 1
   return [
     ...new Set([
       1,
-      ...Array.from({ length: siblingCount * 2 + 1 }, (_, index) => page - siblingCount + index),
+      ...Array.from({ length: siblings * 2 + 1 }, (_, index) => page - siblings + index),
       pageCount,
     ]),
   ]
@@ -33,7 +34,7 @@ function visiblePages(page: number, pageCount: number, siblingCount: number) {
 }
 
 function normalizedPageCount(pageCount: number) {
-  return Number.isFinite(pageCount) ? Math.max(0, Math.floor(pageCount)) : 0
+  return Number.isFinite(pageCount) ? Math.min(Number.MAX_SAFE_INTEGER, Math.max(0, Math.floor(pageCount))) : 0
 }
 
 function normalizedPage(page: number, pageCount: number) {
@@ -88,7 +89,7 @@ export function Pagination({
                 aria-label={`Página ${item}`}
                 onPress={() => onPageChange(item)}
                 size="icon"
-                variant={item === page ? 'secondary' : 'ghost'}
+                variant={item === currentPage ? 'secondary' : 'ghost'}
               >
                 {item}
               </Button>

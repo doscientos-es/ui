@@ -20,6 +20,7 @@ export function useAsyncAction<Args extends unknown[], Result>(
       pendingRef.current = true
       setStatus('pending')
       setError(null)
+      setData(null)
       try {
         const result = await action(...args)
         setData(result)
@@ -37,6 +38,8 @@ export function useAsyncAction<Args extends unknown[], Result>(
   )
 
   const reset = useCallback(() => {
+    // Reset is not cancellation: keep pending UI consistent with the execution lock.
+    if (pendingRef.current) return
     setData(null)
     setError(null)
     setStatus('idle')

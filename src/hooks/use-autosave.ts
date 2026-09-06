@@ -10,7 +10,7 @@ export type UseAutosaveOptions<T> = {
   serialize?: (data: T) => string
 }
 
-/** Debounced autosave with stale-value protection and an explicit `saveNow`. */
+/** Debounced, serialized writes. saveNow flushes the debounce; errors remain in state. */
 export function useAutosave<T>({
   data,
   onSave,
@@ -24,26 +24,48 @@ export function useAutosave<T>({
   const saveRef = useRef(onSave)
   const serializeRef = useRef(serialize)
   const latestSaveId = useRef(0)
+  const queue = useRef<Promise<void>>(Promise.resolve())
+  const queuedCount = useRef(0)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const mounted = useRef(true)
+
+  useEffect(() => {
+    mounted.current = true
+    return () => {
+      mounted.current = false
+      clearTimeout(timeoutRef.current)
+    }
+  }, [])
 
   useEffect(() => {
     saveRef.current = onSave
     serializeRef.current = serialize
   }, [onSave, serialize])
 
-  const save = useCallback(async (value: T) => {
+  const save = useCallback((value: T) => {
+    clearTimeout(timeoutRef.current)
     const saveId = ++latestSaveId.current
+    const snapshot = serializeRef.current(value)
+    const write = saveRef.current
+    queuedCount.current += 1
     setStatus('saving')
     setError(null)
-    try {
-      await saveRef.current(value)
-      if (saveId !== latestSaveId.current) return
-      lastSaved.current = serializeRef.current(value)
-      setStatus('saved')
-    } catch (cause) {
-      if (saveId !== latestSaveId.current) return
-      setError(cause instanceof Error ? cause : new Error('No se pudo guardar.'))
-      setStatus('error')
-    }
+    const pending = queue.current.then(async () => {
+      try {
+        if (!mounted.current) return
+        if (lastSaved.current !== snapshot) await write(value)
+        lastSaved.current = snapshot
+        if (mounted.current && saveId === latestSaveId.current) setStatus('saved')
+      } catch (cause) {
+        if (!mounted.current || saveId !== latestSaveId.current) return
+        setError(cause instanceof Error ? cause : new Error('No se pudo guardar.'))
+        setStatus('error')
+      } finally {
+        queuedCount.current -= 1
+      }
+    })
+    queue.current = pending
+    return pending
   }, [])
 
   useEffect(() => {
@@ -53,9 +75,9 @@ export function useAutosave<T>({
       lastSaved.current = snapshot
       return
     }
-    if (snapshot === lastSaved.current) return
-    const timeout = window.setTimeout(() => void save(data), debounceMs)
-    return () => window.clearTimeout(timeout)
+    if (snapshot === lastSaved.current && queuedCount.current === 0) return
+    timeoutRef.current = setTimeout(() => void save(data), debounceMs)
+    return () => clearTimeout(timeoutRef.current)
   }, [data, debounceMs, enabled, save])
 
   return { status, error, saveNow: () => save(data) }

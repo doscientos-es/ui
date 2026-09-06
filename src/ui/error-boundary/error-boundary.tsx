@@ -19,6 +19,10 @@ export type ErrorBoundaryProps = {
 }
 type ErrorBoundaryState = { error: Error | null }
 
+function normalizeError(cause: unknown): Error {
+  return cause instanceof Error ? cause : new Error('No se pudo renderizar este contenido.', { cause })
+}
+
 function changedResetKeys(previous: readonly unknown[] = [], next: readonly unknown[] = []) {
   return (
     previous.length !== next.length ||
@@ -28,11 +32,11 @@ function changedResetKeys(previous: readonly unknown[] = [], next: readonly unkn
 
 class Boundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   state: ErrorBoundaryState = { error: null }
-  static getDerivedStateFromError(error: Error) {
-    return { error }
+  static getDerivedStateFromError(error: unknown) {
+    return { error: normalizeError(error) }
   }
-  componentDidCatch(error: Error, info: React.ErrorInfo) {
-    this.props.onError?.(error, info)
+  componentDidCatch(error: unknown, info: React.ErrorInfo) {
+    this.props.onError?.(this.state.error ?? normalizeError(error), info)
   }
   componentDidUpdate(previousProps: ErrorBoundaryProps) {
     if (this.state.error && changedResetKeys(previousProps.resetKeys, this.props.resetKeys))
@@ -44,7 +48,7 @@ class Boundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     if (!this.state.error) return children
     if (typeof fallback === 'function')
       return fallback({ error: this.state.error, reset: this.reset })
-    if (fallback) return fallback
+    if (fallback !== undefined) return fallback
     return (
       <ErrorState>
         <ErrorStateIcon />
