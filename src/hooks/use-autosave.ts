@@ -42,7 +42,7 @@ export function useAutosave<T>({
     serializeRef.current = serialize
   }, [onSave, serialize])
 
-  const save = useCallback((value: T) => {
+  const save = useCallback((value: T, force = false) => {
     clearTimeout(timeoutRef.current)
     const saveId = ++latestSaveId.current
     const snapshot = serializeRef.current(value)
@@ -53,7 +53,7 @@ export function useAutosave<T>({
     const pending = queue.current.then(async () => {
       try {
         if (!mounted.current) return
-        if (lastSaved.current !== snapshot) await write(value)
+        if (force || lastSaved.current !== snapshot) await write(value)
         lastSaved.current = snapshot
         if (mounted.current && saveId === latestSaveId.current) setStatus('saved')
       } catch (cause) {
@@ -80,5 +80,5 @@ export function useAutosave<T>({
     return () => clearTimeout(timeoutRef.current)
   }, [data, debounceMs, enabled, save])
 
-  return { status, error, saveNow: () => save(data) }
+  return { status, error, saveNow: () => save(data, true) }
 }

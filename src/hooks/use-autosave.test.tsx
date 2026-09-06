@@ -7,6 +7,37 @@ import { useAutosave } from './use-autosave'
 afterEach(() => vi.useRealTimers())
 
 describe('useAutosave', () => {
+  it('allows an explicit initial save and cancels queued work after unmount', async () => {
+    vi.useFakeTimers()
+    let finish!: () => void
+    const onSave = vi.fn().mockImplementationOnce(
+      () =>
+        new Promise<void>((resolve) => {
+          finish = resolve
+        }),
+    )
+    const { result, rerender, unmount } = renderHook(
+      ({ data }) => useAutosave({ data, onSave, debounceMs: 100 }),
+      { initialProps: { data: 'initial' } },
+    )
+    let pending!: Promise<void>
+    await act(async () => {
+      pending = result.current.saveNow()
+      await vi.advanceTimersByTimeAsync(0)
+    })
+    expect(onSave).toHaveBeenCalledWith('initial')
+    rerender({ data: 'edited' })
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(100)
+    })
+    unmount()
+    await act(async () => {
+      finish()
+      await pending
+      await vi.advanceTimersByTimeAsync(0)
+    })
+    expect(onSave).toHaveBeenCalledTimes(1)
+  })
   it('does not save the initial payload and debounces subsequent changes', async () => {
     vi.useFakeTimers()
     const onSave = vi.fn().mockResolvedValue(undefined)

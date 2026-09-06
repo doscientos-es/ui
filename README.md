@@ -76,7 +76,19 @@ Las primitivas de composición no conocen rutas, entidades ni transporte: cada f
 ## Estado asíncrono, errores y copia
 
 - `useAsyncAction(action)` evita dobles ejecuciones mientras está pendiente y devuelve `run`, `status`, `isPending`, `data`, `error` y `reset`.
+- `reset` no cancela peticiones y no oculta una operación pendiente. Cada ejecución
+  limpia el resultado anterior para que un fallo no presente datos de un éxito antiguo.
+- `useAutosave` serializa las escrituras de una instancia para que una petición
+  antigua no termine sobrescribiendo la siguiente. `saveNow` cancela el debounce
+  pendiente y fuerza un guardado explícito; los errores quedan en `status`/`error`.
+  Usa datos inmutables y una instancia por documento (remonta con `key` al cambiar
+  de entidad). El servidor todavía necesita control de versión para varios usuarios
+  o pestañas; un timeout no prueba que una escritura remota no se haya confirmado.
+  Al desmontar se descartan guardados en cola, no se cancelan escrituras ya enviadas.
 - `ErrorBoundary` aporta fallback recuperable, `resetKeys` y `onError`; `AsyncBoundary` combina error boundary con `Suspense`.
+- `fallback={null}` oculta el contenido explícitamente. Los errores lanzados que no
+  sean instancias de `Error` se normalizan. No sustituye los errores de loaders,
+  promesas o eventos: esos se gestionan en el router o en la acción correspondiente.
 - `ErrorState` es el fallback visual componible. La aplicación inyecta su acción de reintento, no el paquete.
 - `useClipboard` y `CopyButton` resuelven copia, feedback y errores sin acoplarse a Sileo; usa `onCopied` u `onCopyError` para analytics/toasts de producto.
 
@@ -91,9 +103,21 @@ router.replace(`?${next}`)
 
 No añadas hooks de Next, React Router ni TanStack Router al paquete. Las stories documentan componentes visuales; los hooks y utilidades puras se documentan aquí y se cubren con pruebas unitarias.
 
+## Contratos de estilos y navegación
+
+- Los slots composables de Combobox conservan tanto clases estáticas como funciones
+  `className(state)` de React Aria, combinándolas con los estilos base.
+- `Pagination` normaliza página y vecinos; `siblingCount` se limita a 0–10 para no
+  generar listas de botones sin límite. Estado visual y `aria-current` coinciden.
+- Para que los overlays portaled hereden la marca y el tema, aplica los tokens y
+  `.dark` en la raíz del documento, no solo en un contenedor del contenido.
+- No hay integración con un router implícita: la aplicación configura navegación
+  SPA mediante las APIs del router o del proveedor de React Aria según corresponda.
+
 ## Desarrollo
 
-- `pnpm test`: pruebas unitarias y de renderizado.
+- `pnpm quality`: formato, lint, tipos y tests; es el control del paquete en CI.
+- `pnpm test`: pruebas del contrato de empaquetado, unitarias y de renderizado.
 - `pnpm test:storybook`: renderizado, accesibilidad e interacciones de todas las stories en Chromium.
 - `pnpm typecheck`: contrato TypeScript.
 - `pnpm build`: distribución JS, tipos y CSS Tailwind compilado.

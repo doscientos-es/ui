@@ -4,9 +4,8 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { ErrorBoundary } from './error-boundary'
 
-function Broken() {
+function Broken(): never {
   throw new Error('Roto')
-  return null
 }
 
 describe('ErrorBoundary', () => {
@@ -38,9 +37,9 @@ describe('ErrorBoundary', () => {
 
   it('normalizes non-Error thrown values for the public fallback API', () => {
     const error = vi.spyOn(console, 'error').mockImplementation(() => undefined)
-    function BrokenValue() {
+    function BrokenValue(): never {
+      // oxlint-disable-next-line no-throw-literal -- Reproduce invalid throws from third-party components.
       throw 'failure'
-      return null
     }
     const onError = vi.fn()
     render(
