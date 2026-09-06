@@ -17,7 +17,8 @@ export const Default: Story = {
     await expect(checkbox).not.toBeChecked()
     await userEvent.click(checkbox)
     await expect(checkbox).toBeChecked()
-    await userEvent.keyboard('{Space}')
+    await expect(checkbox).toHaveFocus()
+    await userEvent.keyboard(' ')
     await expect(checkbox).not.toBeChecked()
   },
 }
