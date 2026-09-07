@@ -169,7 +169,7 @@
   box-sizing: border-box;
 }
 
-[data-slot='button-ripple'] {
+[data-slot='action-ripple'] {
   background: radial-gradient(
     circle,
     color-mix(in srgb, currentColor 24%, transparent) 0%,

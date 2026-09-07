@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 
@@ -26,5 +26,19 @@ describe('Menu', () => {
 
     await user.keyboard('{Escape}')
     expect(screen.queryByRole('menuitem', { name: 'Editar' })).toBeNull()
+  })
+
+  it('shows the shared action ripple when an item is pressed', async () => {
+    const user = userEvent.setup()
+    render(
+      <Menu aria-label="Acciones de cliente">
+        <MenuItem id="edit">Editar</MenuItem>
+      </Menu>,
+    )
+
+    const item = screen.getByRole('menuitem', { name: 'Editar' })
+    await user.click(item)
+
+    await waitFor(() => expect(item.querySelector('[data-slot="action-ripple"]')).toBeTruthy())
   })
 })

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 
@@ -27,5 +27,22 @@ describe('Tabs', () => {
       'true',
     )
     expect(screen.getByRole('tabpanel').textContent).toContain('Actividad del proyecto')
+  })
+
+  it('shows the shared action ripple when a tab is pressed', async () => {
+    const user = userEvent.setup()
+    render(
+      <Tabs defaultSelectedKey="summary">
+        <TabsList aria-label="Proyecto">
+          <TabsTrigger id="summary">Resumen</TabsTrigger>
+          <TabsTrigger id="activity">Actividad</TabsTrigger>
+        </TabsList>
+      </Tabs>,
+    )
+
+    const tab = screen.getByRole('tab', { name: 'Actividad' })
+    await user.click(tab)
+
+    await waitFor(() => expect(tab.querySelector('[data-slot="action-ripple"]')).toBeTruthy())
   })
 })

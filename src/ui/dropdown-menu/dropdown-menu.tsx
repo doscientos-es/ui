@@ -17,6 +17,7 @@ import {
   type MenuSectionProps as MenuSectionPrimitiveProps,
 } from 'react-aria-components'
 
+import { actionRipple, useActionRipple } from '../../lib/action-ripple'
 import { cn } from '../../lib/cn'
 import { floatingSurfaceClassName } from '../../lib/floating-surface'
 import { Button, type ButtonProps } from '../button/button'
@@ -132,7 +133,10 @@ function DropdownMenuLabel({
 }
 
 const dropdownMenuItemVariants = cva(
-  'group/dropdown-menu-item relative flex cursor-default items-center outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  cn(
+    'group/dropdown-menu-item relative flex cursor-default items-center outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+    actionRipple(),
+  ),
   {
     variants: {
       selectionMode: {
@@ -151,11 +155,14 @@ function DropdownMenuItem({
   inset,
   variant = 'default',
   children,
+  onPress,
   ...props
 }: MenuItemPrimitiveProps<object> & {
   inset?: boolean
   variant?: 'default' | 'destructive'
 }) {
+  const { ripple, triggerRipple } = useActionRipple()
+
   return (
     <MenuItemPrimitive
       data-slot="dropdown-menu-item"
@@ -165,6 +172,10 @@ function DropdownMenuItem({
       className={composeRenderProps(className, (className, { selectionMode }) =>
         cn(dropdownMenuItemVariants({ selectionMode }), className),
       )}
+      onPress={(event) => {
+        onPress?.(event)
+        triggerRipple(event)
+      }}
       {...props}
     >
       {composeRenderProps(children, (children, { isSelected, selectionMode }) => (
@@ -182,6 +193,7 @@ function DropdownMenuItem({
             </span>
           ) : null}
           {children}
+          {ripple}
         </>
       ))}
     </MenuItemPrimitive>
@@ -196,10 +208,13 @@ function DropdownMenuSubTrigger({
   className,
   inset,
   children,
+  onPress,
   ...props
 }: MenuItemPrimitiveProps<object> & {
   inset?: boolean
 }) {
+  const { ripple, triggerRipple } = useActionRipple()
+
   return (
     <MenuItemPrimitive
       data-slot="dropdown-menu-sub-trigger"
@@ -207,14 +222,20 @@ function DropdownMenuSubTrigger({
       textValue={typeof children === 'string' ? children : props.textValue}
       className={cn(
         "flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm outline-hidden select-none focus:bg-muted focus:text-foreground focus:**:text-foreground data-inset:pl-7 data-open:bg-muted data-open:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        actionRipple(),
         className,
       )}
+      onPress={(event) => {
+        onPress?.(event)
+        triggerRipple(event)
+      }}
       {...props}
     >
       {composeRenderProps(children, (children) => (
         <>
           {children}
           <ChevronRightIcon className="cn-rtl-flip ml-auto" />
+          {ripple}
         </>
       ))}
     </MenuItemPrimitive>

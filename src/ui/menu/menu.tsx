@@ -1,12 +1,16 @@
+'use client'
+
 import {
   Menu as AriaMenu,
   MenuItem as AriaMenuItem,
   MenuTrigger as AriaMenuTrigger,
   Popover,
+  composeRenderProps,
   type MenuItemProps,
   type MenuProps,
 } from 'react-aria-components'
 
+import { actionRipple, useActionRipple } from '../../lib/action-ripple'
 import { cn } from '../../lib/cn'
 import { floatingSurfaceClassName } from '../../lib/floating-surface'
 
@@ -31,17 +35,34 @@ export function Menu<T extends object>({ className, ...props }: MenuProps<T>) {
   return <AriaMenu data-slot="menu" className={cn('outline-none', className)} {...props} />
 }
 
-export function MenuItem<T extends object>({ className, children, ...props }: MenuItemProps<T>) {
+export function MenuItem<T extends object>({
+  className,
+  children,
+  onPress,
+  ...props
+}: MenuItemProps<T>) {
+  const { ripple, triggerRipple } = useActionRipple()
+
   return (
     <AriaMenuItem
       data-slot="menu-item"
       className={cn(
         'flex cursor-default items-center gap-2 rounded-md px-2 py-1.5 text-sm outline-none data-focused:bg-muted data-disabled:pointer-events-none data-disabled:opacity-50',
+        actionRipple(),
         className,
       )}
+      onPress={(event) => {
+        onPress?.(event)
+        triggerRipple(event)
+      }}
       {...props}
     >
-      {children}
+      {composeRenderProps(children, (value) => (
+        <>
+          {value}
+          {ripple}
+        </>
+      ))}
     </AriaMenuItem>
   )
 }

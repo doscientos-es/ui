@@ -33,19 +33,19 @@ describe('Button', () => {
       { keys: '[MouseLeft>]', target: button, coords: { x: 55, y: 35 } },
       { keys: '[/MouseLeft]', target: button, coords: { x: 55, y: 35 } },
     ])
-    await waitFor(() => expect(button.querySelector('[data-slot="button-ripple"]')).toBeTruthy())
-    const firstRipple = button.querySelector('[data-slot="button-ripple"]')
+    await waitFor(() => expect(button.querySelector('[data-slot="action-ripple"]')).toBeTruthy())
+    const firstRipple = button.querySelector('[data-slot="action-ripple"]')
     expect(firstRipple?.className).toContain('animate-ui-ripple')
     expect((firstRipple as HTMLElement).style.left).toBe('45px')
     expect((firstRipple as HTMLElement).style.top).toBe('15px')
 
     if (!firstRipple) throw new Error('Expected the pointer ripple to render.')
     fireEvent.animationEnd(firstRipple)
-    expect(button.querySelector('[data-slot="button-ripple"]')).toBeNull()
+    expect(button.querySelector('[data-slot="action-ripple"]')).toBeNull()
 
     button.focus()
     await user.keyboard('{Enter}')
-    const keyboardRipple = button.querySelector('[data-slot="button-ripple"]')
+    const keyboardRipple = button.querySelector('[data-slot="action-ripple"]')
     expect(keyboardRipple).not.toBe(firstRipple)
     expect((keyboardRipple as HTMLElement).style.left).toBe('50%')
     expect((keyboardRipple as HTMLElement).style.top).toBe('50%')
@@ -68,7 +68,7 @@ describe('Button', () => {
 
     fireEvent.click(button)
 
-    expect(button.querySelector('[data-slot="button-ripple"]')).toBeNull()
+    expect(button.querySelector('[data-slot="action-ripple"]')).toBeNull()
   })
 
   it('supports React Aria and HTML disabled semantics', () => {

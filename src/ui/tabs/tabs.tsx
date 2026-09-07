@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Tab as AriaTab,
   TabList as AriaTabList,
@@ -12,6 +14,7 @@ import {
   type TabsProps as AriaTabsProps,
 } from 'react-aria-components'
 
+import { actionRipple, useActionRipple } from '../../lib/action-ripple'
 import { cn } from '../../lib/cn'
 
 export type TabsProps = AriaTabsProps
@@ -46,18 +49,32 @@ export function TabsList<T extends object>({ className, ...props }: AriaTabListP
 }
 
 /** Tab control that selects the {@link TabsContent} with the same identifier. */
-export function TabsTrigger({ className, ...props }: AriaTabProps) {
+export function TabsTrigger({ className, children, onPress, ...props }: AriaTabProps) {
+  const { ripple, triggerRipple } = useActionRipple()
+
   return (
     <AriaTab
       data-slot="tabs-trigger"
       className={composeRenderProps(className, (value) =>
         cn(
           'inline-flex h-7 items-center justify-center gap-1.5 rounded-md px-2.5 text-sm font-medium outline-none transition-colors data-hovered:text-foreground data-selected:bg-background data-selected:text-foreground data-selected:shadow-sm data-focus-visible:ring-3 data-focus-visible:ring-ring/50 data-disabled:cursor-not-allowed data-disabled:opacity-50',
+          actionRipple(),
           value,
         ),
       )}
+      onPress={(event) => {
+        onPress?.(event)
+        triggerRipple(event)
+      }}
       {...props}
-    />
+    >
+      {composeRenderProps(children, (value) => (
+        <>
+          {value}
+          {ripple}
+        </>
+      ))}
+    </AriaTab>
   )
 }
 
