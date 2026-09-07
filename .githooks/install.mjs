@@ -35,8 +35,12 @@ try {
   if (git('config', '--local', 'core.hooksPath', '.githooks').status !== 0) {
     throw new Error('Cannot configure local Git hooks.')
   }
-  process.stdout.write('Pre-commit installed: pnpm quality:quick. No pre-push hook or automatic fixes.\n')
+  process.stdout.write(
+    'Pre-commit installed: pnpm quality:quick. No pre-push hook or automatic fixes.\n',
+  )
 } catch (error) {
-  process.stderr.write(error instanceof Error ? `${error.message}\n` : 'Hook installation failed.\n')
+  process.stderr.write(
+    error instanceof Error ? `${error.message}\n` : 'Hook installation failed.\n',
+  )
   process.exitCode = 1
 }
