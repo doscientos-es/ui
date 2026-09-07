@@ -98,6 +98,7 @@ export function Button({
   size = 'default',
   children,
   disabled,
+  type = 'button',
   isDisabled,
   onClick,
   onPress,
@@ -109,6 +110,7 @@ export function Button({
     <ButtonPrimitive
       data-slot="button"
       data-variant={variant}
+      type={type}
       data-size={size}
       className={cn(buttonVariants({ variant, size, className }))}
       onClick={onClick}
