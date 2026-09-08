@@ -22,7 +22,9 @@ No buscamos una copia literal de una referencia concreta. Buscamos el mismo leng
 ### Canvas y superficies
 
 - Canvas por defecto: gris cálido muy claro (`#f7f7f5`), nunca blanco puro a pantalla completa.
+- En layouts enmarcados, `--canvas` es la capa exterior y `--background` el lienzo de trabajo; no resolver ambas con el mismo color.
 - Surface primaria: blanco (`--card`) sobre canvas.
+- `--sidebar` y `--surface-subtle` separan navegación, toolbars y footers sin introducir nuevas elevaciones.
 - Border: gris muy claro, 1px, bajo contraste.
 - Elevación: sombra difusa y corta. Nada de sombras negras duras.
 - Radios: `0.75rem` base; `1rem–1.25rem` para cards, drawers y paneles principales.
@@ -63,15 +65,18 @@ Usar iconos lineales, simples y de peso uniforme. Un icono no sustituye el texto
 - Contenido: max-width amplio (`80rem–100rem`) y padding 24–32px en desktop.
 - Página: `PageHeader` → contexto/acciones → primer bloque de trabajo; no empezar con una pared de controles.
 - En móvil, conservar la jerarquía y convertir la navegación en patrón mobile; no simplemente comprimir la sidebar.
+- Para el patrón de las referencias, componer `SidebarProvider` → `AppShell variant="inset"` → `Sidebar` + `AppShellMain`; usar `AppShellHeaderContext/Actions` y `PageStack` para que la geometría quede resuelta por el paquete.
 
 ## Patrones de datos
 
 - KPI: nombre corto, valor dominante, comparación y contexto temporal.
+- `MetricCard` reserva `visual` para una sparkline o strip pequeño y `footer` para contexto; no convertir el KPI en una mini página.
 - Cards: una idea principal; evitar cards anidadas salvo que representen una relación clara.
 - Tablas: encabezados discretos, filas con altura cómoda, alineación numérica consistente y estados vacíos explícitos.
 - Gráficas: una serie principal fuerte, series de comparación apagadas, gridlines muy suaves y tooltips informativos.
 - Actividad: timestamp corto, evento, contexto y estado; separar grupos con líneas tenues.
 - Kanban: encabezado de columna, contador, cards escaneables y acciones de contexto en hover/focus.
+- En paneles mixtos, usar `CardToolbar` y `Table density="compact"`; la densidad se decide una vez en el contenedor, no celda a celda.
 
 ## Estados, interacción y motion
 

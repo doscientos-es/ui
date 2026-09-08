@@ -11,13 +11,14 @@ import {
   TableHead,
   TableHeader,
   TableLoading,
+  TableNumber,
   TableRow,
 } from './table'
 
 describe('Table', () => {
   it('preserves native table semantics and regions', () => {
     render(
-      <Table>
+      <Table density="compact" containerClassName="table-frame">
         <TableCaption>Facturas recientes</TableCaption>
         <TableHeader>
           <TableRow>
@@ -26,7 +27,7 @@ describe('Table', () => {
         </TableHeader>
         <TableBody>
           <TableRow>
-            <TableCell>Acme</TableCell>
+            <TableCell><TableNumber>1.200 €</TableNumber></TableCell>
           </TableRow>
         </TableBody>
         <TableFooter>
@@ -37,10 +38,13 @@ describe('Table', () => {
       </Table>,
     )
     expect(screen.getByRole('table', { name: 'Facturas recientes' })).toBeTruthy()
+    expect(screen.getByRole('table').getAttribute('data-density')).toBe('compact')
+    expect(screen.getByRole('table').parentElement?.className).toContain('table-frame')
     expect(screen.getByRole('columnheader', { name: 'Cliente' })).toBeTruthy()
     expect(screen.getByText('Total: 1').closest('tfoot')?.getAttribute('data-slot')).toBe(
       'table-footer',
     )
+    expect(screen.getByText('1.200 €').getAttribute('data-slot')).toBe('table-number')
   })
 })
 

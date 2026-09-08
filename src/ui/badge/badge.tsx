@@ -24,7 +24,7 @@ function BadgeIcon({ icon, variant }: BadgeIconProps & VariantProps<typeof badge
     variant && variant in statusIcons ? statusIcons[variant as keyof typeof statusIcons] : undefined
   const content = icon === undefined ? DefaultIcon ? <DefaultIcon /> : null : icon
 
-  if (content == null || typeof content === 'boolean') return null
+  if (content === null || content === undefined || typeof content === 'boolean') return null
 
   return (
     <span

@@ -28,10 +28,10 @@ describe('AppShell', () => {
   it('supports a persistent sidebar and mobile header at a configurable breakpoint', () => {
     const { container } = render(
       <AppShell sidebarBreakpoint="lg">
-        <AppShellSidebar aria-label="Navegación">Navegación</AppShellSidebar>
+        <AppShellSidebar width="wide" aria-label="Navegación">Navegación</AppShellSidebar>
         <AppShellMain>
           <AppShellMobileHeader>Menú</AppShellMobileHeader>
-          <AppShellContent size="full" padded={false} scrollable={false}>
+          <AppShellContent size="full" padded={false} scrollable={false} density="compact">
             Contenido
           </AppShellContent>
         </AppShellMain>
@@ -44,9 +44,18 @@ describe('AppShell', () => {
     const content = screen.getByText('Contenido')
     expect(shell?.getAttribute('data-sidebar-breakpoint')).toBe('lg')
     expect(sidebar?.textContent).toBe('Navegación')
+    expect(sidebar?.getAttribute('data-width')).toBe('wide')
     expect(mobileHeader?.textContent).toBe('Menú')
     expect(content.getAttribute('data-size')).toBe('full')
     expect(content.hasAttribute('data-padded')).toBe(false)
     expect(content.hasAttribute('data-scrollable')).toBe(false)
+    expect(content.getAttribute('data-density')).toBe('compact')
+  })
+
+  it('supports a framed application treatment', () => {
+    const { container } = render(<AppShell variant="inset" />)
+    expect(container.querySelector('[data-slot="app-shell"]')?.getAttribute('data-variant')).toBe(
+      'inset',
+    )
   })
 })

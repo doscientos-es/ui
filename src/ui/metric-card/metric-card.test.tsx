@@ -24,6 +24,8 @@ describe('MetricCard', () => {
         loadingLabel="Cargando Ventas"
         trend="up"
         delta="+12%"
+        action={<button type="button">Abrir</button>}
+        visual={<span>Gráfico</span>}
       />,
     )
     expect(container.querySelector('[data-slot="metric-card"]')?.getAttribute('aria-busy')).toBe(
@@ -31,5 +33,8 @@ describe('MetricCard', () => {
     )
     expect(screen.getByLabelText('Cargando Ventas')).toBeTruthy()
     expect(screen.getByText('+12%')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Abrir' })).toBeTruthy()
+    expect(screen.getByText('Gráfico').closest('[data-slot="metric-card-visual"]')).not.toBeNull()
+    expect(screen.getByText('+12%').closest('[data-slot="metric-card-support"]')).not.toBeNull()
   })
 })

@@ -44,6 +44,12 @@ export function ProfileName() {
 
 Los proyectos pueden definir los tokens semánticos en `:root` o `.dark` para aplicar la marca del cliente; no deben modificar los componentes. `@doscientos/ui` no sobrescribe esos tokens y usa los valores del tema del backoffice como fallback cuando falte alguno.
 
+Además de los tokens shadcn habituales, el paquete expone capas de producto para evitar
+que cada aplicación reconstruya el mismo dashboard: `canvas`, `sidebar`,
+`surface-subtle` y `border-strong`. Los fallbacks ya producen una interfaz cálida y
+monocroma; una marca puede redefinirlos mediante `--canvas`, `--sidebar`,
+`--surface-subtle` y `--border-strong`.
+
 ## Iconos de estado en badges
 
 `Badge` y `BadgeLink` incluyen un icono decorativo según `variant`: `success` → check,
@@ -97,10 +103,18 @@ Las primitivas de composición no conocen rutas, entidades ni transporte: cada f
 - `DataViewState`: estado vacío, de carga o recuperable de una vista de datos; compón título, descripción y acciones.
 - `DetailDrawer`: marco de drawer para fichas; añade `DetailDrawerHeader`, `DetailDrawerBody` y `DetailDrawerFooter`.
 - `SectionHeader`: cabecera de panel con heading y acciones; `PageHeader` se reserva para el `h1` de una página.
-- `MetricGrid` y `MetricCard`: grid responsive de KPIs. `MetricCard` admite `loading`, `loadingLabel`, `trend` y `delta`.
+- `PageStack`: ritmo vertical compartido entre la cabecera y las secciones de una página.
+- `MetricGrid` y `MetricCard`: grid responsive de KPIs. `MetricCard` admite `loading`, `trend`, `delta`, `action`, `visual` y `footer`; el gráfico sigue siendo responsabilidad de la app.
 - `BrandMark`: lockup de producto consistente para headers y sidebars.
 - `Eyebrow`: label editorial de sección para navegación y agrupaciones de contenido.
 - `AppShellSidebarHeader`, `AppShellSidebarContent` y `AppShellSidebarFooter`: slots para construir la sidebar tipo workspace con marca arriba, navegación desplazable y utilidades/perfil fijados abajo.
+- `AppShell variant="inset"`: enmarca el producto sobre `canvas` en escritorio, como en herramientas SaaS editoriales, sin alterar el layout móvil.
+- `SidebarWorkspace` y `SidebarProfile`: resuelven el selector de espacio y la cuenta fijada al pie; `Sidebar` también se puede usar directamente como hijo de `AppShell`.
+- `Card variant="flat"`, `CardToolbar`, `Toolbar variant="surface|attached"` y `Table density="compact"`: permiten paneles de datos completos sin repetir clases de borde, sombra y densidad.
+
+La story `Application/Recipes/Workspace dashboard` es la receta de referencia para
+combinar estos componentes en una pantalla completa sin acoplar el paquete a un
+dominio ni a una librería de gráficas.
 
 ## Estado asíncrono, errores y copia
 
