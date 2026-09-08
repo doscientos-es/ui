@@ -18,7 +18,7 @@ const speedClasses: Record<SpinnerSpeed, string> = {
   fast: 'motion-safe:animate-[spin_0.5s_linear_infinite]',
 }
 
-export type SpinnerProps = Omit<ComponentPropsWithRef<'span'>, 'children' | 'role'> & {
+export type SpinnerProps = Omit<ComponentPropsWithRef<'output'>, 'children'> & {
   /** Accessible text announced while the related content is loading. */
   label?: string
   /** Visual scale of the indicator. */
@@ -38,11 +38,10 @@ export function Spinner({
   const id = useId()
 
   return (
-    <span
+    <output
       aria-label={label}
       data-size={size}
       data-slot="spinner"
-      role="status"
       {...props}
       className={cn('inline-flex shrink-0', sizeClasses[size], className)}
     >
@@ -75,6 +74,6 @@ export function Spinner({
           />
         </g>
       </svg>
-    </span>
+    </output>
   )
 }

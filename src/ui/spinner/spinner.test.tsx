@@ -6,7 +6,7 @@ import { Spinner } from './spinner'
 
 describe('Spinner', () => {
   it('announces its loading state and exposes the React 19 ref on its container', () => {
-    const ref = createRef<HTMLSpanElement>()
+    const ref = createRef<HTMLOutputElement>()
     render(<Spinner ref={ref} label="Cargando clientes" size="lg" speed="fast" />)
 
     const spinner = screen.getByRole('status', { name: 'Cargando clientes' })
