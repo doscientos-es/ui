@@ -44,6 +44,30 @@ export function ProfileName() {
 
 Los proyectos pueden definir los tokens semánticos en `:root` o `.dark` para aplicar la marca del cliente; no deben modificar los componentes. `@doscientos/ui` no sobrescribe esos tokens y usa los valores del tema del backoffice como fallback cuando falte alguno.
 
+## Iconos de estado en badges
+
+`Badge` y `BadgeLink` incluyen un icono decorativo según `variant`: `success` → check,
+`warning` → reloj, `info` → información, `danger`/`destructive` → alerta. Las variantes
+de categoría (`default`, `secondary`, `neutral`, `outline`, `ghost`, `link`) no añaden icono.
+
+```tsx
+<Badge variant="info">Emitida</Badge>
+<Badge variant="success">Verifactu · Aceptada</Badge>
+<Badge variant="success" icon={<ShieldCheck />}>Verificada</Badge>
+<Badge variant="warning" icon={false}>Revisión</Badge>
+```
+
+Omitir `icon` (o pasar `undefined`) usa el predeterminado. `false` y `null` lo ocultan.
+Un elemento lo sustituye; también funciona en variantes neutras. El icono es decorativo
+y no altera el nombre accesible: conserva el estado en el texto y evita controles
+interactivos dentro de `icon`. Storybook: **Components / Data Display / Badge / Icon Overrides**.
+
+Al actualizar consumidores: elimina los iconos de estado insertados manualmente en
+`children`, pásalos por `icon` si son específicos del dominio, o usa `icon={false}`
+para conservar una composición anterior. En el backoffice, al instalar la nueva
+versión, elimina el mapa local de iconos de `StatusBadge`: su `...rest` ya propagará
+`icon` y el paquete resolverá el predeterminado. Actualiza dependencia y wrapper juntos.
+
 ## Sugerencias y autocompletado
 
 El combobox es composable: la aplicación controla datos, peticiones y caché; la UI resuelve el teclado, foco, filtrado, popup y selección accesible. `HighlightMatch` mantiene el texto original y encuentra coincidencias aunque cambien mayúsculas o acentos.
