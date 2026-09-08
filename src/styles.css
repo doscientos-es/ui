@@ -11,6 +11,7 @@
 :root {
   /* Reference-led defaults for the backoffice surface system. */
   --ui-radius: var(--radius, 0.75rem);
+  --ui-canvas: var(--canvas, #ececea);
   --ui-background: var(--background, #f7f7f5);
   --ui-foreground: var(--foreground, #202020);
   --ui-card: var(--card, #ffffff);
@@ -34,11 +35,17 @@
   --ui-border: var(--border, #e6e6e3);
   --ui-input: var(--input, var(--ui-border));
   --ui-ring: var(--ring, oklch(0.871 0.006 286.286));
-  --ui-shadow-surface: 0 8px 30px rgb(20 20 20 / 4%);
+  --ui-sidebar: var(--sidebar, #f4f4f2);
+  --ui-sidebar-foreground: var(--sidebar-foreground, var(--ui-foreground));
+  --ui-surface-subtle: var(--surface-subtle, #fafaf9);
+  --ui-border-strong: var(--border-strong, #d8d8d4);
+  --ui-shadow-hairline: 0 1px 2px rgb(20 20 20 / 4%);
+  --ui-shadow-surface: 0 8px 30px rgb(20 20 20 / 4%), 0 1px 2px rgb(20 20 20 / 3%);
   --ui-shadow-floating: 0 18px 45px rgb(20 20 20 / 10%), 0 3px 10px rgb(20 20 20 / 6%);
 }
 
 .dark {
+  --ui-canvas: var(--canvas, oklch(0.105 0 0));
   --ui-background: var(--background, oklch(0.145 0 0));
   --ui-foreground: var(--foreground, oklch(0.985 0 0));
   --ui-card: var(--card, oklch(0.205 0 0));
@@ -62,9 +69,14 @@
   --ui-border: var(--border, oklch(1 0 0 / 15%));
   --ui-input: var(--input, var(--ui-border));
   --ui-ring: var(--ring, oklch(0.556 0 0));
+  --ui-sidebar: var(--sidebar, oklch(0.17 0 0));
+  --ui-sidebar-foreground: var(--sidebar-foreground, var(--ui-foreground));
+  --ui-surface-subtle: var(--surface-subtle, oklch(0.18 0 0));
+  --ui-border-strong: var(--border-strong, oklch(1 0 0 / 24%));
 }
 
 @theme inline {
+  --color-canvas: var(--ui-canvas);
   --color-background: var(--ui-background);
   --color-foreground: var(--ui-foreground);
   --color-card: var(--ui-card);
@@ -88,6 +100,10 @@
   --color-border: var(--ui-border);
   --color-input: var(--ui-input);
   --color-ring: var(--ui-ring);
+  --color-sidebar: var(--ui-sidebar);
+  --color-sidebar-foreground: var(--ui-sidebar-foreground);
+  --color-surface-subtle: var(--ui-surface-subtle);
+  --color-border-strong: var(--ui-border-strong);
   --radius-sm: calc(var(--ui-radius) * 0.6);
   --radius-md: calc(var(--ui-radius) * 0.8);
   --radius-lg: var(--ui-radius);
@@ -205,6 +221,16 @@
   stroke-width: 1px;
 }
 
+/* Data density is selected once on Table instead of repeated on every cell. */
+[data-slot='table'][data-density='compact'] [data-slot='table-head'] {
+  height: 2.25rem;
+  padding-inline: 0.625rem;
+}
+
+[data-slot='table'][data-density='compact'] [data-slot='table-cell'] {
+  padding: 0.625rem;
+}
+
 /* Application shell ---------------------------------------------------------
  * Use data slots instead of responsive utility classes so consumer imports
  * cannot change the display order of the shell's desktop/mobile states. */
@@ -214,18 +240,52 @@
   width: 100%;
   overflow: hidden;
   flex-direction: column;
+  background: var(--ui-canvas);
 }
 
-[data-slot='app-shell-sidebar'] {
+[data-slot='app-shell-sidebar'],
+[data-slot='app-shell'] > [data-slot='sidebar'] {
   display: none;
   height: 100%;
   flex-direction: column;
 }
 
-[data-slot='app-shell-sidebar'] {
+[data-slot='app-shell-sidebar'][data-width='compact'] {
+  width: 13.5rem;
+}
+
+[data-slot='app-shell-sidebar'][data-width='default'] {
   width: 15.5rem;
+}
+
+[data-slot='app-shell-sidebar'][data-width='wide'] {
+  width: 18rem;
+}
+
+[data-slot='app-shell-sidebar-header'] a,
+[data-slot='app-shell-sidebar-content'] a,
+[data-slot='app-shell-sidebar-footer'] a {
+  outline: none;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+[data-slot='app-shell-sidebar-content'] a[aria-current='page'],
+[data-slot='app-shell-sidebar-content'] a[data-active='true'] {
+  background: var(--ui-secondary);
+  color: var(--ui-foreground);
+  font-weight: 600;
+}
+
+[data-slot='app-shell-sidebar-content'] a:hover,
+[data-slot='app-shell-sidebar-footer'] a:hover {
+  background: color-mix(in srgb, var(--ui-secondary) 72%, transparent);
+  color: var(--ui-foreground);
+}
+
+[data-slot='app-shell-sidebar'] {
   border-right-color: color-mix(in srgb, var(--ui-border) 72%, transparent);
-  background: color-mix(in srgb, var(--ui-card) 92%, var(--ui-background));
+  background: var(--ui-sidebar);
+  color: var(--ui-sidebar-foreground);
 }
 
 [data-slot='app-shell-main'] {
@@ -234,6 +294,7 @@
   min-height: 0;
   flex: 1;
   flex-direction: column;
+  background: var(--ui-background);
 }
 
 [data-slot='app-shell-header'] {
@@ -273,6 +334,14 @@
   padding: 1rem;
 }
 
+[data-slot='app-shell-content'][data-density='compact'] {
+  --ui-content-gap: 1rem;
+}
+
+[data-slot='app-shell-content'][data-density='comfortable'] {
+  --ui-content-gap: 1.5rem;
+}
+
 [data-slot='app-shell-content'][data-scrollable] {
   min-height: 0;
   flex: 1;
@@ -285,12 +354,35 @@
   }
 }
 
+@media (min-width: 64rem) {
+  [data-slot='app-shell'][data-variant='inset'] {
+    min-height: 100svh;
+    padding: 1rem;
+  }
+
+  [data-slot='app-shell'][data-variant='inset'] > :is([data-slot='app-shell-sidebar'], [data-slot='sidebar']) {
+    height: calc(100svh - 2rem);
+    border: 1px solid var(--ui-border);
+    border-right: 0;
+    border-radius: calc(var(--ui-radius) * 1.5) 0 0 calc(var(--ui-radius) * 1.5);
+    box-shadow: var(--ui-shadow-hairline);
+  }
+
+  [data-slot='app-shell'][data-variant='inset'] > [data-slot='app-shell-main'] {
+    height: calc(100svh - 2rem);
+    overflow: hidden;
+    border: 1px solid var(--ui-border);
+    border-radius: 0 calc(var(--ui-radius) * 1.5) calc(var(--ui-radius) * 1.5) 0;
+    box-shadow: var(--ui-shadow-hairline);
+  }
+}
+
 @media (min-width: 40rem) {
   [data-slot='app-shell'][data-sidebar-breakpoint='sm'] {
     flex-direction: row;
   }
 
-  [data-slot='app-shell'][data-sidebar-breakpoint='sm'] [data-slot='app-shell-sidebar'] {
+  [data-slot='app-shell'][data-sidebar-breakpoint='sm'] > :is([data-slot='app-shell-sidebar'], [data-slot='sidebar']) {
     display: flex;
   }
 
@@ -304,7 +396,7 @@
     flex-direction: row;
   }
 
-  [data-slot='app-shell'][data-sidebar-breakpoint='md'] [data-slot='app-shell-sidebar'] {
+  [data-slot='app-shell'][data-sidebar-breakpoint='md'] > :is([data-slot='app-shell-sidebar'], [data-slot='sidebar']) {
     display: flex;
   }
 
@@ -318,7 +410,7 @@
     flex-direction: row;
   }
 
-  [data-slot='app-shell'][data-sidebar-breakpoint='lg'] [data-slot='app-shell-sidebar'] {
+  [data-slot='app-shell'][data-sidebar-breakpoint='lg'] > :is([data-slot='app-shell-sidebar'], [data-slot='sidebar']) {
     display: flex;
   }
 

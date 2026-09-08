@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Ellipsis, Search } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ChevronsUpDown, Ellipsis, Search } from 'lucide-react'
 import { type ReactNode, useCallback, useMemo, useState } from 'react'
 import { Link, type LinkProps } from 'react-aria-components'
 
@@ -49,7 +49,7 @@ export function Sidebar({ className, ...props }: React.ComponentProps<'aside'>) 
       data-slot="sidebar"
       data-collapsed={collapsed || undefined}
       className={cn(
-        'group/sidebar flex h-full w-60 shrink-0 flex-col border-r border-border/70 bg-card text-foreground transition-[width] duration-200 ease-out motion-reduce:transition-none data-[collapsed]:w-16',
+        'group/sidebar flex h-full w-60 shrink-0 flex-col border-r border-border/70 bg-sidebar text-sidebar-foreground transition-[width] duration-200 ease-out motion-reduce:transition-none data-[collapsed]:w-16',
         className,
       )}
       {...props}
@@ -73,21 +73,79 @@ export function SidebarSearch({
   className,
   ...props
 }: React.ComponentProps<'button'> & { label?: string; shortcut?: string }) {
+  const { collapsed } = useSidebar()
   return (
     <button
       type="button"
       data-slot="sidebar-search"
+      aria-label={collapsed ? label : undefined}
       className={cn(
         'group flex w-full items-center gap-2 rounded-xl border border-border/70 bg-background px-3 py-2 text-sm text-muted-foreground transition-[border-color,color,box-shadow] hover:border-primary/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+        collapsed && 'justify-center border-transparent bg-transparent px-0',
         className,
       )}
       {...props}
     >
-      <Search className="size-4 shrink-0" />
-      <span className="flex-1 text-left">{label}</span>
-      <kbd className="bg-secondary text-muted-foreground rounded px-1.5 py-0.5 font-mono text-[10px]">
+      <Search aria-hidden="true" className="size-4 shrink-0" />
+      <span className={cn('flex-1 text-left', collapsed && 'sr-only')}>{label}</span>
+      <kbd
+        className={cn(
+          'rounded bg-secondary px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground',
+          collapsed && 'hidden',
+        )}
+      >
         {shortcut}
       </kbd>
+    </button>
+  )
+}
+
+export type SidebarWorkspaceProps = React.ComponentProps<'button'> & {
+  logo?: ReactNode
+  name: ReactNode
+  eyebrow?: ReactNode
+  indicator?: ReactNode
+}
+
+/** Compact workspace switcher for the top of product navigation. */
+export function SidebarWorkspace({
+  className,
+  logo,
+  name,
+  eyebrow,
+  indicator = <ChevronsUpDown aria-hidden="true" />,
+  ...props
+}: SidebarWorkspaceProps) {
+  const { collapsed } = useSidebar()
+  return (
+    <button
+      type="button"
+      data-slot="sidebar-workspace"
+      aria-label={collapsed && typeof name === 'string' ? name : undefined}
+      className={cn(
+        'flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-border/80 bg-background p-2 text-left shadow-[var(--ui-shadow-hairline)] outline-none transition-[background-color,border-color,box-shadow] hover:border-border-strong hover:bg-card focus-visible:ring-2 focus-visible:ring-ring/50',
+        collapsed && 'size-10 flex-none justify-center p-1.5',
+        className,
+      )}
+      {...props}
+    >
+      {logo ? (
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-card shadow-[var(--ui-shadow-hairline)]">
+          {logo}
+        </span>
+      ) : null}
+      <span className={cn('min-w-0 flex-1', collapsed && 'sr-only')}>
+        {eyebrow ? (
+          <span className="block truncate text-[0.6875rem] text-muted-foreground">{eyebrow}</span>
+        ) : null}
+        <span className="block truncate text-sm font-medium text-foreground">{name}</span>
+      </span>
+      <span
+        aria-hidden="true"
+        className={cn('text-muted-foreground [&>svg]:size-3.5', collapsed && 'hidden')}
+      >
+        {indicator}
+      </span>
     </button>
   )
 }
@@ -110,6 +168,45 @@ export function SidebarFooter({ className, ...props }: React.ComponentProps<'div
       className={cn('mt-auto flex flex-col gap-2 border-t border-border p-2', className)}
       {...props}
     />
+  )
+}
+
+export type SidebarProfileProps = React.ComponentProps<'div'> & {
+  avatar?: ReactNode
+  name: ReactNode
+  description?: ReactNode
+  action?: ReactNode
+}
+
+/** Profile/account row designed to remain anchored in SidebarFooter. */
+export function SidebarProfile({
+  className,
+  avatar,
+  name,
+  description,
+  action,
+  ...props
+}: SidebarProfileProps) {
+  const { collapsed } = useSidebar()
+  return (
+    <div
+      data-slot="sidebar-profile"
+      className={cn(
+        'flex min-w-0 items-center gap-2 rounded-xl px-2 py-1.5',
+        collapsed && 'justify-center px-0',
+        className,
+      )}
+      {...props}
+    >
+      {avatar ? <span className="shrink-0">{avatar}</span> : null}
+      <span className={cn('min-w-0 flex-1', collapsed && 'sr-only')}>
+        <span className="block truncate text-sm font-medium text-foreground">{name}</span>
+        {description ? (
+          <span className="block truncate text-xs text-muted-foreground">{description}</span>
+        ) : null}
+      </span>
+      {action && !collapsed ? <span className="shrink-0">{action}</span> : null}
+    </div>
   )
 }
 
@@ -157,6 +254,7 @@ export function SidebarItem({
   return (
     <Link
       data-slot="sidebar-item"
+      data-active={active || undefined}
       aria-current={active ? 'page' : undefined}
       aria-label={collapsed && label ? label : undefined}
       className={cn(

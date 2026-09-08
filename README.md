@@ -76,6 +76,7 @@ Las primitivas de composición no conocen rutas, entidades ni transporte: cada f
 - `MetricGrid` y `MetricCard`: grid responsive de KPIs. `MetricCard` admite `loading`, `loadingLabel`, `trend` y `delta`.
 - `BrandMark`: lockup de producto consistente para headers y sidebars.
 - `Eyebrow`: label editorial de sección para navegación y agrupaciones de contenido.
+- `AppShellSidebarHeader`, `AppShellSidebarContent` y `AppShellSidebarFooter`: slots para construir la sidebar tipo workspace con marca arriba, navegación desplazable y utilidades/perfil fijados abajo.
 
 ## Estado asíncrono, errores y copia
 

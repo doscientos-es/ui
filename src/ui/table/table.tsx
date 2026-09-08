@@ -2,12 +2,26 @@ import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
 
+export type TableProps = React.ComponentProps<'table'> & {
+  containerClassName?: string
+  density?: 'compact' | 'comfortable'
+}
+
 /** Presentational table primitives. Sorting, pagination and data state stay in the application. */
-export function Table({ className, ...props }: React.ComponentProps<'table'>) {
+export function Table({
+  className,
+  containerClassName,
+  density = 'comfortable',
+  ...props
+}: TableProps) {
   return (
-    <div data-slot="table-container" className="relative w-full overflow-x-auto">
+    <div
+      data-slot="table-container"
+      className={cn('relative w-full overflow-x-auto', containerClassName)}
+    >
       <table
         data-slot="table"
+        data-density={density}
         className={cn('w-full caption-bottom text-sm', className)}
         {...props}
       />
@@ -91,6 +105,17 @@ export function TableToolbar({ className, ...props }: React.ComponentProps<'div'
     <div
       data-slot="table-toolbar"
       className={cn('flex flex-wrap items-center justify-between gap-2 py-2', className)}
+      {...props}
+    />
+  )
+}
+
+/** Aligns comparable values and keeps their glyph widths stable. */
+export function TableNumber({ className, ...props }: React.ComponentProps<'span'>) {
+  return (
+    <span
+      data-slot="table-number"
+      className={cn('block text-right font-medium tabular-nums', className)}
       {...props}
     />
   )

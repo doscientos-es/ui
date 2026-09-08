@@ -2,6 +2,17 @@ import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
 
+/** Establishes the shared vertical rhythm between a page header and its sections. */
+export function PageStack({ className, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div
+      data-slot="page-stack"
+      className={cn('flex min-w-0 flex-col gap-(--ui-content-gap,1.5rem)', className)}
+      {...props}
+    />
+  )
+}
+
 /** Page-level heading layout with optional description and actions. */
 export function PageHeader({ className, ...props }: React.ComponentProps<'header'>) {
   return (
@@ -34,6 +45,15 @@ export function PageHeaderDescription({ className, ...props }: React.ComponentPr
     <p
       data-slot="page-header-description"
       className={cn('mt-1 text-sm text-muted-foreground', className)}
+      {...props}
+    />
+  )
+}
+export function PageHeaderMeta({ className, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div
+      data-slot="page-header-meta"
+      className={cn('mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground', className)}
       {...props}
     />
   )

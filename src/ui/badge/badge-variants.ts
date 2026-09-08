@@ -1,17 +1,17 @@
 import { cva } from 'class-variance-authority'
 
 export const badgeVariants = cva(
-  'inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 [&>svg]:pointer-events-none [&>svg]:size-3',
+  'inline-flex w-fit shrink-0 items-center justify-center gap-1.5 overflow-hidden rounded-lg border border-transparent px-2.5 py-1 text-xs font-medium whitespace-nowrap transition-[background-color,border-color,color,box-shadow,transform] duration-150 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 [&>svg]:pointer-events-none [&>svg]:size-3.5',
   {
     variants: {
       variant: {
         default: 'bg-primary text-primary-foreground',
         secondary: 'bg-secondary text-secondary-foreground',
         neutral: 'bg-muted text-muted-foreground',
-        success: 'bg-success/10 text-success',
-        warning: 'bg-warning/10 text-warning',
-        info: 'bg-info/10 text-info',
-        danger: 'bg-destructive/10 text-destructive',
+        success: 'border-success/20 bg-success/10 text-success',
+        warning: 'border-warning/20 bg-warning/10 text-warning',
+        info: 'border-info/20 bg-info/10 text-info',
+        danger: 'border-destructive/20 bg-destructive/10 text-destructive',
         destructive: 'bg-destructive text-destructive-foreground',
         outline: 'border border-border text-foreground',
         ghost: 'text-foreground hover:bg-muted',

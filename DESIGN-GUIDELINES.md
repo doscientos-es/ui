@@ -57,6 +57,7 @@ Usar iconos lineales, simples y de peso uniforme. Un icono no sustituye el texto
 
 - Shell de escritorio: sidebar persistente de aproximadamente 248px y contenido flexible.
 - Sidebar: marca arriba, navegación agrupada en secciones, ajustes y ayuda abajo.
+- Sidebar tipo workspace: puede añadir búsqueda bajo la marca, favoritos o registros en grupos separados, utilidades antes del footer y perfil fijado al fondo. Usa `AppShellSidebarHeader`, `AppShellSidebarContent` y `AppShellSidebarFooter` para heredar esta composición.
 - Navegación activa: surface secundaria suave, radio amplio, texto foreground; evitar pills completamente redondas.
 - Header: 56–64px, sticky cuando el contenido lo necesite, fondo translúcido y borde tenue.
 - Contenido: max-width amplio (`80rem–100rem`) y padding 24–32px en desktop.

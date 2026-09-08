@@ -7,25 +7,79 @@ export type AppShellBreakpoint = 'sm' | 'md' | 'lg'
 export type AppShellProps = React.ComponentProps<'div'> & {
   /** Breakpoint at which the persistent sidebar replaces the mobile header. */
   sidebarBreakpoint?: AppShellBreakpoint
+  /** `inset` frames the application over a neutral canvas on large screens. */
+  variant?: 'default' | 'inset'
 }
 
 /** Application layout foundation for a responsive sidebar, header and content area. */
-export function AppShell({ className, sidebarBreakpoint = 'md', ...props }: AppShellProps) {
+export function AppShell({
+  className,
+  sidebarBreakpoint = 'md',
+  variant = 'default',
+  ...props
+}: AppShellProps) {
   return (
     <div
       data-slot="app-shell"
       data-sidebar-breakpoint={sidebarBreakpoint}
-      className={cn('bg-background text-foreground', className)}
+      data-variant={variant}
+      className={cn(
+        'text-foreground',
+        variant === 'inset' ? 'bg-canvas' : 'bg-background',
+        className,
+      )}
       {...props}
     />
   )
 }
 
-export function AppShellSidebar({ className, ...props }: React.ComponentProps<'aside'>) {
+export type AppShellSidebarProps = React.ComponentProps<'aside'> & {
+  /** Width preset for the persistent navigation column. */
+  width?: 'compact' | 'default' | 'wide'
+}
+
+export function AppShellSidebar({
+  className,
+  width = 'default',
+  ...props
+}: AppShellSidebarProps) {
   return (
     <aside
       data-slot="app-shell-sidebar"
-      className={cn('w-56 shrink-0 border-r border-border bg-card text-foreground', className)}
+      data-width={width}
+      className={cn('shrink-0 border-r border-border bg-sidebar text-sidebar-foreground', className)}
+      {...props}
+    />
+  )
+}
+
+/** Content slots for the workspace-style sidebar used across Doscientos apps. */
+export function AppShellSidebarHeader({ className, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div
+      data-slot="app-shell-sidebar-header"
+      className={cn('flex shrink-0 flex-col gap-4 px-5 py-6', className)}
+      {...props}
+    />
+  )
+}
+
+export function AppShellSidebarContent({ className, ...props }: React.ComponentProps<'nav'>) {
+  return (
+    <nav
+      data-slot="app-shell-sidebar-content"
+      aria-label="Navegación principal"
+      className={cn('min-h-0 flex-1 overflow-y-auto px-3 py-1', className)}
+      {...props}
+    />
+  )
+}
+
+export function AppShellSidebarFooter({ className, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div
+      data-slot="app-shell-sidebar-footer"
+      className={cn('mt-auto flex shrink-0 flex-col gap-1 border-t border-border/70 px-3 py-4', className)}
       {...props}
     />
   )
@@ -40,6 +94,26 @@ export function AppShellHeader({ className, ...props }: React.ComponentProps<'he
     <header
       data-slot="app-shell-header"
       className={cn('border-b border-border bg-background px-4', className)}
+      {...props}
+    />
+  )
+}
+
+export function AppShellHeaderContext({ className, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div
+      data-slot="app-shell-header-context"
+      className={cn('flex min-w-0 flex-1 items-center gap-2', className)}
+      {...props}
+    />
+  )
+}
+
+export function AppShellHeaderActions({ className, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div
+      data-slot="app-shell-header-actions"
+      className={cn('ml-auto flex shrink-0 items-center gap-2', className)}
       {...props}
     />
   )
@@ -65,6 +139,8 @@ export type AppShellContentProps = React.ComponentProps<'div'> & {
   padded?: boolean
   /** Lets this region scroll while the surrounding shell remains fixed. */
   scrollable?: boolean
+  /** Establishes a shared spacing rhythm for composed page sections. */
+  density?: 'compact' | 'comfortable'
 }
 
 export function AppShellContent({
@@ -72,12 +148,14 @@ export function AppShellContent({
   size = 'wide',
   padded = true,
   scrollable = true,
+  density = 'comfortable',
   ...props
 }: AppShellContentProps) {
   return (
     <div
       data-slot="app-shell-content"
       data-size={size}
+      data-density={density}
       data-padded={padded || undefined}
       data-scrollable={scrollable || undefined}
       className={className}

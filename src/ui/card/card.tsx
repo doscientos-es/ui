@@ -4,17 +4,23 @@ import { cn } from '../../lib/cn'
 
 export type CardProps = React.ComponentProps<'div'> & {
   /** Spacing preset for standard or compact content. */
-  size?: 'default' | 'sm'
+  size?: 'sm' | 'default' | 'lg'
+  /** Surface treatment. `flat` works well inside dense dashboard grids. */
+  variant?: 'default' | 'flat' | 'subtle'
 }
 
 /** Surface for related content with optional header, body, action and footer regions. */
-function Card({ className, size = 'default', ...props }: CardProps) {
+function Card({ className, size = 'default', variant = 'default', ...props }: CardProps) {
   return (
     <div
       data-slot="card"
       data-size={size}
+      data-variant={variant}
       className={cn(
-        'group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-2xl border border-border/80 bg-card py-(--card-spacing) text-sm text-card-foreground shadow-[0_8px_30px_rgb(20_20_20/0.04)] [--card-spacing:--spacing(5)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-2xl *:[img:last-child]:rounded-b-2xl',
+        'group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-2xl border border-border/80 bg-card py-(--card-spacing) text-sm text-card-foreground [--card-spacing:--spacing(5)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=lg]:[--card-spacing:--spacing(6)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-2xl *:[img:last-child]:rounded-b-2xl',
+        variant === 'default' && 'shadow-[var(--ui-shadow-surface)]',
+        variant === 'flat' && 'shadow-[var(--ui-shadow-hairline)]',
+        variant === 'subtle' && 'border-transparent bg-surface-subtle shadow-none',
         className,
       )}
       {...props}
@@ -79,7 +85,7 @@ function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="card-footer"
       className={cn(
-        'flex items-center rounded-b-xl border-t border-border bg-muted/50 p-(--card-spacing)',
+        'flex items-center rounded-b-xl border-t border-border/70 bg-surface-subtle p-(--card-spacing)',
         className,
       )}
       {...props}
@@ -87,4 +93,28 @@ function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-export { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
+/** Integrated controls row that visually belongs to the card below it. */
+function CardToolbar({ className, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div
+      role="toolbar"
+      data-slot="card-toolbar"
+      className={cn(
+        'flex flex-wrap items-center gap-2 border-y border-border/70 bg-surface-subtle px-(--card-spacing) py-2.5',
+        className,
+      )}
+      {...props}
+    />
+  )
+}
+
+export {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  CardToolbar,
+}
