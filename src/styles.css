@@ -10,8 +10,8 @@
  */
 :root {
   /* Reference-led defaults for the backoffice surface system. */
-  --ui-radius: var(--radius, 0.625rem);
-  --ui-background: var(--background, #ffffff);
+  --ui-radius: var(--radius, 0.75rem);
+  --ui-background: var(--background, #f7f7f5);
   --ui-foreground: var(--foreground, #202020);
   --ui-card: var(--card, #ffffff);
   --ui-card-foreground: var(--card-foreground, var(--ui-foreground));
@@ -22,8 +22,8 @@
   --ui-primary-foreground: var(--primary-foreground, #ffffff);
   --ui-secondary: var(--secondary, #f1f1ef);
   --ui-secondary-foreground: var(--secondary-foreground, #171717);
-  --ui-muted: var(--muted, #fafafa);
-  --ui-muted-foreground: var(--muted-foreground, #6d6965);
+  --ui-muted: var(--muted, #f0f0ee);
+  --ui-muted-foreground: var(--muted-foreground, #737572);
   --ui-accent: var(--accent, #bdff7b);
   --ui-accent-foreground: var(--accent-foreground, #1a2e18);
   --ui-destructive: var(--destructive, #b91c1c);
@@ -31,9 +31,11 @@
   --ui-success: var(--success, #166534);
   --ui-warning: var(--warning, #854d0e);
   --ui-info: var(--info, #0369a1);
-  --ui-border: var(--border, #e7e5e2);
+  --ui-border: var(--border, #e6e6e3);
   --ui-input: var(--input, var(--ui-border));
   --ui-ring: var(--ring, oklch(0.871 0.006 286.286));
+  --ui-shadow-surface: 0 8px 30px rgb(20 20 20 / 4%);
+  --ui-shadow-floating: 0 18px 45px rgb(20 20 20 / 10%), 0 3px 10px rgb(20 20 20 / 6%);
 }
 
 .dark {
@@ -100,6 +102,8 @@
   --animate-ui-overlay-in: ui-overlay-in 150ms ease-out;
   --animate-ui-overlay-out: ui-overlay-out 100ms ease-in;
   --animate-ui-ripple: ui-ripple 400ms ease-out;
+  --animate-marquee-x: marquee-x var(--marquee-duration, 20s) linear infinite;
+  --animate-marquee-y: marquee-y var(--marquee-duration, 20s) linear infinite;
 
   @keyframes accordion-down {
     from {
@@ -158,6 +162,18 @@
       transform: translate(-50%, -50%) scale(1.5);
     }
   }
+
+  @keyframes marquee-x {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes marquee-y {
+    to {
+      transform: translateY(-50%);
+    }
+  }
 }
 
 /* Dialogs can host plain HTML controls as well as package components. Keep their declared width
@@ -206,6 +222,12 @@
   flex-direction: column;
 }
 
+[data-slot='app-shell-sidebar'] {
+  width: 15.5rem;
+  border-right-color: color-mix(in srgb, var(--ui-border) 72%, transparent);
+  background: color-mix(in srgb, var(--ui-card) 92%, var(--ui-background));
+}
+
 [data-slot='app-shell-main'] {
   display: flex;
   min-width: 0;
@@ -221,7 +243,9 @@
   display: flex;
   min-height: 3.5rem;
   align-items: center;
-  backdrop-filter: blur(0.75rem);
+  border-bottom-color: color-mix(in srgb, var(--ui-border) 72%, transparent);
+  background: color-mix(in srgb, var(--ui-background) 86%, transparent);
+  backdrop-filter: blur(1rem);
 }
 
 [data-slot='app-shell-mobile-header'] {

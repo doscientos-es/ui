@@ -44,12 +44,15 @@ export function MetricCard({
       data-tone={tone}
       data-trend={trend}
       aria-busy={loading || undefined}
-      className={cn('min-w-0', className)}
+      className={cn('min-w-0 shadow-[var(--ui-shadow-surface)]', className)}
       {...props}
     >
       <CardContent className="flex items-start gap-3">
         {icon ? (
-          <div data-slot="metric-card-icon" className="text-muted-foreground shrink-0">
+          <div
+            data-slot="metric-card-icon"
+            className="bg-secondary text-muted-foreground flex size-9 shrink-0 items-center justify-center rounded-xl"
+          >
             {icon}
           </div>
         ) : null}
@@ -75,7 +78,7 @@ export function MetricCard({
             <span
               data-slot="metric-card-delta"
               className={cn(
-                'mt-1 block text-xs',
+                'mt-2 block text-xs font-medium',
                 trend === 'up' && 'text-emerald-600',
                 trend === 'down' && 'text-destructive',
                 trend === 'neutral' && 'text-muted-foreground',

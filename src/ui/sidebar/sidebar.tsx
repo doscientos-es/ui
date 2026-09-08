@@ -49,7 +49,7 @@ export function Sidebar({ className, ...props }: React.ComponentProps<'aside'>) 
       data-slot="sidebar"
       data-collapsed={collapsed || undefined}
       className={cn(
-        'group/sidebar flex h-full w-56 shrink-0 flex-col border-r border-border bg-card text-foreground transition-[width] duration-200 ease-out motion-reduce:transition-none data-[collapsed]:w-16',
+        'group/sidebar flex h-full w-60 shrink-0 flex-col border-r border-border/70 bg-card text-foreground transition-[width] duration-200 ease-out motion-reduce:transition-none data-[collapsed]:w-16',
         className,
       )}
       {...props}
@@ -61,7 +61,7 @@ export function SidebarHeader({ className, ...props }: React.ComponentProps<'div
   return (
     <div
       data-slot="sidebar-header"
-      className={cn('flex items-center gap-2 px-4 py-5', className)}
+      className={cn('flex items-center gap-2 px-5 py-6', className)}
       {...props}
     />
   )
@@ -78,7 +78,7 @@ export function SidebarSearch({
       type="button"
       data-slot="sidebar-search"
       className={cn(
-        'group flex w-full items-center gap-2 rounded-md border border-border bg-background px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+        'group flex w-full items-center gap-2 rounded-xl border border-border/70 bg-background px-3 py-2 text-sm text-muted-foreground transition-[border-color,color,box-shadow] hover:border-primary/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
         className,
       )}
       {...props}
@@ -160,7 +160,7 @@ export function SidebarItem({
       aria-current={active ? 'page' : undefined}
       aria-label={collapsed && label ? label : undefined}
       className={cn(
-        'group/item relative flex min-h-9 items-center gap-2.5 rounded-md px-2.5 py-2 text-sm text-muted-foreground outline-none transition-[background-color,color,transform] duration-150 hover:bg-secondary/60 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40 data-[current=page]:bg-secondary data-[current=page]:font-medium data-[current=page]:text-foreground data-pressed:scale-[0.98] motion-reduce:transition-none',
+        'group/item relative flex min-h-10 items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-muted-foreground outline-none transition-[background-color,color,transform] duration-150 hover:bg-secondary/70 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40 data-[current=page]:bg-secondary data-[current=page]:font-medium data-[current=page]:text-foreground data-pressed:scale-[0.98] motion-reduce:transition-none',
         collapsed && 'justify-center px-0',
         typeof className === 'function' ? className : className,
       )}

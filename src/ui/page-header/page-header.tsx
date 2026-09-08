@@ -8,7 +8,7 @@ export function PageHeader({ className, ...props }: React.ComponentProps<'header
     <header
       data-slot="page-header"
       className={cn(
-        'flex flex-col gap-4 py-2 sm:flex-row sm:items-center sm:justify-between',
+        'flex flex-col gap-4 py-3 sm:flex-row sm:items-center sm:justify-between',
         className,
       )}
       {...props}
@@ -22,7 +22,7 @@ export function PageHeaderTitle({ className, children, ...props }: React.Compone
   return (
     <h1
       data-slot="page-header-title"
-      className={cn('truncate text-xl font-semibold tracking-tight md:text-2xl', className)}
+      className={cn('truncate text-2xl font-semibold tracking-[-0.03em] md:text-3xl', className)}
       {...props}
     >
       {children}

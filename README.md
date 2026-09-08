@@ -2,6 +2,8 @@
 
 Primitives React accesibles, rápidas y temables para los productos de Doscientos. No depende de Next.js, Astro, router, backend ni estado de datos.
 
+El criterio visual y de producto está documentado en [DESIGN-GUIDELINES.md](./DESIGN-GUIDELINES.md). Ese documento es parte del contrato del paquete: explica cómo combinar las primitives para que una aplicación Doscientos se sienta premium, no solo qué componentes existen.
+
 ## Alcance
 
 - Foundations: tokens CSS, tema claro/oscuro y utilidades de clases y texto.
@@ -72,6 +74,8 @@ Las primitivas de composición no conocen rutas, entidades ni transporte: cada f
 - `DetailDrawer`: marco de drawer para fichas; añade `DetailDrawerHeader`, `DetailDrawerBody` y `DetailDrawerFooter`.
 - `SectionHeader`: cabecera de panel con heading y acciones; `PageHeader` se reserva para el `h1` de una página.
 - `MetricGrid` y `MetricCard`: grid responsive de KPIs. `MetricCard` admite `loading`, `loadingLabel`, `trend` y `delta`.
+- `BrandMark`: lockup de producto consistente para headers y sidebars.
+- `Eyebrow`: label editorial de sección para navegación y agrupaciones de contenido.
 
 ## Estado asíncrono, errores y copia
 
