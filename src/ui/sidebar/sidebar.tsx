@@ -10,6 +10,7 @@ import {
   type LinkProps,
 } from 'react-aria-components'
 
+import { useIsMobile } from '../../hooks/use-is-mobile'
 import { cn } from '../../lib/cn'
 import { Button } from '../button/button'
 import { Drawer, DrawerDescription, DrawerHeader, DrawerTitle } from '../drawer/drawer'
@@ -24,20 +25,6 @@ const SIDEBAR_WIDTH = '16rem'
 const SIDEBAR_WIDTH_MOBILE = '18rem'
 const SIDEBAR_WIDTH_ICON = '3rem'
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b'
-const MOBILE_MEDIA_QUERY = '(max-width: 47.99rem)'
-
-/** Reactive media-query flag for viewports below the `md` breakpoint. */
-function useIsMobile() {
-  return React.useSyncExternalStore(
-    (onStoreChange) => {
-      const query = window.matchMedia(MOBILE_MEDIA_QUERY)
-      query.addEventListener('change', onStoreChange)
-      return () => query.removeEventListener('change', onStoreChange)
-    },
-    () => window.matchMedia(MOBILE_MEDIA_QUERY).matches,
-    () => false,
-  )
-}
 
 type SidebarContextProps = {
   state: 'expanded' | 'collapsed'
