@@ -27,7 +27,9 @@ describe('Table', () => {
         </TableHeader>
         <TableBody>
           <TableRow>
-            <TableCell><TableNumber>1.200 €</TableNumber></TableCell>
+            <TableCell>
+              <TableNumber>1.200 €</TableNumber>
+            </TableCell>
           </TableRow>
         </TableBody>
         <TableFooter>

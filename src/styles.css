@@ -266,7 +266,9 @@
 [data-slot='app-shell-sidebar-content'] a,
 [data-slot='app-shell-sidebar-footer'] a {
   outline: none;
-  transition: background-color 150ms ease, color 150ms ease;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
 }
 
 [data-slot='app-shell-sidebar-content'] a[aria-current='page'],
@@ -360,7 +362,8 @@
     padding: 1rem;
   }
 
-  [data-slot='app-shell'][data-variant='inset'] > :is([data-slot='app-shell-sidebar'], [data-slot='sidebar']) {
+  [data-slot='app-shell'][data-variant='inset']
+    > :is([data-slot='app-shell-sidebar'], [data-slot='sidebar']) {
     height: calc(100svh - 2rem);
     border: 1px solid var(--ui-border);
     border-right: 0;
@@ -382,7 +385,8 @@
     flex-direction: row;
   }
 
-  [data-slot='app-shell'][data-sidebar-breakpoint='sm'] > :is([data-slot='app-shell-sidebar'], [data-slot='sidebar']) {
+  [data-slot='app-shell'][data-sidebar-breakpoint='sm']
+    > :is([data-slot='app-shell-sidebar'], [data-slot='sidebar']) {
     display: flex;
   }
 
@@ -396,7 +400,8 @@
     flex-direction: row;
   }
 
-  [data-slot='app-shell'][data-sidebar-breakpoint='md'] > :is([data-slot='app-shell-sidebar'], [data-slot='sidebar']) {
+  [data-slot='app-shell'][data-sidebar-breakpoint='md']
+    > :is([data-slot='app-shell-sidebar'], [data-slot='sidebar']) {
     display: flex;
   }
 
@@ -410,7 +415,8 @@
     flex-direction: row;
   }
 
-  [data-slot='app-shell'][data-sidebar-breakpoint='lg'] > :is([data-slot='app-shell-sidebar'], [data-slot='sidebar']) {
+  [data-slot='app-shell'][data-sidebar-breakpoint='lg']
+    > :is([data-slot='app-shell-sidebar'], [data-slot='sidebar']) {
     display: flex;
   }
 

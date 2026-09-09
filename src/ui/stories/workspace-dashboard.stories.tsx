@@ -14,6 +14,7 @@ import {
   WalletCards,
 } from 'lucide-react'
 
+import { cn } from '../../lib/cn'
 import {
   AppShell,
   AppShellContent,
@@ -37,7 +38,6 @@ import {
   CardToolbar,
 } from '../card/card'
 import { Input } from '../input/input'
-import { cn } from '../../lib/cn'
 import { MetricCard } from '../metric-card/metric-card'
 import { MetricGrid } from '../metric-grid/metric-grid'
 import {
@@ -170,7 +170,9 @@ export const Default: Story = {
               }
               name="Guillem Martínez"
               description="Administrador"
-              action={<MoreHorizontal aria-hidden="true" className="size-4 text-muted-foreground" />}
+              action={
+                <MoreHorizontal aria-hidden="true" className="text-muted-foreground size-4" />
+              }
             />
           </SidebarFooter>
         </Sidebar>
@@ -258,7 +260,9 @@ export const Default: Story = {
                 <Card size="lg" variant="flat">
                   <CardHeader>
                     <CardTitle>Evolución de ingresos</CardTitle>
-                    <CardDescription>Comparativa acumulada de los últimos seis meses.</CardDescription>
+                    <CardDescription>
+                      Comparativa acumulada de los últimos seis meses.
+                    </CardDescription>
                     <CardAction>
                       <Button variant="ghost" size="icon-sm" aria-label="Más opciones">
                         <MoreHorizontal />
@@ -279,7 +283,7 @@ export const Default: Story = {
                     <div className="relative min-w-44 flex-1">
                       <Search
                         aria-hidden="true"
-                        className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
+                        className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
                       />
                       <Input aria-label="Buscar actividad" placeholder="Buscar" className="pl-9" />
                     </div>
@@ -300,21 +304,27 @@ export const Default: Story = {
                           <TableCell>
                             <Badge variant="success">Verificado</Badge>
                           </TableCell>
-                          <TableCell><TableNumber>4.200 €</TableNumber></TableCell>
+                          <TableCell>
+                            <TableNumber>4.200 €</TableNumber>
+                          </TableCell>
                         </TableRow>
                         <TableRow>
                           <TableCell>Factura · Northwind</TableCell>
                           <TableCell>
                             <Badge variant="warning">Revisar</Badge>
                           </TableCell>
-                          <TableCell><TableNumber>1.840 €</TableNumber></TableCell>
+                          <TableCell>
+                            <TableNumber>1.840 €</TableNumber>
+                          </TableCell>
                         </TableRow>
                         <TableRow>
                           <TableCell>Suscripción · Contoso</TableCell>
                           <TableCell>
                             <Badge variant="info">Pendiente</Badge>
                           </TableCell>
-                          <TableCell><TableNumber>920 €</TableNumber></TableCell>
+                          <TableCell>
+                            <TableNumber>920 €</TableNumber>
+                          </TableCell>
                         </TableRow>
                       </TableBody>
                     </Table>

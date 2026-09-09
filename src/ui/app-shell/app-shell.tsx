@@ -38,16 +38,15 @@ export type AppShellSidebarProps = React.ComponentProps<'aside'> & {
   width?: 'compact' | 'default' | 'wide'
 }
 
-export function AppShellSidebar({
-  className,
-  width = 'default',
-  ...props
-}: AppShellSidebarProps) {
+export function AppShellSidebar({ className, width = 'default', ...props }: AppShellSidebarProps) {
   return (
     <aside
       data-slot="app-shell-sidebar"
       data-width={width}
-      className={cn('shrink-0 border-r border-border bg-sidebar text-sidebar-foreground', className)}
+      className={cn(
+        'shrink-0 border-r border-border bg-sidebar text-sidebar-foreground',
+        className,
+      )}
       {...props}
     />
   )
@@ -79,7 +78,10 @@ export function AppShellSidebarFooter({ className, ...props }: React.ComponentPr
   return (
     <div
       data-slot="app-shell-sidebar-footer"
-      className={cn('mt-auto flex shrink-0 flex-col gap-1 border-t border-border/70 px-3 py-4', className)}
+      className={cn(
+        'mt-auto flex shrink-0 flex-col gap-1 border-t border-border/70 px-3 py-4',
+        className,
+      )}
       {...props}
     />
   )

@@ -130,15 +130,15 @@ export function SidebarWorkspace({
       {...props}
     >
       {logo ? (
-        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-card shadow-[var(--ui-shadow-hairline)]">
+        <span className="bg-card flex size-8 shrink-0 items-center justify-center rounded-lg shadow-[var(--ui-shadow-hairline)]">
           {logo}
         </span>
       ) : null}
       <span className={cn('min-w-0 flex-1', collapsed && 'sr-only')}>
         {eyebrow ? (
-          <span className="block truncate text-[0.6875rem] text-muted-foreground">{eyebrow}</span>
+          <span className="text-muted-foreground block truncate text-[0.6875rem]">{eyebrow}</span>
         ) : null}
-        <span className="block truncate text-sm font-medium text-foreground">{name}</span>
+        <span className="text-foreground block truncate text-sm font-medium">{name}</span>
       </span>
       <span
         aria-hidden="true"
@@ -200,9 +200,9 @@ export function SidebarProfile({
     >
       {avatar ? <span className="shrink-0">{avatar}</span> : null}
       <span className={cn('min-w-0 flex-1', collapsed && 'sr-only')}>
-        <span className="block truncate text-sm font-medium text-foreground">{name}</span>
+        <span className="text-foreground block truncate text-sm font-medium">{name}</span>
         {description ? (
-          <span className="block truncate text-xs text-muted-foreground">{description}</span>
+          <span className="text-muted-foreground block truncate text-xs">{description}</span>
         ) : null}
       </span>
       {action && !collapsed ? <span className="shrink-0">{action}</span> : null}

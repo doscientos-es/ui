@@ -53,7 +53,10 @@ export function PageHeaderMeta({ className, ...props }: React.ComponentProps<'di
   return (
     <div
       data-slot="page-header-meta"
-      className={cn('mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground', className)}
+      className={cn(
+        'mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground',
+        className,
+      )}
       {...props}
     />
   )

@@ -49,6 +49,27 @@ export const Statuses: Story = {
     </div>
   ),
 }
+export const TableStatuses: Story = {
+  render: () => (
+    <div className="divide-border border-border flex max-w-md flex-col divide-y rounded-lg border">
+      {[
+        { label: 'GMT+3', status: 'Verificado', variant: 'success' },
+        { label: 'GMT+5', status: 'Revisión', variant: 'warning' },
+        { label: 'GMT+2', status: 'Pendiente', variant: 'info' },
+        { label: 'GMT+1', status: 'Riesgo alto', variant: 'danger' },
+        { label: 'GMT+0', status: 'Verificado', variant: 'success' },
+      ].map(({ label, status, variant }) => (
+        <div key={label} className="flex items-center justify-between px-4 py-3">
+          <Badge variant="outline" icon={false}>
+            {label}
+          </Badge>
+          <Badge variant={variant as 'success' | 'warning' | 'info' | 'danger'}>{status}</Badge>
+        </div>
+      ))}
+    </div>
+  ),
+}
+
 export const AsLink: Story = {
   render: () => (
     <BadgeLink href="#invoices" variant="outline">

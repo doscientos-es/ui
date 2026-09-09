@@ -1,5 +1,5 @@
 import type { VariantProps } from 'class-variance-authority'
-import { AlertTriangle, Check, Clock3, Info } from 'lucide-react'
+import { BadgeCheck, Bell, Loader, OctagonAlert } from 'lucide-react'
 import type * as React from 'react'
 import { Link, type LinkProps } from 'react-aria-components'
 
@@ -12,11 +12,11 @@ type BadgeIconProps = {
 }
 
 const statusIcons = {
-  success: Check,
-  warning: Clock3,
-  info: Info,
-  danger: AlertTriangle,
-  destructive: AlertTriangle,
+  success: BadgeCheck,
+  warning: Bell,
+  info: Loader,
+  danger: OctagonAlert,
+  destructive: OctagonAlert,
 }
 
 function BadgeIcon({ icon, variant }: BadgeIconProps & VariantProps<typeof badgeVariants>) {
@@ -30,7 +30,7 @@ function BadgeIcon({ icon, variant }: BadgeIconProps & VariantProps<typeof badge
     <span
       data-slot="badge-icon"
       aria-hidden="true"
-      className="pointer-events-none inline-flex size-3.5 shrink-0 items-center justify-center [&>svg]:size-full"
+      className="pointer-events-none inline-flex size-3 shrink-0 items-center justify-center [&>svg]:size-full"
     >
       {content}
     </span>

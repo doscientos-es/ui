@@ -1,5 +1,5 @@
-import type * as React from 'react'
 import { Minus, TrendingDown, TrendingUp } from 'lucide-react'
+import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { Card, CardAction, CardContent, CardFooter, CardHeader } from '../card/card'
@@ -48,7 +48,8 @@ export function MetricCard({
   loadingLabel = 'Cargando métrica',
   ...props
 }: MetricCardProps) {
-  const support = footer ??
+  const support =
+    footer ??
     (delta || description ? (
       <>
         {delta ? (
@@ -68,7 +69,10 @@ export function MetricCard({
           </span>
         ) : null}
         {description ? (
-          <span data-slot="metric-card-description" className="min-w-0 text-xs text-muted-foreground">
+          <span
+            data-slot="metric-card-description"
+            className="text-muted-foreground min-w-0 text-xs"
+          >
             {description}
           </span>
         ) : null}
@@ -100,7 +104,10 @@ export function MetricCard({
             {icon}
           </div>
         ) : null}
-        <p data-slot="metric-card-label" className="min-w-0 flex-1 truncate text-sm text-muted-foreground">
+        <p
+          data-slot="metric-card-label"
+          className="text-muted-foreground min-w-0 flex-1 truncate text-sm"
+        >
           {label}
         </p>
         {action ? <CardAction className="self-center">{action}</CardAction> : null}
@@ -114,14 +121,14 @@ export function MetricCard({
             <span
               data-slot="metric-card-loading"
               aria-label={loadingLabel}
-              className="block h-8 w-28 animate-pulse rounded-lg bg-muted motion-reduce:animate-none"
+              className="bg-muted block h-8 w-28 animate-pulse rounded-lg motion-reduce:animate-none"
             />
           ) : (
             value
           )}
         </strong>
         {visual ? (
-          <div data-slot="metric-card-visual" className="min-w-0 shrink-0 text-muted-foreground">
+          <div data-slot="metric-card-visual" className="text-muted-foreground min-w-0 shrink-0">
             {visual}
           </div>
         ) : null}

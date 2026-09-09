@@ -28,7 +28,9 @@ describe('AppShell', () => {
   it('supports a persistent sidebar and mobile header at a configurable breakpoint', () => {
     const { container } = render(
       <AppShell sidebarBreakpoint="lg">
-        <AppShellSidebar width="wide" aria-label="Navegación">Navegación</AppShellSidebar>
+        <AppShellSidebar width="wide" aria-label="Navegación">
+          Navegación
+        </AppShellSidebar>
         <AppShellMain>
           <AppShellMobileHeader>Menú</AppShellMobileHeader>
           <AppShellContent size="full" padded={false} scrollable={false} density="compact">
