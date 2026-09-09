@@ -15,17 +15,9 @@ import {
 } from 'lucide-react'
 
 import { cn } from '../../lib/cn'
-import {
-  AppShell,
-  AppShellContent,
-  AppShellHeader,
-  AppShellHeaderActions,
-  AppShellHeaderContext,
-  AppShellMain,
-  AppShellMobileHeader,
-} from '../app-shell/app-shell'
 import { Avatar, AvatarFallback } from '../avatar/avatar'
 import { Badge } from '../badge/badge'
+import { BrandMark } from '../brand/brand'
 import { Breadcrumb, BreadcrumbLink, BreadcrumbPage, Breadcrumbs } from '../breadcrumb/breadcrumb'
 import { Button } from '../button/button'
 import {
@@ -48,17 +40,24 @@ import {
   PageHeaderTitle,
   PageStack,
 } from '../page-header/page-header'
+import { Separator } from '../separator/separator'
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
-  SidebarItem,
-  SidebarProfile,
+  SidebarInput,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuBadge,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarProvider,
-  SidebarSearch,
-  SidebarWorkspace,
+  SidebarRail,
+  SidebarTrigger,
 } from '../sidebar/sidebar'
 import {
   Table,
@@ -135,206 +134,251 @@ function RevenueChart() {
 export const Default: Story = {
   render: () => (
     <SidebarProvider>
-      <AppShell variant="inset" sidebarBreakpoint="sm">
-        <Sidebar className="border-r-0">
-          <SidebarHeader>
-            <SidebarWorkspace
-              eyebrow="Workspace"
-              name="Estudio Doscientos"
-              logo={<span className="font-semibold">D</span>}
-            />
-          </SidebarHeader>
-          <div className="px-3 pb-4">
-            <SidebarSearch label="Buscar" />
-          </div>
-          <SidebarContent>
-            <SidebarGroup label="Principal">
-              <SidebarItem href="#overview" icon={<House />} label="Resumen" active />
-              <SidebarItem href="#customers" icon={<Users />} label="Clientes" badge="248" />
-              <SidebarItem href="#campaigns" icon={<Megaphone />} label="Campañas" />
-              <SidebarItem href="#billing" icon={<WalletCards />} label="Facturación" />
-            </SidebarGroup>
-            <SidebarGroup label="Análisis">
-              <SidebarItem href="#performance" icon={<Activity />} label="Rendimiento" />
-              <SidebarItem href="#reports" icon={<FileText />} label="Informes" />
-            </SidebarGroup>
-          </SidebarContent>
-          <SidebarFooter>
-            <SidebarItem href="#help" icon={<CircleHelp />} label="Ayuda" />
-            <SidebarItem href="#settings" icon={<Settings />} label="Configuración" />
-            <SidebarProfile
-              avatar={
-                <Avatar>
-                  <AvatarFallback className="bg-primary text-primary-foreground">GM</AvatarFallback>
+      <Sidebar variant="inset">
+        <SidebarHeader className="gap-3 p-3">
+          <BrandMark name="Estudio Doscientos" size="sm" />
+          <SidebarInput aria-label="Buscar" placeholder="Buscar" />
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Principal</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton href="#overview" isActive tooltip="Resumen">
+                    <House aria-hidden="true" />
+                    Resumen
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton href="#customers" tooltip="Clientes">
+                    <Users aria-hidden="true" />
+                    Clientes
+                  </SidebarMenuButton>
+                  <SidebarMenuBadge>248</SidebarMenuBadge>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton href="#campaigns" tooltip="Campañas">
+                    <Megaphone aria-hidden="true" />
+                    Campañas
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton href="#billing" tooltip="Facturación">
+                    <WalletCards aria-hidden="true" />
+                    Facturación
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+          <SidebarGroup>
+            <SidebarGroupLabel>Análisis</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton href="#performance" tooltip="Rendimiento">
+                    <Activity aria-hidden="true" />
+                    Rendimiento
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton href="#reports" tooltip="Informes">
+                    <FileText aria-hidden="true" />
+                    Informes
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton href="#help">
+                <CircleHelp aria-hidden="true" />
+                Ayuda
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton href="#settings">
+                <Settings aria-hidden="true" />
+                Configuración
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton size="lg">
+                <Avatar className="size-8">
+                  <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                    GM
+                  </AvatarFallback>
                 </Avatar>
-              }
-              name="Guillem Martínez"
-              description="Administrador"
-              action={
-                <MoreHorizontal aria-hidden="true" className="text-muted-foreground size-4" />
-              }
-            />
-          </SidebarFooter>
-        </Sidebar>
+                <span className="grid flex-1 text-left leading-tight">
+                  <span className="truncate font-medium">Guillem Martínez</span>
+                  <span className="text-muted-foreground truncate text-xs">Administrador</span>
+                </span>
+                <MoreHorizontal aria-hidden="true" className="text-muted-foreground ml-auto" />
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+        <SidebarRail />
+      </Sidebar>
 
-        <AppShellMain>
-          <AppShellMobileHeader>
-            <strong>Estudio Doscientos</strong>
-          </AppShellMobileHeader>
-          <AppShellHeader className="gap-4 px-5">
-            <AppShellHeaderContext>
-              <Breadcrumbs>
-                <Breadcrumb>
-                  <BreadcrumbLink href="#workspace">Workspace</BreadcrumbLink>
-                </Breadcrumb>
-                <Breadcrumb>
-                  <BreadcrumbPage>Resumen</BreadcrumbPage>
-                </Breadcrumb>
-              </Breadcrumbs>
-            </AppShellHeaderContext>
-            <AppShellHeaderActions>
-              <Button variant="ghost" size="icon" aria-label="Buscar">
-                <Search />
-              </Button>
-              <Button variant="ghost" size="icon" aria-label="Notificaciones">
-                <Bell />
-              </Button>
-            </AppShellHeaderActions>
-          </AppShellHeader>
+      <SidebarInset>
+        <header className="border-border flex h-14 shrink-0 items-center gap-3 border-b px-4">
+          <SidebarTrigger />
+          <Separator orientation="vertical" className="h-4" />
+          <Breadcrumbs>
+            <Breadcrumb>
+              <BreadcrumbLink href="#workspace">Workspace</BreadcrumbLink>
+            </Breadcrumb>
+            <Breadcrumb>
+              <BreadcrumbPage>Resumen</BreadcrumbPage>
+            </Breadcrumb>
+          </Breadcrumbs>
+          <div className="ml-auto flex items-center gap-1">
+            <Button variant="ghost" size="icon-sm" aria-label="Buscar">
+              <Search />
+            </Button>
+            <Button variant="ghost" size="icon-sm" aria-label="Notificaciones">
+              <Bell />
+            </Button>
+          </div>
+        </header>
 
-          <AppShellContent size="wide" density="comfortable">
-            <PageStack>
-              <PageHeader>
-                <PageHeaderHeading>
-                  <PageHeaderTitle>Buenos días, Guillem</PageHeaderTitle>
-                  <PageHeaderDescription>
-                    Este es el pulso del negocio durante los últimos 30 días.
-                  </PageHeaderDescription>
-                </PageHeaderHeading>
-                <PageHeaderActions>
-                  <Button variant="outline">Exportar</Button>
-                  <Button>
-                    <Plus data-icon="inline-start" />
-                    Nuevo informe
-                  </Button>
-                </PageHeaderActions>
-              </PageHeader>
+        <div className="min-h-0 min-w-0 flex-1 overflow-y-auto p-4 sm:p-6">
+          <PageStack>
+            <PageHeader>
+              <PageHeaderHeading>
+                <PageHeaderTitle>Buenos días, Guillem</PageHeaderTitle>
+                <PageHeaderDescription>
+                  Este es el pulso del negocio durante los últimos 30 días.
+                </PageHeaderDescription>
+              </PageHeaderHeading>
+              <PageHeaderActions>
+                <Button variant="outline">Exportar</Button>
+                <Button>
+                  <Plus data-icon="inline-start" />
+                  Nuevo informe
+                </Button>
+              </PageHeaderActions>
+            </PageHeader>
 
-              <MetricGrid columns={3}>
-                <MetricCard
-                  label="Ingresos netos"
-                  value="48.290 €"
-                  icon={<WalletCards aria-hidden="true" />}
-                  tone="info"
-                  trend="up"
-                  delta="18,4%"
-                  description="frente al periodo anterior"
-                  visual={<MetricBars />}
-                  variant="flat"
-                />
-                <MetricCard
-                  label="Clientes activos"
-                  value="248"
-                  icon={<Users aria-hidden="true" />}
-                  tone="success"
-                  trend="up"
-                  delta="12 nuevos"
-                  description="este mes"
-                  visual={<MetricBars tone="success" />}
-                  variant="flat"
-                />
-                <MetricCard
-                  label="Facturas pendientes"
-                  value="12.840 €"
-                  icon={<FileText aria-hidden="true" />}
-                  tone="warning"
-                  trend="neutral"
-                  delta="8 facturas"
-                  description="requieren seguimiento"
-                  visual={<MetricBars tone="warning" />}
-                  variant="flat"
-                />
-              </MetricGrid>
+            <MetricGrid columns={3}>
+              <MetricCard
+                label="Ingresos netos"
+                value="48.290 €"
+                icon={<WalletCards aria-hidden="true" />}
+                tone="info"
+                trend="up"
+                delta="18,4%"
+                description="frente al periodo anterior"
+                visual={<MetricBars />}
+                variant="flat"
+              />
+              <MetricCard
+                label="Clientes activos"
+                value="248"
+                icon={<Users aria-hidden="true" />}
+                tone="success"
+                trend="up"
+                delta="12 nuevos"
+                description="este mes"
+                visual={<MetricBars tone="success" />}
+                variant="flat"
+              />
+              <MetricCard
+                label="Facturas pendientes"
+                value="12.840 €"
+                icon={<FileText aria-hidden="true" />}
+                tone="warning"
+                trend="neutral"
+                delta="8 facturas"
+                description="requieren seguimiento"
+                visual={<MetricBars tone="warning" />}
+                variant="flat"
+              />
+            </MetricGrid>
 
-              <div className="grid min-w-0 gap-(--ui-content-gap,1.5rem) xl:grid-cols-[minmax(0,1.55fr)_minmax(22rem,1fr)]">
-                <Card size="lg" variant="flat">
-                  <CardHeader>
-                    <CardTitle>Evolución de ingresos</CardTitle>
-                    <CardDescription>
-                      Comparativa acumulada de los últimos seis meses.
-                    </CardDescription>
-                    <CardAction>
-                      <Button variant="ghost" size="icon-sm" aria-label="Más opciones">
-                        <MoreHorizontal />
-                      </Button>
-                    </CardAction>
-                  </CardHeader>
-                  <CardContent>
-                    <RevenueChart />
-                  </CardContent>
-                </Card>
+            <div className="grid min-w-0 gap-(--ui-content-gap,1.5rem) xl:grid-cols-[minmax(0,1.55fr)_minmax(22rem,1fr)]">
+              <Card size="lg" variant="flat">
+                <CardHeader>
+                  <CardTitle>Evolución de ingresos</CardTitle>
+                  <CardDescription>
+                    Comparativa acumulada de los últimos seis meses.
+                  </CardDescription>
+                  <CardAction>
+                    <Button variant="ghost" size="icon-sm" aria-label="Más opciones">
+                      <MoreHorizontal />
+                    </Button>
+                  </CardAction>
+                </CardHeader>
+                <CardContent>
+                  <RevenueChart />
+                </CardContent>
+              </Card>
 
-                <Card size="lg" variant="flat" className="gap-0">
-                  <CardHeader className="pb-5">
-                    <CardTitle>Actividad reciente</CardTitle>
-                    <CardDescription>Movimientos que requieren contexto.</CardDescription>
-                  </CardHeader>
-                  <CardToolbar>
-                    <div className="relative min-w-44 flex-1">
-                      <Search
-                        aria-hidden="true"
-                        className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
-                      />
-                      <Input aria-label="Buscar actividad" placeholder="Buscar" className="pl-9" />
-                    </div>
-                    <Button variant="outline">Filtrar</Button>
-                  </CardToolbar>
-                  <CardContent className="px-0">
-                    <Table density="compact">
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Movimiento</TableHead>
-                          <TableHead>Estado</TableHead>
-                          <TableHead className="text-right">Importe</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell>Cobro · Acme Studio</TableCell>
-                          <TableCell>
-                            <Badge variant="success">Verificado</Badge>
-                          </TableCell>
-                          <TableCell>
-                            <TableNumber>4.200 €</TableNumber>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>Factura · Northwind</TableCell>
-                          <TableCell>
-                            <Badge variant="warning">Revisar</Badge>
-                          </TableCell>
-                          <TableCell>
-                            <TableNumber>1.840 €</TableNumber>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>Suscripción · Contoso</TableCell>
-                          <TableCell>
-                            <Badge variant="info">Pendiente</Badge>
-                          </TableCell>
-                          <TableCell>
-                            <TableNumber>920 €</TableNumber>
-                          </TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
-              </div>
-            </PageStack>
-          </AppShellContent>
-        </AppShellMain>
-      </AppShell>
+              <Card size="lg" variant="flat" className="gap-0">
+                <CardHeader className="pb-5">
+                  <CardTitle>Actividad reciente</CardTitle>
+                  <CardDescription>Movimientos que requieren contexto.</CardDescription>
+                </CardHeader>
+                <CardToolbar>
+                  <div className="relative min-w-44 flex-1">
+                    <Search
+                      aria-hidden="true"
+                      className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
+                    />
+                    <Input aria-label="Buscar actividad" placeholder="Buscar" className="pl-9" />
+                  </div>
+                  <Button variant="outline">Filtrar</Button>
+                </CardToolbar>
+                <CardContent className="px-0">
+                  <Table density="compact">
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Movimiento</TableHead>
+                        <TableHead>Estado</TableHead>
+                        <TableHead className="text-right">Importe</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>Cobro · Acme Studio</TableCell>
+                        <TableCell>
+                          <Badge variant="success">Verificado</Badge>
+                        </TableCell>
+                        <TableCell>
+                          <TableNumber>4.200 €</TableNumber>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Factura · Northwind</TableCell>
+                        <TableCell>
+                          <Badge variant="warning">Revisar</Badge>
+                        </TableCell>
+                        <TableCell>
+                          <TableNumber>1.840 €</TableNumber>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Suscripción · Contoso</TableCell>
+                        <TableCell>
+                          <Badge variant="info">Pendiente</Badge>
+                        </TableCell>
+                        <TableCell>
+                          <TableNumber>920 €</TableNumber>
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </div>
+          </PageStack>
+        </div>
+      </SidebarInset>
     </SidebarProvider>
   ),
 }

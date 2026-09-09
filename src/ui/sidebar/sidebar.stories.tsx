@@ -46,8 +46,8 @@ function SidebarNav() {
               <SidebarMenuButton href="#reservas" tooltip="Reservas">
                 <CalendarDays aria-hidden="true" />
                 Reservas
-                <SidebarMenuBadge>24</SidebarMenuBadge>
               </SidebarMenuButton>
+              <SidebarMenuBadge>24</SidebarMenuBadge>
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton href="#clientes" tooltip="Clientes">

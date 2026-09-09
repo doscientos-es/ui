@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -6,29 +6,43 @@ import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarItem,
-  SidebarProfile,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarProvider,
-  SidebarSearch,
   SidebarTrigger,
-  SidebarWorkspace,
 } from './sidebar'
 
+function sidebarState() {
+  return document.querySelector('[data-slot="sidebar"]')?.getAttribute('data-state')
+}
+
 describe('Sidebar', () => {
-  it('renders accessible navigation and active item', () => {
+  it('marks the active menu link as the current page', () => {
     render(
       <SidebarProvider>
         <Sidebar>
           <SidebarContent>
-            <SidebarGroup label="Workspace">
-              <SidebarItem href="/clientes" label="Clientes" active />
+            <SidebarGroup>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton href="/clientes" isActive>
+                      Clientes
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
             </SidebarGroup>
           </SidebarContent>
         </Sidebar>
       </SidebarProvider>,
     )
-    expect(screen.getByRole('navigation', { name: 'Navegación principal' })).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'Clientes' }).getAttribute('aria-current')).toBe('page')
+
+    const link = screen.getByRole('link', { name: 'Clientes' })
+    expect(link.getAttribute('aria-current')).toBe('page')
+    expect(link.getAttribute('data-active')).toBe('true')
   })
 
   it('toggles its collapsed state with an accessible trigger', async () => {
@@ -40,9 +54,11 @@ describe('Sidebar', () => {
         </Sidebar>
       </SidebarProvider>,
     )
-    const trigger = screen.getByRole('button', { name: 'Colapsar navegación' })
-    await user.click(trigger)
+
+    await user.click(screen.getByRole('button', { name: 'Colapsar navegación' }))
+
     expect(screen.getByRole('button', { name: 'Expandir navegación' })).toBeTruthy()
+    expect(sidebarState()).toBe('collapsed')
   })
 
   it('composes consumer handlers without losing its toggle behavior', async () => {
@@ -59,38 +75,36 @@ describe('Sidebar', () => {
     await user.click(screen.getByRole('button', { name: 'Colapsar navegación' }))
 
     expect(onPress).toHaveBeenCalledOnce()
-    expect(screen.getByRole('button', { name: 'Expandir navegación' })).toBeTruthy()
+    expect(sidebarState()).toBe('collapsed')
   })
 
   it('reports state changes in controlled usage', async () => {
     const user = userEvent.setup()
-    const onCollapsedChange = vi.fn()
+    const onOpenChange = vi.fn()
     render(
-      <SidebarProvider collapsed={false} onCollapsedChange={onCollapsedChange}>
+      <SidebarProvider open={false} onOpenChange={onOpenChange}>
         <Sidebar>
           <SidebarTrigger />
         </Sidebar>
       </SidebarProvider>,
     )
 
-    await user.click(screen.getByRole('button', { name: 'Colapsar navegación' }))
+    await user.click(screen.getByRole('button', { name: 'Expandir navegación' }))
 
-    expect(onCollapsedChange).toHaveBeenCalledWith(true)
+    expect(onOpenChange).toHaveBeenCalledWith(true)
   })
 
-  it('keeps workspace, search and profile accessible when collapsed', () => {
+  it('toggles with the keyboard shortcut', () => {
     render(
-      <SidebarProvider defaultCollapsed>
+      <SidebarProvider>
         <Sidebar>
-          <SidebarWorkspace name="Estudio" />
-          <SidebarSearch label="Buscar" />
-          <SidebarProfile avatar={<span>GM</span>} name="Guillem" description="Admin" />
+          <SidebarTrigger />
         </Sidebar>
       </SidebarProvider>,
     )
 
-    expect(screen.getByRole('button', { name: 'Estudio' })).toBeTruthy()
-    expect(screen.getByRole('button', { name: 'Buscar' })).toBeTruthy()
-    expect(screen.getByText('Guillem').parentElement?.className).toContain('sr-only')
+    fireEvent.keyDown(window, { key: 'b', ctrlKey: true })
+
+    expect(sidebarState()).toBe('collapsed')
   })
 })
