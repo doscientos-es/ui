@@ -181,27 +181,6 @@ function DrawerDescription({
   )
 }
 
-/** @deprecated Use {@link DrawerContent}. */
-const Sheet = DrawerContent
-/** @deprecated Use {@link DrawerPrimitiveProps}. */
-type SheetPrimitiveProps = DrawerPrimitiveProps
-/** @deprecated Use {@link DrawerClose}. */
-const SheetClose = DrawerClose
-/** @deprecated Use {@link DrawerContent}. */
-const SheetContent = DrawerContent
-/** @deprecated Use {@link DrawerDescription}. */
-const SheetDescription = DrawerDescription
-/** @deprecated Use {@link DrawerFooter}. */
-const SheetFooter = DrawerFooter
-/** @deprecated Use {@link DrawerHeader}. */
-const SheetHeader = DrawerHeader
-/** @deprecated Use {@link DrawerTitle}. */
-const SheetTitle = DrawerTitle
-/** @deprecated Use {@link DrawerTrigger}. */
-const SheetTrigger = DrawerTrigger
-/** @deprecated Use {@link DrawerTriggerPrimitiveProps}. */
-type SheetTriggerPrimitiveProps = DrawerTriggerPrimitiveProps
-
 export {
   Drawer,
   DrawerClose,
@@ -211,16 +190,6 @@ export {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
   type DrawerPrimitiveProps,
   type DrawerTriggerPrimitiveProps,
-  type SheetPrimitiveProps,
-  type SheetTriggerPrimitiveProps,
 }
