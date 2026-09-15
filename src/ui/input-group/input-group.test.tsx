@@ -17,6 +17,7 @@ describe('InputGroup', () => {
     )
 
     await user.tab()
+    await user.tab()
     const button = screen.getByRole('button', { name: 'Mostrar contraseña' })
     expect(document.activeElement).toBe(button)
     expect(button.closest('[data-slot="input-group"]')?.className).toContain(
