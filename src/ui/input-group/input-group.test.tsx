@@ -18,7 +18,7 @@ describe('InputGroup', () => {
 
     await user.tab()
     const button = screen.getByRole('button', { name: 'Mostrar contraseña' })
-    expect(button.matches(':focus-visible')).toBe(true)
+    expect(document.activeElement).toBe(button)
     expect(button.closest('[data-slot="input-group"]')?.className).toContain(
       'has-[[data-slot=input-group-button]:focus-visible]:ring-3',
     )
