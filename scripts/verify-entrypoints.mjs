@@ -14,4 +14,4 @@ for (const name of manifest) {
     await access(join(root, 'dist', 'generated-entrypoints', `${name}.${extension}`))
   }
 }
-console.log(`Verified ${manifest.length} public component entrypoints.`)
+process.stdout.write(`Verified ${manifest.length} public component entrypoints.\n`)

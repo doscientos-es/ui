@@ -34,4 +34,4 @@ for (const name of folders) {
 }
 
 await writeFile(join(entriesDir, 'manifest.json'), `${JSON.stringify(publicEntries, null, 2)}\n`)
-console.log(`Generated ${publicEntries.length} @doscientos/ui component entrypoints.`)
+process.stdout.write(`Generated ${publicEntries.length} @doscientos/ui component entrypoints.\n`)

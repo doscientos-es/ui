@@ -38,10 +38,13 @@ export type CalendarProps = {
 
 const DAY_MS = 86_400_000
 
+// These pure helpers are part of Calendar's public API and intentionally live beside the component.
+// oxlint-disable-next-line react/only-export-components
 export function snapMinutes(minutes: number, step = 30) {
   return Math.round(minutes / Math.max(1, step)) * Math.max(1, step)
 }
 
+// oxlint-disable-next-line react/only-export-components
 export function moveCalendarItem(
   item: CalendarItem,
   start: Date,
