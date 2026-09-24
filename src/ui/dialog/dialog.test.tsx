@@ -119,6 +119,38 @@ describe('Dialog', () => {
     ).toBe(true)
   })
 
+  it('keeps a comfortable mobile margin by default', () => {
+    render(
+      <Dialog open>
+        <DialogContent>
+          <DialogTitle>Detalle del pedido</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    const dialog = screen.getByRole('dialog', { name: 'Detalle del pedido' })
+    expect(dialog.classList.contains('w-[calc(100%-3rem)]')).toBe(true)
+    expect(dialog.classList.contains('max-w-[calc(100%-3rem)]')).toBe(true)
+  })
+
+  it('allows consumers to opt into a full-width dialog explicitly', () => {
+    render(
+      <Dialog open>
+        <DialogContent className="w-full max-w-none sm:max-w-none">
+          <DialogTitle>Calendario completo</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    const dialog = screen.getByRole('dialog', { name: 'Calendario completo' })
+    expect(dialog.classList.contains('w-full')).toBe(true)
+    expect(dialog.classList.contains('max-w-none')).toBe(true)
+    expect(dialog.classList.contains('sm:max-w-none')).toBe(true)
+    expect(dialog.classList.contains('w-[calc(100%-3rem)]')).toBe(false)
+    expect(dialog.classList.contains('max-w-[calc(100%-3rem)]')).toBe(false)
+    expect(dialog.classList.contains('sm:max-w-sm')).toBe(false)
+  })
+
   it('applies custom classes only to the dialog content', () => {
     render(
       <Dialog open>

@@ -16,7 +16,6 @@ export function PasswordRequirementsIndicator({
       aria-label={label}
       className="grid size-4 place-items-center rounded-full"
       data-slot="password-requirements-indicator"
-      role="status"
       style={{
         background: `conic-gradient(${color} ${normalizedProgress}%, var(--border) ${normalizedProgress}% 100%)`,
       }}

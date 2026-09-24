@@ -27,4 +27,5 @@ Thumbs.db
 .idea/
 .vscode/*
 !.vscode/extensions.json
+src/generated-entrypoints/
 !.vscode/settings.json

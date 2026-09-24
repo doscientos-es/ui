@@ -4,6 +4,83 @@
 @source "./";
 @custom-variant dark (&:is(.dark *));
 
+.dsc-calendar__month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+.dsc-calendar__month-day {
+  min-height: 7rem;
+  padding: 0.5rem;
+  border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+}
+.dsc-calendar__month-day > time,
+.dsc-calendar__time-axis time {
+  display: block;
+  font-size: 0.75rem;
+  opacity: 0.65;
+}
+.dsc-calendar__month-day button,
+.dsc-calendar__agenda-item {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  padding: 0.35rem 0.5rem;
+  border: 0;
+  border-radius: 0.4rem;
+  background: color-mix(in srgb, currentColor 8%, transparent);
+  text-align: left;
+  cursor: pointer;
+}
+.dsc-calendar__time-grid {
+  display: grid;
+  grid-template-columns: 4rem repeat(var(--calendar-days, 1), minmax(0, 1fr));
+  min-height: 36rem;
+}
+.dsc-calendar__time-axis {
+  display: grid;
+  grid-template-rows: repeat(var(--calendar-hours), minmax(2rem, 1fr));
+}
+.dsc-calendar__resource-column {
+  position: relative;
+  min-height: 36rem;
+  border-left: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc((100% / var(--calendar-hours)) - 1px),
+    color-mix(in srgb, currentColor 10%, transparent) calc(100% / var(--calendar-hours))
+  );
+}
+.dsc-calendar__resource-label {
+  padding: 0.6rem;
+  font-weight: 650;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+}
+.dsc-calendar__time-item {
+  position: absolute;
+  inset-inline: 0.35rem;
+  min-height: 2rem;
+  padding: 0.5rem;
+  border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, currentColor 10%, white);
+  cursor: grab;
+  transition:
+    transform 0.16s,
+    box-shadow 0.16s;
+}
+.dsc-calendar__time-item.is-dragging {
+  transform: rotate(1deg) scale(1.02);
+  box-shadow: 0 0.5rem 1.2rem #0002;
+  opacity: 0.75;
+}
+.dsc-calendar__agenda-day {
+  margin-block: 1rem;
+}
+.dsc-calendar__agenda-item {
+  padding: 0.7rem;
+}
+
 /*
  * Consume a host application's semantic tokens without redefining them.
  * Each alias falls back to the backoffice theme when the host omits a token.

@@ -168,6 +168,12 @@ export function AutocompleteCombobox<T extends object>({
   onKeyDown,
   ...props
 }: AutocompleteComboboxProps<T>) {
+  const accessibleLabel =
+    typeof label === 'string'
+      ? label
+      : typeof props['aria-label'] === 'string'
+        ? props['aria-label']
+        : undefined
   const [internalInputValue, setInternalInputValue] = useState('')
   const inputValue = controlledInputValue ?? internalInputValue
   const setInputValue = (value: string) => {
@@ -208,6 +214,7 @@ export function AutocompleteCombobox<T extends object>({
   return (
     <AriaComboBox<T>
       {...props}
+      aria-label={accessibleLabel}
       className={(state) =>
         cn(
           'group/combobox flex w-full flex-col gap-1.5',
@@ -238,6 +245,7 @@ export function AutocompleteCombobox<T extends object>({
           </span>
         )}
         <ComboboxInput
+          aria-label={accessibleLabel}
           aria-autocomplete={suggestionLabel ? 'both' : 'list'}
           placeholder={placeholder}
           onKeyDown={handleKeyDown}

@@ -30,13 +30,15 @@ export function ErrorStateIcon({
     />
   )
 }
-export function ErrorStateTitle({ className, ...props }: React.ComponentProps<'h2'>) {
+export function ErrorStateTitle({ className, children, ...props }: React.ComponentProps<'h2'>) {
   return (
     <h2
       data-slot="error-state-title"
       className={cn('font-semibold text-foreground', className)}
       {...props}
-    />
+    >
+      {children}
+    </h2>
   )
 }
 export function ErrorStateDescription({ className, ...props }: React.ComponentProps<'p'>) {

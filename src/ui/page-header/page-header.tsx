@@ -84,13 +84,15 @@ export function SectionHeader({ className, ...props }: React.ComponentProps<'div
 export function SectionHeaderHeading({ className, ...props }: React.ComponentProps<'div'>) {
   return <div data-slot="section-header-heading" className={cn('min-w-0', className)} {...props} />
 }
-export function SectionHeaderTitle({ className, ...props }: React.ComponentProps<'h2'>) {
+export function SectionHeaderTitle({ className, children, ...props }: React.ComponentProps<'h2'>) {
   return (
     <h2
       data-slot="section-header-title"
       className={cn('text-base font-semibold tracking-tight', className)}
       {...props}
-    />
+    >
+      {children}
+    </h2>
   )
 }
 export function SectionHeaderDescription({ className, ...props }: React.ComponentProps<'p'>) {

@@ -648,6 +648,9 @@ function SidebarMenuSubButton({
   )
 }
 
+// This module intentionally exposes the provider and its hook as one public
+// primitive; Fast Refresh's single-export heuristic is not applicable here.
+// oxlint-disable react/only-export-components
 export {
   Sidebar,
   SidebarContent,
