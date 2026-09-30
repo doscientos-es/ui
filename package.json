@@ -1,6 +1,6 @@
 {
   "name": "@doscientos/ui",
-  "version": "0.1.42",
+  "version": "0.1.43",
   "private": false,
   "description": "Accessible, themeable React primitives for Doscientos products.",
   "license": "SEE LICENSE IN LICENSE",
