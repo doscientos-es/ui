@@ -1,15 +1,26 @@
 import { defineConfig } from 'tsup'
 
-export default defineConfig({
-  entry: ['src/index.ts', 'src/generated-entrypoints/*.ts'],
+const shared = {
   format: ['esm', 'cjs'],
   dts: true,
   sourcemap: true,
-  clean: true,
+  // `dist` is emptied by the build:js script: parallel configs must not clean each other.
+  clean: false,
   external: ['react', 'react-dom', 'react/jsx-runtime'],
-  // The public barrel includes React Aria components and hooks. Preserve an
-  // RSC client boundary in the compiled artifacts consumed by Next.js apps.
-  banner: {
-    js: '"use client";',
+} as const
+
+export default defineConfig([
+  {
+    ...shared,
+    // Components and hooks need an RSC client boundary in Next.js apps.
+    entry: ['src/index.ts', 'src/generated-entrypoints/*.ts', '!src/generated-entrypoints/utils.ts'],
+    banner: { js: '"use client";' },
   },
-})
+  {
+    ...shared,
+    // Pure helpers (`@doscientos/ui/utils`) stay callable from Server Components.
+    // No splitting: each output is self-contained and cannot collide with client chunks.
+    entry: { 'generated-entrypoints/utils': 'src/generated-entrypoints/utils.ts' },
+    splitting: false,
+  },
+])

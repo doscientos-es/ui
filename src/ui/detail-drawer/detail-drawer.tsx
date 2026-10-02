@@ -5,7 +5,7 @@ import { DrawerContent, DrawerFooter, DrawerHeader } from '../drawer/drawer'
 
 /**
  * Drawer content frame for record details.
- * Use it as the content of `DrawerTrigger`, or control it directly with `isOpen` and `onOpenChange`.
+ * Use it as the content of `DrawerTrigger`, or control it directly with `open` and `onOpenChange`.
  */
 export function DetailDrawer({ children, ...props }: React.ComponentProps<typeof DrawerContent>) {
   return <DrawerContent {...props}>{children}</DrawerContent>

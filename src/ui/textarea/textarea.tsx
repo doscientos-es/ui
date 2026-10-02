@@ -5,10 +5,11 @@ import {
 } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
+import type { CompatibleRef } from '../../lib/compatible-ref'
 
-type CompatibleRef<T> = ((instance: T | null) => unknown) | { readonly current: T | null } | null
-
+/** Props for a multi-line text input. */
 export type TextareaProps = Omit<AriaTextAreaProps, 'ref'> & {
+  /** Ref compatible with all supported React 19 type releases. */
   ref?: CompatibleRef<HTMLTextAreaElement>
 }
 

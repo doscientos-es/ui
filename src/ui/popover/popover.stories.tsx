@@ -40,7 +40,7 @@ function FiltersPopover() {
     <Popover
       trigger="Filtrar facturas"
       triggerProps={{ variant: 'outline' }}
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={setIsOpen}
       className="w-72 p-4"
     >

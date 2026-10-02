@@ -8,15 +8,21 @@ import {
 
 import { cn } from '../../lib/cn'
 import { floatingSurfaceClassName } from '../../lib/floating-surface'
+import { type OpenStateProps, resolveOpen } from '../../lib/open-state'
 import { Button, type ButtonProps } from '../button/button'
 
 export type PopoverContentProps = Omit<AriaPopoverProps, 'className' | 'trigger'> & {
   className?: string
 }
-export type { DialogTriggerProps as PopoverTriggerProps }
+
+/** Props for {@link PopoverTrigger}. */
+export type PopoverTriggerProps = Omit<DialogTriggerProps, 'isOpen' | 'defaultOpen' | 'onOpenChange'> &
+  OpenStateProps
 
 /** Wrap a trigger and Popover surface; React Aria handles focus and positioning. */
-export const PopoverTrigger = AriaDialogTrigger
+export function PopoverTrigger({ open, isOpen, ...props }: PopoverTriggerProps) {
+  return <AriaDialogTrigger isOpen={resolveOpen({ open, isOpen })} {...props} />
+}
 
 /** Floating content positioned and focus-managed by {@link PopoverTrigger}. */
 export function PopoverContent({ className, ...props }: PopoverContentProps) {
@@ -34,10 +40,8 @@ export function PopoverContent({ className, ...props }: PopoverContentProps) {
   )
 }
 
-type PopoverTriggerStateProps = Pick<DialogTriggerProps, 'defaultOpen' | 'isOpen' | 'onOpenChange'>
-
 type SimplePopoverProps = PopoverContentProps &
-  PopoverTriggerStateProps & {
+  OpenStateProps & {
     /** Text for a default button, or an interactive element that opens the popover. */
     trigger: string | React.ReactElement
     /** Props for the default button rendered when {@link trigger} is text. */
@@ -54,13 +58,25 @@ export type PopoverProps = PopoverContentProps | SimplePopoverProps
 export function Popover(props: PopoverProps) {
   if (!('trigger' in props)) return <PopoverContent {...props} />
 
-  const { children, trigger, triggerProps, defaultOpen, isOpen, onOpenChange, ...contentProps } =
-    props
+  const {
+    children,
+    trigger,
+    triggerProps,
+    defaultOpen,
+    open,
+    isOpen,
+    onOpenChange,
+    ...contentProps
+  } = props
   const triggerElement =
     typeof trigger === 'string' ? <Button {...triggerProps}>{trigger}</Button> : trigger
 
   return (
-    <PopoverTrigger defaultOpen={defaultOpen} isOpen={isOpen} onOpenChange={onOpenChange}>
+    <PopoverTrigger
+      defaultOpen={defaultOpen}
+      open={resolveOpen({ open, isOpen })}
+      onOpenChange={onOpenChange}
+    >
       {triggerElement}
       <PopoverContent {...contentProps}>{children}</PopoverContent>
     </PopoverTrigger>

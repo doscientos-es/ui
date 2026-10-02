@@ -8,7 +8,7 @@ export type FormFeedbackState =
   | { status: 'success'; message?: string }
   | { status: 'error'; message: string }
 
-export interface FormFeedbackProps {
+export type FormFeedbackProps = {
   /** Current submission state and optional user-facing result message. */
   state: FormFeedbackState
   className?: string
@@ -26,11 +26,18 @@ export function FormFeedback({
   successLabel = 'Guardado',
 }: FormFeedbackProps) {
   if (state.status === 'idle')
-    return <span aria-hidden="true" className={cn('inline-flex h-5 items-center', className)} />
+    return (
+      <span
+        data-slot="form-feedback"
+        aria-hidden="true"
+        className={cn('inline-flex h-5 items-center', className)}
+      />
+    )
   const error = state.status === 'error'
   const success = state.status === 'success'
   return (
     <span
+      data-slot="form-feedback"
       role={error ? 'alert' : 'status'}
       aria-live={error ? 'assertive' : 'polite'}
       className={cn(

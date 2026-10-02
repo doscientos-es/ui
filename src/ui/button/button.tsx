@@ -17,7 +17,7 @@ import { buttonVariants } from './button-variants'
 export type ButtonProps = Omit<ButtonPrimitiveProps, 'className'> &
   React.RefAttributes<HTMLButtonElement> &
   VariantProps<typeof buttonVariants> & {
-    /** HTML-compatible alias for `isDisabled`. */
+    /** @deprecated Use `isDisabled`. Kept as an HTML-compatible alias. */
     disabled?: boolean
     /** Visual treatment for the action's priority and intent. */
     variant?: VariantProps<typeof buttonVariants>['variant']

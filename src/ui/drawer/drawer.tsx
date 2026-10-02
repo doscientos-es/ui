@@ -11,14 +11,29 @@ import {
   ModalOverlay as ModalOverlayPrimitive,
   type ModalOverlayProps as ModalOverlayPrimitiveProps,
   Modal as ModalPrimitive,
+  Pressable,
   Text,
 } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
+import { type OpenStateProps, resolveOpen } from '../../lib/open-state'
 import { Button, type ButtonProps } from '../button/button'
 
-function DrawerTrigger({ ...props }: DrawerTriggerPrimitiveProps) {
-  return <DrawerTriggerPrimitive data-slot="drawer-trigger" {...props} />
+/** Props for {@link DrawerTrigger}. */
+export type DrawerTriggerProps = Omit<
+  DrawerTriggerPrimitiveProps,
+  'isOpen' | 'defaultOpen' | 'onOpenChange'
+> &
+  OpenStateProps
+
+function DrawerTrigger({ open, isOpen, ...props }: DrawerTriggerProps) {
+  return (
+    <DrawerTriggerPrimitive
+      data-slot="drawer-trigger"
+      isOpen={resolveOpen({ open, isOpen })}
+      {...props}
+    />
+  )
 }
 
 function DrawerClose({ className, variant = 'outline', size = 'default', ...props }: ButtonProps) {
@@ -58,7 +73,11 @@ function DrawerOverlay({
 }
 
 /** Props for a controlled drawer panel. */
-export type DrawerContentProps = Omit<ModalOverlayPrimitiveProps, 'className' | 'children'> &
+export type DrawerContentProps = Omit<
+  ModalOverlayPrimitiveProps,
+  'className' | 'children' | 'isOpen' | 'defaultOpen' | 'onOpenChange'
+> &
+  OpenStateProps &
   Pick<React.ComponentProps<typeof ModalPrimitive>, 'isDismissable'> & {
     className?: string
     /** Props applied to the accessible dialog inside the drawer panel. */
@@ -75,10 +94,12 @@ function DrawerContent({
   dialogProps,
   side = 'right',
   showCloseButton = true,
+  open,
+  isOpen,
   ...props
 }: DrawerContentProps) {
   return (
-    <DrawerOverlay {...props}>
+    <DrawerOverlay isOpen={resolveOpen({ open, isOpen })} {...props}>
       <ModalPrimitive
         data-slot="drawer-content"
         data-side={side}
@@ -105,31 +126,46 @@ function DrawerContent({
   )
 }
 
-type TriggerDrawerProps = DrawerContentProps &
-  Pick<DrawerTriggerPrimitiveProps, 'defaultOpen' | 'isOpen' | 'onOpenChange'> & {
-    /** Text for a default button, or an interactive element that opens the drawer. */
-    trigger: string | React.ReactElement
-    /** Props for the default button rendered when {@link trigger} is text. */
-    triggerProps?: Omit<ButtonProps, 'children'>
-  }
+type TriggerDrawerProps = DrawerContentProps & {
+  /** Text for a default button, or an interactive element that opens the drawer. */
+  trigger: string | React.ReactElement
+  /** Props for the default button rendered when {@link trigger} is text. */
+  triggerProps?: Omit<ButtonProps, 'children'>
+}
 
 /** Props for a controlled drawer or a drawer with a simple trigger. */
 export type DrawerProps = DrawerContentProps | TriggerDrawerProps
 
 /**
- * A dismissable modal panel. Pass `trigger` for a simple trigger API, or control it with `isOpen`.
+ * A dismissable modal panel. Pass `trigger` for a simple trigger API, or control it with `open`.
  * Use {@link DrawerTrigger} plus {@link DrawerContent} for advanced composition.
  */
 function Drawer(props: DrawerProps) {
   if (!('trigger' in props)) return <DrawerContent {...props} />
 
-  const { children, trigger, triggerProps, defaultOpen, isOpen, onOpenChange, ...contentProps } =
-    props
+  const {
+    children,
+    trigger,
+    triggerProps,
+    defaultOpen,
+    open,
+    isOpen,
+    onOpenChange,
+    ...contentProps
+  } = props
   const triggerElement =
-    typeof trigger === 'string' ? <Button {...triggerProps}>{trigger}</Button> : trigger
+    typeof trigger === 'string' ? (
+      <Button {...triggerProps}>{trigger}</Button>
+    ) : (
+      <Pressable>{trigger as React.ComponentProps<typeof Pressable>['children']}</Pressable>
+    )
 
   return (
-    <DrawerTrigger defaultOpen={defaultOpen} isOpen={isOpen} onOpenChange={onOpenChange}>
+    <DrawerTrigger
+      defaultOpen={defaultOpen}
+      open={resolveOpen({ open, isOpen })}
+      onOpenChange={onOpenChange}
+    >
       {triggerElement}
       <DrawerContent {...contentProps}>{children}</DrawerContent>
     </DrawerTrigger>

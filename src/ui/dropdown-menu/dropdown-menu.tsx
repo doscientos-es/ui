@@ -20,10 +20,24 @@ import {
 import { actionRipple, useActionRipple } from '../../lib/action-ripple'
 import { cn } from '../../lib/cn'
 import { floatingSurfaceClassName } from '../../lib/floating-surface'
+import { type OpenStateProps, resolveOpen } from '../../lib/open-state'
 import { Button, type ButtonProps } from '../button/button'
 
-function DropdownMenuTrigger({ ...props }: React.ComponentProps<typeof MenuTriggerPrimitive>) {
-  return <MenuTriggerPrimitive data-slot="dropdown-menu-trigger" {...props} />
+/** Props for {@link DropdownMenuTrigger}. */
+export type DropdownMenuTriggerProps = Omit<
+  React.ComponentProps<typeof MenuTriggerPrimitive>,
+  'isOpen' | 'defaultOpen' | 'onOpenChange'
+> &
+  OpenStateProps
+
+function DropdownMenuTrigger({ open, isOpen, ...props }: DropdownMenuTriggerProps) {
+  return (
+    <MenuTriggerPrimitive
+      data-slot="dropdown-menu-trigger"
+      isOpen={resolveOpen({ open, isOpen })}
+      {...props}
+    />
+  )
 }
 
 export type DropdownMenuContentProps = Omit<
@@ -68,13 +82,8 @@ function DropdownMenuContent({
   )
 }
 
-type DropdownMenuTriggerStateProps = Pick<
-  React.ComponentProps<typeof MenuTriggerPrimitive>,
-  'defaultOpen' | 'isOpen' | 'onOpenChange'
->
-
 type SimpleDropdownMenuProps = DropdownMenuContentProps &
-  DropdownMenuTriggerStateProps & {
+  OpenStateProps & {
     /** Text for a default button, or an interactive element that opens the menu. */
     trigger: string | React.ReactElement
     /** Props for the default button rendered when {@link trigger} is text. */
@@ -91,13 +100,25 @@ export type DropdownMenuProps = DropdownMenuContentProps | SimpleDropdownMenuPro
 function DropdownMenu(props: DropdownMenuProps) {
   if (!('trigger' in props)) return <DropdownMenuContent {...props} />
 
-  const { children, trigger, triggerProps, defaultOpen, isOpen, onOpenChange, ...contentProps } =
-    props
+  const {
+    children,
+    trigger,
+    triggerProps,
+    defaultOpen,
+    open,
+    isOpen,
+    onOpenChange,
+    ...contentProps
+  } = props
   const triggerElement =
     typeof trigger === 'string' ? <Button {...triggerProps}>{trigger}</Button> : trigger
 
   return (
-    <DropdownMenuTrigger defaultOpen={defaultOpen} isOpen={isOpen} onOpenChange={onOpenChange}>
+    <DropdownMenuTrigger
+      defaultOpen={defaultOpen}
+      open={resolveOpen({ open, isOpen })}
+      onOpenChange={onOpenChange}
+    >
       {triggerElement}
       <DropdownMenuContent {...contentProps}>{children}</DropdownMenuContent>
     </DropdownMenuTrigger>

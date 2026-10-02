@@ -53,7 +53,7 @@ describe('Drawer', () => {
     const user = userEvent.setup()
     const onOpenChange = vi.fn()
     render(
-      <Drawer isOpen onOpenChange={onOpenChange} showCloseButton={false}>
+      <Drawer open onOpenChange={onOpenChange} showCloseButton={false}>
         <DrawerTitle>Ficha del lead</DrawerTitle>
         <Dialog>
           <DialogTrigger>Registrar llamada</DialogTrigger>
@@ -74,7 +74,7 @@ describe('Drawer', () => {
 
   it('uses dialogProps to provide an accessible name without a visual title', () => {
     render(
-      <Drawer isOpen showCloseButton={false} dialogProps={{ 'aria-label': 'Filtros avanzados' }}>
+      <Drawer open showCloseButton={false} dialogProps={{ 'aria-label': 'Filtros avanzados' }}>
         <p>Configura los filtros.</p>
       </Drawer>,
     )

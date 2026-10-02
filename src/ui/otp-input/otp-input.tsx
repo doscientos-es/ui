@@ -8,9 +8,9 @@ import {
 import { Input as AriaInput, type InputProps as AriaInputProps } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
+import type { CompatibleRef } from '../../lib/compatible-ref'
 
-type CompatibleRef<T> = ((instance: T | null) => unknown) | { readonly current: T | null } | null
-
+/** Props for a one-time-code input split into visual slots. */
 export type OtpInputProps = Omit<
   AriaInputProps,
   'children' | 'className' | 'defaultValue' | 'maxLength' | 'onChange' | 'type' | 'value'

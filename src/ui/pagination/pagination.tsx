@@ -63,6 +63,7 @@ export function Pagination({
 
   return (
     <nav
+      data-slot="pagination"
       aria-label={ariaLabel}
       className={cn('flex flex-wrap items-center justify-between gap-4', className)}
     >

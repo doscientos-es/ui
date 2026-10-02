@@ -42,6 +42,18 @@ export function ProfileName() {
 }
 ```
 
+### Subpaths (cargar solo lo necesario)
+
+Además del barrel `@doscientos/ui`, cada componente tiene su subpath y hay dos subpaths no visuales:
+
+```ts
+import { Button } from '@doscientos/ui/button' // un componente
+import { useDebouncedValue, useClipboard } from '@doscientos/ui/hooks' // hooks (cliente)
+import { cn, getTextMatchParts } from '@doscientos/ui/utils' // helpers puros, válidos en Server Components
+```
+
+`utils` no lleva `"use client"` ni depende de React; `hooks` y los componentes sí.
+
 Los proyectos pueden definir los tokens semánticos en `:root` o `.dark` para aplicar la marca del cliente; no deben modificar los componentes. `@doscientos/ui` no sobrescribe esos tokens y usa los valores del tema del backoffice como fallback cuando falte alguno.
 
 Además de los tokens shadcn habituales, el paquete expone capas de producto para evitar

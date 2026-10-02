@@ -14,8 +14,10 @@ import { actionRipple, useActionRipple } from '../../lib/action-ripple'
 import { cn } from '../../lib/cn'
 import { floatingSurfaceClassName } from '../../lib/floating-surface'
 
+/** @deprecated Use `DropdownMenu` from `@doscientos/ui/dropdown-menu`. */
 export const MenuTrigger = AriaMenuTrigger
 
+/** @deprecated Use `DropdownMenuContent` from `@doscientos/ui/dropdown-menu`. */
 export function MenuContent({ className, ...props }: React.ComponentProps<typeof Popover>) {
   return (
     <Popover

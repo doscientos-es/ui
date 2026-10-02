@@ -78,7 +78,10 @@ export function TabsTrigger({ className, children, onPress, ...props }: AriaTabP
   )
 }
 
-/** Container for the panels associated with a {@link TabsList}. */
+/**
+ * Optional container for animated panel transitions.
+ * @deprecated Render {@link TabsContent} directly inside {@link Tabs}.
+ */
 export function TabsPanels<T extends object>({ className, ...props }: AriaTabPanelsProps<T>) {
   return <AriaTabPanels data-slot="tabs-panels" className={cn('min-w-0', className)} {...props} />
 }

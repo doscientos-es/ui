@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 
 import { cn } from '../../lib/cn'
 
-export interface FormRowProps {
+export type FormRowProps = {
   /** Visible label associated with the form control. */
   label: ReactNode
   /** Identifier of the labelled form control. */
