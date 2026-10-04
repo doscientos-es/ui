@@ -8,7 +8,6 @@ import {
 import { Input as AriaInput, type InputProps as AriaInputProps } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
-import type { CompatibleRef } from '../../lib/compatible-ref'
 
 /** Props for a one-time-code input split into visual slots. */
 export type OtpInputProps = Omit<
@@ -23,7 +22,8 @@ export type OtpInputProps = Omit<
   onComplete?: (value: string) => void
   className?: string
   inputClassName?: string
-  ref?: CompatibleRef<HTMLInputElement>
+  /** Native input ref, passed as a regular prop in React 19. */
+  ref?: Ref<HTMLInputElement>
 }
 
 function normalizeOtp(value: string, length: number) {
@@ -60,7 +60,7 @@ export function OtpInput({
     code.length === slotCount ? slotCount - 1 : Math.min(selectionStart, code.length, slotCount - 1)
 
   useImperativeHandle(
-    forwardedRef as Ref<HTMLInputElement> | undefined,
+    forwardedRef,
     () => inputRef.current as HTMLInputElement,
   )
 

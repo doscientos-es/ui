@@ -14,9 +14,10 @@ import { cn } from '../../lib/cn'
 import { buttonVariants } from './button-variants'
 
 /** Props for a button that triggers an in-page action. */
-export type ButtonProps = Omit<ButtonPrimitiveProps, 'className'> &
-  React.RefAttributes<HTMLButtonElement> &
+export type ButtonProps = Omit<ButtonPrimitiveProps, 'className' | 'ref'> &
   VariantProps<typeof buttonVariants> & {
+    /** Native button ref, passed as a regular prop in React 19. */
+    ref?: React.Ref<HTMLButtonElement>
     /** @deprecated Use `isDisabled`. Kept as an HTML-compatible alias. */
     disabled?: boolean
     /** Visual treatment for the action's priority and intent. */
@@ -38,6 +39,7 @@ export function Button({
   disabled,
   type = 'button',
   isDisabled,
+  ref,
   onClick,
   onPress,
   ...props
@@ -46,6 +48,7 @@ export function Button({
 
   return (
     <ButtonPrimitive
+      ref={ref}
       data-slot="button"
       data-variant={variant}
       type={type}
@@ -70,8 +73,10 @@ export function Button({
 }
 
 /** Props for a link styled consistently with {@link Button}. */
-export type LinkButtonProps = Omit<LinkPrimitiveProps, 'className'> &
+export type LinkButtonProps = Omit<LinkPrimitiveProps, 'className' | 'ref'> &
   VariantProps<typeof buttonVariants> & {
+    /** Native anchor ref, passed as a regular prop in React 19. */
+    ref?: React.Ref<HTMLAnchorElement>
     /** Visual treatment for the navigation action's priority and intent. */
     variant?: VariantProps<typeof buttonVariants>['variant']
     /** Preset height, spacing and icon dimensions. */
@@ -88,6 +93,7 @@ export function LinkButton({
   variant = 'default',
   size = 'default',
   children,
+  ref,
   onClick,
   onPress,
   ...props
@@ -96,6 +102,7 @@ export function LinkButton({
 
   return (
     <LinkPrimitive
+      ref={ref}
       data-slot="button"
       data-variant={variant}
       data-size={size}

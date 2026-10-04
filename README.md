@@ -2,6 +2,8 @@
 
 Primitives React accesibles, rápidas y temables para los productos de Doscientos. No depende de Next.js, Astro, router, backend ni estado de datos.
 
+Requiere React y React DOM 19 o superior.
+
 El criterio visual y de producto está documentado en [DESIGN-GUIDELINES.md](./DESIGN-GUIDELINES.md). Ese documento es parte del contrato del paquete: explica cómo combinar las primitives para que una aplicación Doscientos se sienta premium, no solo qué componentes existen.
 
 ## Alcance

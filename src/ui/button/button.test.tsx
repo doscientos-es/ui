@@ -1,3 +1,4 @@
+import { createRef } from 'react'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
@@ -5,6 +6,22 @@ import { describe, expect, it, vi } from 'vitest'
 import { Button, LinkButton } from './button'
 
 describe('Button', () => {
+  it('passes React 19 ref props to the native button and link', () => {
+    const buttonRef = createRef<HTMLButtonElement>()
+    const linkRef = createRef<HTMLAnchorElement>()
+    render(
+      <>
+        <Button ref={buttonRef}>Guardar</Button>
+        <LinkButton href="/clientes" ref={linkRef}>
+          Ver clientes
+        </LinkButton>
+      </>,
+    )
+
+    expect(buttonRef.current).toBe(screen.getByRole('button', { name: 'Guardar' }))
+    expect(linkRef.current).toBe(screen.getByRole('link', { name: 'Ver clientes' }))
+  })
+
   it('renders its semantic element, variant and interaction', () => {
     const onClick = vi.fn()
     render(
