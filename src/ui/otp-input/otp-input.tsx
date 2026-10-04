@@ -59,10 +59,7 @@ export function OtpInput({
   const activeIndex =
     code.length === slotCount ? slotCount - 1 : Math.min(selectionStart, code.length, slotCount - 1)
 
-  useImperativeHandle(
-    forwardedRef,
-    () => inputRef.current as HTMLInputElement,
-  )
+  useImperativeHandle(forwardedRef, () => inputRef.current as HTMLInputElement)
 
   function updateSelection(input: HTMLInputElement) {
     setSelectionStart(input.selectionStart ?? code.length)

@@ -1,6 +1,6 @@
-import { createRef } from 'react'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { createRef } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 
 import { Button, LinkButton } from './button'
