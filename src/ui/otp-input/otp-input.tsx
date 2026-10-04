@@ -1,6 +1,6 @@
 import {
-  forwardRef,
   type PointerEvent as ReactPointerEvent,
+  type Ref,
   useImperativeHandle,
   useRef,
   useState,
@@ -30,24 +30,23 @@ function normalizeOtp(value: string, length: number) {
   return value.replace(/[^0-9]/g, '').slice(0, length)
 }
 
-const OtpInputImpl = forwardRef<HTMLInputElement, OtpInputProps>(function OtpInput(
-  {
-    length = 6,
-    value,
-    defaultValue = '',
-    onChange,
-    onComplete,
-    className,
-    inputClassName,
-    disabled,
-    onBlur,
-    onFocus,
-    onKeyUp,
-    onSelect,
-    ...props
-  },
-  forwardedRef,
-) {
+/** A single accessible input visually split into slots for numeric one-time codes. */
+export function OtpInput({
+  length = 6,
+  value,
+  defaultValue = '',
+  onChange,
+  onComplete,
+  className,
+  inputClassName,
+  disabled,
+  onBlur,
+  onFocus,
+  onKeyUp,
+  onSelect,
+  ref: forwardedRef,
+  ...props
+}: OtpInputProps) {
   const slotCount = Number.isFinite(length) ? Math.max(1, Math.floor(length)) : 6
   const controlled = value !== undefined
   const [internalValue, setInternalValue] = useState(() => normalizeOtp(defaultValue, slotCount))
@@ -60,7 +59,10 @@ const OtpInputImpl = forwardRef<HTMLInputElement, OtpInputProps>(function OtpInp
   const activeIndex =
     code.length === slotCount ? slotCount - 1 : Math.min(selectionStart, code.length, slotCount - 1)
 
-  useImperativeHandle(forwardedRef, () => inputRef.current as HTMLInputElement)
+  useImperativeHandle(
+    forwardedRef as Ref<HTMLInputElement> | undefined,
+    () => inputRef.current as HTMLInputElement,
+  )
 
   function updateSelection(input: HTMLInputElement) {
     setSelectionStart(input.selectionStart ?? code.length)
@@ -151,9 +153,4 @@ const OtpInputImpl = forwardRef<HTMLInputElement, OtpInputProps>(function OtpInp
       ))}
     </div>
   )
-})
-
-/** A single accessible input visually split into slots for numeric one-time codes. */
-export const OtpInput = OtpInputImpl as unknown as (
-  props: OtpInputProps,
-) => ReturnType<typeof OtpInputImpl>
+}

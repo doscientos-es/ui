@@ -1,4 +1,3 @@
-import { forwardRef } from 'react'
 import { Input as AriaInput, type InputProps as AriaInputProps } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
@@ -10,23 +9,17 @@ export type InputProps = Omit<AriaInputProps, 'ref'> & {
   ref?: CompatibleRef<HTMLInputElement>
 }
 
-const InputImpl = forwardRef<HTMLInputElement, AriaInputProps>(function Input(
-  { className, type, ...props },
-  ref,
-) {
+/** Accessible single-line input. `ref` is a regular prop in React 19. */
+export function Input({ className, type, ...props }: InputProps) {
   return (
     <AriaInput
-      ref={ref}
       type={type}
       data-slot="input"
       className={cn(
         'box-border h-9 w-full min-w-0 rounded-lg border border-border bg-background px-3 py-1 text-sm text-foreground shadow-[var(--ui-shadow-hairline)] outline-none transition-[background-color,border-color,box-shadow] placeholder:text-muted-foreground hover:border-border-strong focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive',
         className,
       )}
-      {...props}
+      {...(props as AriaInputProps)}
     />
   )
-})
-
-/** Accessible single-line input with a ref type compatible across React 19 type releases. */
-export const Input = InputImpl as unknown as (props: InputProps) => ReturnType<typeof InputImpl>
+}
