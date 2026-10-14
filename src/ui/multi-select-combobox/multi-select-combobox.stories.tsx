@@ -9,7 +9,7 @@ const items = [
   { id: 'ines', name: 'Inés' },
 ]
 
-const meta = {
+const meta: Meta<typeof MultiSelectCombobox<(typeof items)[number]>> = {
   title: 'Components/Forms/MultiSelectCombobox',
   component: MultiSelectCombobox<(typeof items)[number]>,
   tags: ['test:ui'],
@@ -27,7 +27,7 @@ const meta = {
       </div>
     ),
   ],
-} satisfies Meta<typeof MultiSelectCombobox<(typeof items)[number]>>
+}
 export default meta
 type Story = StoryObj<typeof meta>
 
