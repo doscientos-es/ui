@@ -2,7 +2,16 @@
 
 import { CheckIcon, XIcon } from 'lucide-react'
 import { useMemo, type ReactNode } from 'react'
-import { FieldError, Label, Tag, TagGroup, TagList, Text, type ComboBoxProps, type Key } from 'react-aria-components'
+import {
+  FieldError,
+  Label,
+  Tag,
+  TagGroup,
+  TagList,
+  Text,
+  type ComboBoxProps,
+  type Key,
+} from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
 import { Button } from '../button/button'
@@ -64,34 +73,75 @@ export function MultiSelectCombobox<T extends object>({
       selectionMode="multiple"
       defaultItems={options}
       allowsEmptyCollection
-      className={(state) => cn('flex w-full min-w-0 flex-col gap-1.5', typeof className === 'function' ? className(state) : className)}
+      className={(state) =>
+        cn(
+          'flex w-full min-w-0 flex-col gap-1.5',
+          typeof className === 'function' ? className(state) : className,
+        )
+      }
     >
-      {label && <Label className="text-sm font-medium text-foreground">{label}</Label>}
+      {label && <Label className="text-foreground text-sm font-medium">{label}</Label>}
       <ComboboxInput placeholder={placeholder} />
       <ComboboxValue<SelectionItem<T>>>
         {({ selectedItems, state }) => (
           <TagGroup
             aria-label={selectedLabel}
-            onRemove={locked ? undefined : (keys) => {
-              if (Array.isArray(state.value)) state.setValue(state.value.filter((key) => !keys.has(key)))
-            }}
+            onRemove={
+              locked
+                ? undefined
+                : (keys) => {
+                    if (Array.isArray(state.value))
+                      state.setValue(state.value.filter((key) => !keys.has(key)))
+                  }
+            }
           >
-            <TagList items={selectedItems.filter((item) => item !== null)} className="flex flex-wrap gap-1.5 empty:hidden">
+            <TagList
+              items={selectedItems.filter((item) => item !== null)}
+              className="flex flex-wrap gap-1.5 empty:hidden"
+            >
               {(option) => (
-                <Tag id={option.id} textValue={option.label} isDisabled={props.isDisabled} className="flex min-w-0 items-center gap-1 rounded-md bg-muted py-1 pr-1 pl-2 text-sm text-foreground outline-none data-focus-visible:ring-3 data-focus-visible:ring-ring/50">
+                <Tag
+                  id={option.id}
+                  textValue={option.label}
+                  isDisabled={props.isDisabled}
+                  className="bg-muted text-foreground data-focus-visible:ring-ring/50 flex min-w-0 items-center gap-1 rounded-md py-1 pr-1 pl-2 text-sm outline-none data-focus-visible:ring-3"
+                >
                   <span className="min-w-0 wrap-break-word">{option.label}</span>
-                  {!locked && <Button slot="remove" variant="ghost" size="icon-sm" aria-label={removeLabel}><XIcon aria-hidden="true" /></Button>}
+                  {!locked && (
+                    <Button slot="remove" variant="ghost" size="icon-sm" aria-label={removeLabel}>
+                      <XIcon aria-hidden="true" />
+                    </Button>
+                  )}
                 </Tag>
               )}
             </TagList>
           </TagGroup>
         )}
       </ComboboxValue>
-      {description && <Text slot="description" className="text-xs text-muted-foreground">{description}</Text>}
-      {errorMessage && <FieldError className="text-xs text-destructive">{errorMessage}</FieldError>}
+      {description && (
+        <Text slot="description" className="text-muted-foreground text-xs">
+          {description}
+        </Text>
+      )}
+      {errorMessage && <FieldError className="text-destructive text-xs">{errorMessage}</FieldError>}
       <ComboboxContent>
-        <ComboboxList<SelectionItem<T>> emptyState={<p className="px-3 py-7 text-center text-sm text-muted-foreground">{emptyState}</p>}>
-          {(option) => <ComboboxItem id={option.id} textValue={option.label}>{({ isSelected }) => <><span className="min-w-0 break-words">{renderItem ? renderItem(option.item) : option.label}</span>{isSelected && <CheckIcon aria-hidden="true" className="size-4 shrink-0" />}</>}</ComboboxItem>}
+        <ComboboxList<SelectionItem<T>>
+          emptyState={
+            <p className="text-muted-foreground px-3 py-7 text-center text-sm">{emptyState}</p>
+          }
+        >
+          {(option) => (
+            <ComboboxItem id={option.id} textValue={option.label}>
+              {({ isSelected }) => (
+                <>
+                  <span className="min-w-0 break-words">
+                    {renderItem ? renderItem(option.item) : option.label}
+                  </span>
+                  {isSelected && <CheckIcon aria-hidden="true" className="size-4 shrink-0" />}
+                </>
+              )}
+            </ComboboxItem>
+          )}
         </ComboboxList>
       </ComboboxContent>
     </Combobox>

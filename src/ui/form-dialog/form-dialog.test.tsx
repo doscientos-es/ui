@@ -9,9 +9,15 @@ const defaults = { open: true, title: 'Editar registro', onOpenChange: vi.fn(), 
 
 describe('FormDialog', () => {
   it('links its title and description and reuses the compact dialog defaults', () => {
-    render(<FormDialog {...defaults} description="Actualiza los datos."><Input aria-label="Nombre" /></FormDialog>)
+    render(
+      <FormDialog {...defaults} description="Actualiza los datos.">
+        <Input aria-label="Nombre" />
+      </FormDialog>,
+    )
     const dialog = screen.getByRole('dialog', { name: 'Editar registro' })
-    expect(dialog.getAttribute('aria-describedby')).toBe(screen.getByText('Actualiza los datos.').id)
+    expect(dialog.getAttribute('aria-describedby')).toBe(
+      screen.getByText('Actualiza los datos.').id,
+    )
     expect(dialog.getAttribute('data-size')).toBe('md')
     expect(dialog.className).toContain('max-w-[32rem]')
   })
@@ -23,7 +29,11 @@ describe('FormDialog', () => {
       expect(event.defaultPrevented).toBe(true)
       expect(new FormData(event.currentTarget).get('name')).toBe('Ejemplo')
     })
-    render(<FormDialog {...defaults} onSubmit={onSubmit} onOpenChange={onOpenChange}><Input name="name" aria-label="Nombre" defaultValue="Ejemplo" /></FormDialog>)
+    render(
+      <FormDialog {...defaults} onSubmit={onSubmit} onOpenChange={onOpenChange}>
+        <Input name="name" aria-label="Nombre" defaultValue="Ejemplo" />
+      </FormDialog>,
+    )
     await user.click(screen.getByRole('textbox', { name: 'Nombre' }))
     await user.keyboard('{Enter}')
     expect(onSubmit).toHaveBeenCalledOnce()
@@ -33,7 +43,11 @@ describe('FormDialog', () => {
 
   it('preserves native required-field validation', async () => {
     const onSubmit = vi.fn()
-    render(<FormDialog {...defaults} onSubmit={onSubmit}><Input name="name" aria-label="Nombre" required /></FormDialog>)
+    render(
+      <FormDialog {...defaults} onSubmit={onSubmit}>
+        <Input name="name" aria-label="Nombre" required />
+      </FormDialog>,
+    )
     await userEvent.click(screen.getByRole('button', { name: 'Guardar' }))
     expect(onSubmit).not.toHaveBeenCalled()
     expect((screen.getByRole('textbox') as HTMLInputElement).checkValidity()).toBe(false)
@@ -41,7 +55,11 @@ describe('FormDialog', () => {
 
   it('blocks outside dismissal by default but supports Cancel and Escape', async () => {
     const onOpenChange = vi.fn()
-    render(<FormDialog {...defaults} onOpenChange={onOpenChange}><Input aria-label="Nombre" /></FormDialog>)
+    render(
+      <FormDialog {...defaults} onOpenChange={onOpenChange}>
+        <Input aria-label="Nombre" />
+      </FormDialog>,
+    )
     const dialog = screen.getByRole('dialog')
     await userEvent.click(dialog.parentElement!)
     expect(onOpenChange).not.toHaveBeenCalled()
@@ -54,7 +72,11 @@ describe('FormDialog', () => {
 
   it('can opt into outside dismissal', async () => {
     const onOpenChange = vi.fn()
-    render(<FormDialog {...defaults} isDismissable onOpenChange={onOpenChange}>Campos</FormDialog>)
+    render(
+      <FormDialog {...defaults} isDismissable onOpenChange={onOpenChange}>
+        Campos
+      </FormDialog>,
+    )
     await userEvent.click(screen.getByRole('dialog').parentElement!)
     expect(onOpenChange).toHaveBeenCalledWith(false)
   })
@@ -62,7 +84,18 @@ describe('FormDialog', () => {
   it('keeps pending operations open and prevents repeat submissions', async () => {
     const onOpenChange = vi.fn()
     const onSubmit = vi.fn()
-    render(<FormDialog {...defaults} loading isDismissable onOpenChange={onOpenChange} onSubmit={onSubmit} loadingLabel="Creando…">Campos</FormDialog>)
+    render(
+      <FormDialog
+        {...defaults}
+        loading
+        isDismissable
+        onOpenChange={onOpenChange}
+        onSubmit={onSubmit}
+        loadingLabel="Creando…"
+      >
+        Campos
+      </FormDialog>,
+    )
     const dialog = screen.getByRole('dialog')
     const form = dialog.querySelector('form')!
     expect(form.getAttribute('aria-busy')).toBe('true')
@@ -79,7 +112,11 @@ describe('FormDialog', () => {
   it('disables only submission when submitDisabled is set', async () => {
     const onSubmit = vi.fn()
     const onOpenChange = vi.fn()
-    render(<FormDialog {...defaults} submitDisabled onSubmit={onSubmit} onOpenChange={onOpenChange}>Campos</FormDialog>)
+    render(
+      <FormDialog {...defaults} submitDisabled onSubmit={onSubmit} onOpenChange={onOpenChange}>
+        Campos
+      </FormDialog>,
+    )
     fireEvent.submit(screen.getByRole('dialog').querySelector('form')!)
     expect(onSubmit).not.toHaveBeenCalled()
     await userEvent.click(screen.getByRole('button', { name: 'Cancelar' }))
@@ -89,8 +126,16 @@ describe('FormDialog', () => {
   it('re-enables dismissal and submission when loading finishes', async () => {
     const onSubmit = vi.fn()
     const onOpenChange = vi.fn()
-    const { rerender } = render(<FormDialog {...defaults} loading onSubmit={onSubmit} onOpenChange={onOpenChange}>Campos</FormDialog>)
-    rerender(<FormDialog {...defaults} onSubmit={onSubmit} onOpenChange={onOpenChange}>Campos</FormDialog>)
+    const { rerender } = render(
+      <FormDialog {...defaults} loading onSubmit={onSubmit} onOpenChange={onOpenChange}>
+        Campos
+      </FormDialog>,
+    )
+    rerender(
+      <FormDialog {...defaults} onSubmit={onSubmit} onOpenChange={onOpenChange}>
+        Campos
+      </FormDialog>,
+    )
     expect(screen.getByRole('dialog').querySelector('form')?.hasAttribute('aria-busy')).toBe(false)
     await userEvent.click(screen.getByRole('button', { name: 'Guardar' }))
     expect(onSubmit).toHaveBeenCalledOnce()
@@ -100,16 +145,31 @@ describe('FormDialog', () => {
 
   it('forwards form attributes and refs without forcing a two-column layout', async () => {
     const formRef = vi.fn()
-    render(<FormDialog {...defaults} size="lg" bodyClassName="sm:grid-cols-2" formProps={{ id: 'edit-form', ref: formRef, noValidate: true, className: 'custom-form' }}>Campos</FormDialog>)
+    render(
+      <FormDialog
+        {...defaults}
+        size="lg"
+        bodyClassName="sm:grid-cols-2"
+        formProps={{ id: 'edit-form', ref: formRef, noValidate: true, className: 'custom-form' }}
+      >
+        Campos
+      </FormDialog>,
+    )
     const form = document.getElementById('edit-form')!
     expect(form.hasAttribute('novalidate')).toBe(true)
     expect(form.classList.contains('custom-form')).toBe(true)
-    expect(document.querySelector('[data-slot="form-dialog-body"]')?.className).toContain('sm:grid-cols-2')
+    expect(document.querySelector('[data-slot="form-dialog-body"]')?.className).toContain(
+      'sm:grid-cols-2',
+    )
     await waitFor(() => expect(formRef).toHaveBeenCalledWith(form))
   })
 
   it('renders nothing while closed', () => {
-    render(<FormDialog {...defaults} open={false}>Campos</FormDialog>)
+    render(
+      <FormDialog {...defaults} open={false}>
+        Campos
+      </FormDialog>,
+    )
     expect(screen.queryByRole('dialog')).toBeNull()
   })
 })
