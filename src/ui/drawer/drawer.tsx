@@ -103,20 +103,21 @@ function DrawerContent({
       <ModalPrimitive
         data-slot="drawer-content"
         data-side={side}
+        data-close-button={showCloseButton || undefined}
         className={cn(
-          'fixed z-50 flex max-h-svh flex-col gap-4 border-border bg-popover bg-clip-padding text-sm text-popover-foreground shadow-lg motion-safe:transition motion-safe:duration-200 motion-safe:ease-in-out motion-safe:data-entering:opacity-0 motion-safe:data-exiting:opacity-0 motion-reduce:transition-none data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:h-auto data-[side=bottom]:border-t data-[side=bottom]:pb-[env(safe-area-inset-bottom)] motion-safe:data-[side=bottom]:data-entering:translate-y-10 motion-safe:data-[side=bottom]:data-exiting:translate-y-10 data-[side=left]:inset-y-0 data-[side=left]:left-0 data-[side=left]:h-full data-[side=left]:w-3/4 data-[side=left]:border-r motion-safe:data-[side=left]:data-entering:-translate-x-10 motion-safe:data-[side=left]:data-exiting:-translate-x-10 data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-full data-[side=right]:w-3/4 data-[side=right]:border-l motion-safe:data-[side=right]:data-entering:translate-x-10 motion-safe:data-[side=right]:data-exiting:translate-x-10 data-[side=top]:inset-x-0 data-[side=top]:top-0 data-[side=top]:h-auto data-[side=top]:border-b data-[side=top]:pt-[env(safe-area-inset-top)] motion-safe:data-[side=top]:data-entering:-translate-y-10 motion-safe:data-[side=top]:data-exiting:-translate-y-10 data-[side=left]:sm:max-w-sm data-[side=right]:sm:max-w-sm',
+          'fixed z-50 flex box-border max-h-dvh flex-col gap-4 overflow-hidden border-border bg-popover bg-clip-padding text-sm text-popover-foreground shadow-[var(--ui-shadow-floating)] motion-safe:transition motion-safe:duration-200 motion-safe:ease-in-out motion-safe:data-entering:opacity-0 motion-safe:data-exiting:opacity-0 motion-reduce:transition-none data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:h-auto data-[side=bottom]:border-t data-[side=bottom]:pb-[env(safe-area-inset-bottom)] motion-safe:data-[side=bottom]:data-entering:translate-y-10 motion-safe:data-[side=bottom]:data-exiting:translate-y-10 data-[side=left]:inset-y-0 data-[side=left]:left-0 data-[side=left]:h-full data-[side=left]:w-3/4 data-[side=left]:max-w-[24rem] data-[side=left]:border-r motion-safe:data-[side=left]:data-entering:-translate-x-10 motion-safe:data-[side=left]:data-exiting:-translate-x-10 data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-full data-[side=right]:w-3/4 data-[side=right]:max-w-[24rem] data-[side=right]:border-l motion-safe:data-[side=right]:data-entering:translate-x-10 motion-safe:data-[side=right]:data-exiting:translate-x-10 data-[side=top]:inset-x-0 data-[side=top]:top-0 data-[side=top]:h-auto data-[side=top]:border-b data-[side=top]:pt-[env(safe-area-inset-top)] motion-safe:data-[side=top]:data-entering:-translate-y-10 motion-safe:data-[side=top]:data-exiting:-translate-y-10',
           className,
         )}
       >
         <DrawerPrimitive
           data-slot="drawer"
-          className="[display:inherit] h-full max-h-[inherit] [flex-direction:inherit] gap-[inherit] outline-none"
+          className="[display:inherit] h-full max-h-[inherit] min-h-0 [flex-direction:inherit] gap-[inherit] overflow-y-auto overscroll-contain outline-none"
           {...dialogProps}
         >
           {children}
           {showCloseButton && (
-            <DrawerClose variant="ghost" className="absolute top-3 right-3" size="icon-sm">
-              <XIcon />
+            <DrawerClose variant="ghost" className="absolute top-3 right-3" size="icon">
+              <XIcon aria-hidden="true" />
               <span className="sr-only">Cerrar</span>
             </DrawerClose>
           )}
@@ -176,7 +177,7 @@ function DrawerHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="drawer-header"
-      className={cn('flex flex-col gap-0.5 p-4', className)}
+      className={cn('flex shrink-0 flex-col gap-2 p-4', className)}
       {...props}
     />
   )
@@ -186,7 +187,7 @@ function DrawerFooter({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="drawer-footer"
-      className={cn('mt-auto flex flex-col gap-2 p-4', className)}
+      className={cn('mt-auto flex shrink-0 flex-col gap-2 border-t border-border bg-surface-subtle p-4', className)}
       {...props}
     />
   )
@@ -197,7 +198,7 @@ function DrawerTitle({ className, ...props }: Omit<React.ComponentProps<typeof H
     <Heading
       slot="title"
       data-slot="drawer-title"
-      className={cn('text-base font-medium text-foreground', className)}
+      className={cn('text-lg leading-snug font-semibold tracking-tight break-words text-foreground', className)}
       {...props}
     />
   )
@@ -211,7 +212,7 @@ function DrawerDescription({
     <Text
       slot="description"
       data-slot="drawer-description"
-      className={cn('text-sm text-muted-foreground', className)}
+      className={cn('text-sm leading-relaxed break-words text-muted-foreground', className)}
       {...props}
     />
   )

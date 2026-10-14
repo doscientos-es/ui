@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -96,7 +96,7 @@ describe('Dialog', () => {
     expect(dialog.classList.contains('relative')).toBe(true)
     expect(dialog.classList.contains('mx-auto')).toBe(true)
     expect(dialog.classList.contains('box-border')).toBe(true)
-    expect(dialog.classList.contains('max-h-full')).toBe(true)
+    expect(dialog.classList.contains('max-h-[calc(100dvh-2rem)]')).toBe(true)
     expect(dialog.classList.contains('min-h-0')).toBe(true)
     expect(dialog.classList.contains('overflow-x-hidden')).toBe(true)
     expect(dialog.parentElement?.classList.contains('w-full')).toBe(true)
@@ -119,7 +119,7 @@ describe('Dialog', () => {
     ).toBe(true)
   })
 
-  it('keeps a comfortable mobile margin by default', () => {
+  it('limits its default width without relying on a responsive breakpoint', () => {
     render(
       <Dialog open>
         <DialogContent>
@@ -129,14 +129,16 @@ describe('Dialog', () => {
     )
 
     const dialog = screen.getByRole('dialog', { name: 'Detalle del pedido' })
-    expect(dialog.classList.contains('w-[calc(100%-3rem)]')).toBe(true)
-    expect(dialog.classList.contains('max-w-[calc(100%-3rem)]')).toBe(true)
+    expect(dialog.classList.contains('w-full')).toBe(true)
+    expect(dialog.classList.contains('max-w-[32rem]')).toBe(true)
+    expect(dialog.getAttribute('data-size')).toBe('md')
+    expect(document.querySelector('[data-slot="dialog-overlay"]')?.classList.contains('p-4')).toBe(true)
   })
 
   it('allows consumers to opt into a full-width dialog explicitly', () => {
     render(
       <Dialog open>
-        <DialogContent className="w-full max-w-none sm:max-w-none">
+        <DialogContent size="full">
           <DialogTitle>Calendario completo</DialogTitle>
         </DialogContent>
       </Dialog>,
@@ -145,10 +147,7 @@ describe('Dialog', () => {
     const dialog = screen.getByRole('dialog', { name: 'Calendario completo' })
     expect(dialog.classList.contains('w-full')).toBe(true)
     expect(dialog.classList.contains('max-w-none')).toBe(true)
-    expect(dialog.classList.contains('sm:max-w-none')).toBe(true)
-    expect(dialog.classList.contains('w-[calc(100%-3rem)]')).toBe(false)
-    expect(dialog.classList.contains('max-w-[calc(100%-3rem)]')).toBe(false)
-    expect(dialog.classList.contains('sm:max-w-sm')).toBe(false)
+    expect(dialog.classList.contains('max-w-[32rem]')).toBe(false)
   })
 
   it('applies custom classes only to the dialog content', () => {
@@ -181,5 +180,92 @@ describe('Dialog', () => {
     await userEvent.click(dialogOverlay)
 
     expect(onOpenChange).toHaveBeenCalledWith(false)
+  })
+
+  it.each([
+    ['sm', 'max-w-[24rem]'],
+    ['md', 'max-w-[32rem]'],
+    ['lg', 'max-w-[42rem]'],
+    ['xl', 'max-w-[56rem]'],
+  ] as const)('supports the %s size in the simple API', (size, widthClass) => {
+    render(<Dialog trigger="Abrir" defaultOpen size={size}><DialogTitle>Formulario</DialogTitle></Dialog>)
+    expect(screen.getByRole('dialog').classList.contains(widthClass)).toBe(true)
+  })
+
+  it('still allows custom width overrides', () => {
+    render(<Dialog trigger="Abrir" defaultOpen className="max-w-none"><DialogTitle>Formulario</DialogTitle></Dialog>)
+    const dialog = screen.getByRole('dialog')
+    expect(dialog.classList.contains('max-w-none')).toBe(true)
+    expect(dialog.classList.contains('max-w-[32rem]')).toBe(false)
+  })
+
+  it('associates its description and removes the association when it unmounts', () => {
+    const content = (description: boolean) => <Dialog open><DialogContent>
+      <DialogTitle>Cliente</DialogTitle>
+      {description && <DialogDescription>Actualiza sus datos.</DialogDescription>}
+    </DialogContent></Dialog>
+    const { rerender } = render(content(true))
+    const dialog = screen.getByRole('dialog', { name: 'Cliente' })
+    expect(dialog.getAttribute('aria-describedby')).toBe(screen.getByText('Actualiza sus datos.').id)
+    rerender(content(false))
+    expect(dialog.hasAttribute('aria-describedby')).toBe(false)
+  })
+
+  it('preserves an explicitly provided accessible description', () => {
+    render(<Dialog open><DialogContent aria-describedby="external-description">
+      <DialogTitle>Cliente</DialogTitle><DialogDescription>Ayuda local.</DialogDescription>
+      <p id="external-description">Ayuda personalizada.</p>
+    </DialogContent></Dialog>)
+    expect(screen.getByRole('dialog').getAttribute('aria-describedby')).toBe('external-description')
+  })
+
+  it('can prevent outside dismissal without preventing Escape', async () => {
+    const onOpenChange = vi.fn()
+    render(<Dialog open onOpenChange={onOpenChange}><DialogContent isDismissable={false}>
+      <DialogTitle>Edición</DialogTitle>
+    </DialogContent></Dialog>)
+    const dialog = screen.getByRole('dialog')
+    await userEvent.click(dialog.parentElement!)
+    expect(onOpenChange).not.toHaveBeenCalled()
+    fireEvent.keyDown(dialog, { key: 'Escape' })
+    expect(onOpenChange).toHaveBeenCalledWith(false)
+  })
+
+  it('can prevent Escape dismissal', () => {
+    const onOpenChange = vi.fn()
+    render(<Dialog open onOpenChange={onOpenChange}><DialogContent isKeyboardDismissDisabled>
+      <DialogTitle>Guardando</DialogTitle>
+    </DialogContent></Dialog>)
+    fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape' })
+    expect(onOpenChange).not.toHaveBeenCalled()
+  })
+
+  it('supports keyboard opening, close callbacks and restoring focus to the trigger', async () => {
+    const user = userEvent.setup()
+    const onOpenClick = vi.fn()
+    const onCloseClick = vi.fn()
+    render(<Dialog><DialogTrigger onClick={onOpenClick}>Editar</DialogTrigger>
+      <DialogContent><DialogTitle>Cliente</DialogTitle>
+        <DialogClose onClick={onCloseClick}>Cancelar</DialogClose>
+      </DialogContent></Dialog>)
+    const trigger = screen.getByRole('button', { name: 'Editar' })
+    expect(trigger.getAttribute('aria-haspopup')).toBe('dialog')
+    expect(trigger.getAttribute('aria-expanded')).toBe('false')
+    trigger.focus()
+    await user.keyboard('{Enter}')
+    expect(onOpenClick).toHaveBeenCalledOnce()
+    expect(trigger.getAttribute('aria-expanded')).toBe('true')
+    await user.click(screen.getByRole('button', { name: 'Cancelar' }))
+    expect(onCloseClick).toHaveBeenCalledOnce()
+    await waitFor(() => expect(document.activeElement).toBe(trigger))
+  })
+
+  it('places the optional footer close action before the primary action in DOM order', () => {
+    render(<Dialog open><DialogContent><DialogTitle>Cliente</DialogTitle>
+      <DialogFooter showCloseButton><button type="button">Guardar</button></DialogFooter>
+    </DialogContent></Dialog>)
+    const footer = document.querySelector('[data-slot="dialog-footer"]')
+    expect(footer?.firstElementChild?.textContent).toBe('Cerrar')
+    expect(footer?.lastElementChild?.textContent).toBe('Guardar')
   })
 })

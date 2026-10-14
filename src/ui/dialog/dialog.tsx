@@ -17,6 +17,19 @@ import { Button } from '../button/button'
 type DialogContextValue = { open: boolean; setOpen: (open: boolean) => void }
 type SlottableProps = React.HTMLAttributes<HTMLElement> & { 'data-slot'?: string }
 const DialogContext = React.createContext<DialogContextValue | null>(null)
+const DialogDescriptionContext = React.createContext<{
+  setDescriptionId: React.Dispatch<React.SetStateAction<string | undefined>>
+} | null>(null)
+
+const dialogSizes = {
+  sm: 'max-w-[24rem]',
+  md: 'max-w-[32rem]',
+  lg: 'max-w-[42rem]',
+  xl: 'max-w-[56rem]',
+  full: 'max-w-none',
+} as const
+
+export type DialogSize = keyof typeof dialogSizes
 
 function useDialogContext() {
   const context = React.useContext(DialogContext)
@@ -67,7 +80,7 @@ export function DialogTrigger({
   onClick,
   ...props
 }: DialogTriggerProps) {
-  const { setOpen } = useDialogContext()
+  const { open, setOpen } = useDialogContext()
   const handleClick: React.MouseEventHandler<HTMLElement> = (event) => {
     onClick?.(event as React.MouseEvent<HTMLButtonElement>)
     if (!event.defaultPrevented) setOpen(true)
@@ -78,6 +91,8 @@ export function DialogTrigger({
     return React.cloneElement(child, {
       ...(props as React.HTMLAttributes<HTMLElement>),
       'data-slot': 'dialog-trigger',
+      'aria-haspopup': 'dialog',
+      'aria-expanded': open,
       onClick: (event: React.MouseEvent<HTMLElement>) => {
         child.props.onClick?.(event)
         handleClick(event)
@@ -86,7 +101,14 @@ export function DialogTrigger({
   }
 
   return (
-    <Button data-slot="dialog-trigger" onPress={() => setOpen(true)} {...props}>
+    <Button
+      data-slot="dialog-trigger"
+      aria-haspopup="dialog"
+      aria-expanded={open}
+      onClick={onClick}
+      onPress={() => setOpen(true)}
+      {...props}
+    >
       {children}
     </Button>
   )
@@ -117,7 +139,7 @@ export function DialogOverlay({ children, className, ...props }: DialogOverlayPr
       isOpen={open}
       onOpenChange={setOpen}
       className={cn(
-        'fixed inset-0 isolate z-50 grid place-items-center bg-black/10 p-4 supports-backdrop-filter:backdrop-blur-xs motion-safe:data-entering:animate-ui-overlay-in motion-safe:data-exiting:animate-ui-overlay-out',
+        'fixed inset-0 isolate z-50 grid box-border h-dvh min-h-0 place-items-center overflow-hidden bg-black/20 p-4 supports-backdrop-filter:backdrop-blur-xs motion-safe:data-entering:animate-ui-overlay-in motion-safe:data-exiting:animate-ui-overlay-out',
         className,
       )}
       {...props}
@@ -134,9 +156,15 @@ export type DialogContentProps = Omit<
   children?: React.ReactNode
   className?: string
   contentSlot?: string
+  /** Whether pressing outside the panel dismisses it. Escape remains available. */
+  isDismissable?: boolean
+  /** Prevents Escape dismissal, for example while saving. */
+  isKeyboardDismissDisabled?: boolean
   onOverlayClick?: React.MouseEventHandler<HTMLDivElement>
   overlaySlot?: string
   showCloseButton?: boolean
+  /** Comfortable form width by default; larger surfaces are opt-in. */
+  size?: DialogSize
 }
 
 type SimpleDialogProps = DialogRootProps &
@@ -178,17 +206,23 @@ export function DialogContent({
   children,
   className,
   contentSlot = 'dialog-content',
+  isDismissable = true,
+  isKeyboardDismissDisabled = false,
   onOverlayClick,
   overlaySlot = 'dialog-overlay',
   showCloseButton = true,
+  size = 'md',
   ...props
 }: DialogContentProps) {
   const { setOpen } = useDialogContext()
+  const [descriptionId, setDescriptionId] = React.useState<string>()
 
   return (
     <DialogPortal>
       <DialogOverlay
         data-slot={overlaySlot}
+        isDismissable={isDismissable}
+        isKeyboardDismissDisabled={isKeyboardDismissDisabled}
         onClick={(event) => {
           if (event.target === event.currentTarget) onOverlayClick?.(event)
         }}
@@ -197,30 +231,36 @@ export function DialogContent({
           className="motion-safe:data-entering:animate-ui-surface-in motion-safe:data-exiting:animate-ui-surface-out max-h-full min-h-0 w-full"
           onClick={(event) => {
             if (event.target === event.currentTarget) {
-              setOpen(false)
+              if (isDismissable) setOpen(false)
               onOverlayClick?.(event)
             }
           }}
         >
           <AriaDialog
             data-slot={contentSlot}
+            data-size={size}
+            data-close-button={showCloseButton || undefined}
+            aria-describedby={descriptionId}
             className={cn(
-              'relative mx-auto grid box-border max-h-full min-h-0 w-[calc(100%-3rem)] max-w-[calc(100%-3rem)] gap-4 overflow-x-hidden overflow-y-auto rounded-xl bg-background p-4 text-sm text-foreground ring-1 ring-foreground/10 outline-none sm:max-w-sm',
+              'relative mx-auto grid box-border max-h-[calc(100dvh-2rem)] min-h-0 w-full gap-5 overflow-x-hidden overflow-y-auto overscroll-contain rounded-xl bg-popover p-6 text-sm text-popover-foreground shadow-[var(--ui-shadow-floating)] ring-1 ring-foreground/10 outline-none',
+              dialogSizes[size],
               className,
             )}
             {...props}
           >
-            {children}
+            <DialogDescriptionContext.Provider value={{ setDescriptionId }}>
+              {children}
+            </DialogDescriptionContext.Provider>
             {showCloseButton ? (
               <Button
                 aria-label="Cerrar diálogo"
                 data-slot="dialog-close"
                 variant="ghost"
-                className="absolute top-2 right-2"
-                size="icon-sm"
+                className="absolute top-3 right-3"
+                size="icon"
                 onPress={() => setOpen(false)}
               >
-                <XIcon />
+                <XIcon aria-hidden="true" />
               </Button>
             ) : null}
           </AriaDialog>
@@ -252,7 +292,7 @@ export function DialogClose({ asChild = false, children, onClick, ...props }: Di
   }
 
   return (
-    <Button data-slot="dialog-close" onPress={() => setOpen(false)} {...props}>
+    <Button data-slot="dialog-close" onClick={onClick} onPress={() => setOpen(false)} {...props}>
       {children}
     </Button>
   )
@@ -261,7 +301,7 @@ export function DialogClose({ asChild = false, children, onClick, ...props }: Di
 /** Groups the title and description at the top of a dialog. */
 export function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
-    <div data-slot="dialog-header" className={cn('flex flex-col gap-2', className)} {...props} />
+    <div data-slot="dialog-header" className={cn('flex min-w-0 flex-col gap-2', className)} {...props} />
   )
 }
 
@@ -276,13 +316,13 @@ export function DialogFooter({
     <div
       data-slot="dialog-footer"
       className={cn(
-        '-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t border-border bg-muted/50 p-4 sm:flex-row sm:flex-wrap sm:justify-end',
+        '-mx-6 -mb-6 flex flex-col-reverse gap-2 rounded-b-xl border-t border-border bg-surface-subtle p-6 sm:flex-row sm:flex-wrap sm:justify-end',
         className,
       )}
       {...props}
     >
-      {children}
       {showCloseButton ? <DialogClose variant="outline">Cerrar</DialogClose> : null}
+      {children}
     </div>
   )
 }
@@ -296,7 +336,7 @@ export function DialogTitle({
     <Heading
       slot="title"
       data-slot="dialog-title"
-      className={cn('font-heading text-base leading-none font-medium', className)}
+      className={cn('font-heading text-lg leading-snug font-semibold tracking-tight break-words', className)}
       {...props}
     />
   )
@@ -305,14 +345,26 @@ export function DialogTitle({
 /** Supporting text announced alongside the parent {@link DialogTitle}. */
 export function DialogDescription({
   className,
+  id,
   ...props
 }: Omit<React.ComponentProps<typeof Text>, 'slot'>) {
+  const generatedId = React.useId()
+  const descriptionId = id ?? generatedId
+  const context = React.useContext(DialogDescriptionContext)
+  const setDescriptionId = context?.setDescriptionId
+
+  React.useEffect(() => {
+    setDescriptionId?.(descriptionId)
+    return () => setDescriptionId?.((current) => current === descriptionId ? undefined : current)
+  }, [descriptionId, setDescriptionId])
+
   return (
     <Text
       slot="description"
+      id={descriptionId}
       data-slot="dialog-description"
       className={cn(
-        'text-sm text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground',
+        'text-sm leading-relaxed break-words text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground',
         className,
       )}
       {...props}

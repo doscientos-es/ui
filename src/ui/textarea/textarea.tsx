@@ -5,6 +5,7 @@ import {
 } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
+import { textControlClassName } from '../../lib/text-control'
 
 /** Props for a multi-line text input. */
 export type TextareaProps = Omit<AriaTextAreaProps, 'ref'> & {
@@ -19,7 +20,8 @@ export function Textarea({ className, ref, ...props }: TextareaProps) {
       ref={ref}
       data-slot="textarea"
       className={cn(
-        'box-border min-h-20 w-full rounded-lg border border-border bg-background px-2.5 py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive',
+        textControlClassName,
+        'min-h-24 resize-y py-2 leading-relaxed',
         className,
       )}
       {...props}

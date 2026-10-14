@@ -47,12 +47,12 @@ export function ConfirmDialog({
           {description ? <AlertDialogDescription>{description}</AlertDialogDescription> : null}
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <Button variant="outline" isDisabled={pending} onPress={() => onOpenChange(false)}>
+          <Button variant="outline" autoFocus isDisabled={pending} onPress={() => onOpenChange(false)}>
             {cancelLabel}
           </Button>
           <Button
             variant={destructive ? 'destructive' : 'default'}
-            isDisabled={pending}
+            isPending={pending}
             onPress={onConfirm}
           >
             {confirmLabel}

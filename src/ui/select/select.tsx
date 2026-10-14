@@ -1,4 +1,4 @@
-import { ChevronDown } from 'lucide-react'
+import { Check, ChevronDown } from 'lucide-react'
 import {
   Button as AriaButton,
   Select as AriaSelect,
@@ -24,9 +24,9 @@ export function SelectTrigger({ className, children, ...props }: ButtonProps) {
   return (
     <AriaButton
       data-slot="select-trigger"
-      className={cn(
-        'group/select-trigger box-border flex h-9 w-full min-w-36 items-center gap-2 rounded-lg border border-border bg-background px-3 text-left text-sm text-foreground shadow-[var(--ui-shadow-hairline)] outline-none transition-[background-color,border-color,box-shadow] hover:border-border-strong data-focus-visible:border-ring data-focus-visible:ring-3 data-focus-visible:ring-ring/50 data-disabled:cursor-not-allowed data-disabled:opacity-50',
-        className,
+      className={(state) => cn(
+        'group/select-trigger box-border flex h-9 w-full min-w-0 items-center gap-2 rounded-lg border border-border bg-background px-3 text-left text-base text-foreground shadow-[var(--ui-shadow-hairline)] outline-none transition-[background-color,border-color,box-shadow] enabled:hover:border-border-strong data-focus-visible:border-ring data-focus-visible:ring-3 data-focus-visible:ring-ring/50 data-disabled:cursor-not-allowed data-disabled:opacity-50 in-data-invalid:border-destructive in-data-invalid:data-focus-visible:border-destructive in-data-invalid:data-focus-visible:ring-destructive/20 motion-reduce:transition-none md:text-sm',
+        typeof className === 'function' ? className(state) : className,
       )}
       {...props}
     >
@@ -35,7 +35,7 @@ export function SelectTrigger({ className, children, ...props }: ButtonProps) {
           {typeof children === 'function' ? children(state) : children}
           <ChevronDown
             aria-hidden="true"
-            className="text-muted-foreground ml-auto size-4 transition-transform group-data-pressed/select-trigger:rotate-180 motion-reduce:transition-none"
+            className="text-muted-foreground ml-auto size-4 shrink-0 transition-transform group-aria-expanded/select-trigger:rotate-180 motion-reduce:transition-none"
           />
         </>
       )}
@@ -48,7 +48,7 @@ export function SelectValue({ className, ...props }: React.ComponentProps<typeof
   return (
     <AriaSelectValue
       data-slot="select-value"
-      className={cn('flex-1 truncate data-placeholder:text-muted-foreground', className)}
+      className={(state) => cn('min-w-0 flex-1 truncate data-placeholder:text-muted-foreground', typeof className === 'function' ? className(state) : className)}
       {...props}
     />
   )
@@ -59,10 +59,10 @@ export function SelectContent({ className, ...props }: React.ComponentProps<type
   return (
     <Popover
       data-slot="select-content"
-      className={cn(
+      className={(state) => cn(
         floatingSurfaceClassName,
         'w-(--trigger-width) overflow-hidden rounded-xl border border-border bg-background p-1.5 text-foreground',
-        className,
+        typeof className === 'function' ? className(state) : className,
       )}
       {...props}
     />
@@ -74,7 +74,7 @@ export function SelectList<T extends object>({ className, ...props }: ListBoxPro
   return (
     <ListBox
       data-slot="select-list"
-      className={cn('max-h-64 overflow-y-auto', className)}
+      className={(state) => cn('max-h-64 overflow-y-auto overscroll-contain outline-none', typeof className === 'function' ? className(state) : className)}
       {...props}
     />
   )
@@ -89,13 +89,16 @@ export function SelectItem<T extends object>({
   return (
     <ListBoxItem
       data-slot="select-item"
-      className={cn(
-        'flex cursor-default items-center gap-2 rounded-md px-2 py-1.5 text-sm outline-none data-focused:bg-muted data-selected:bg-muted data-disabled:pointer-events-none data-disabled:opacity-50',
-        className,
+      className={(state) => cn(
+        'flex min-h-9 cursor-default items-center gap-2 rounded-md px-2 py-2 text-sm outline-none data-focused:bg-muted data-selected:bg-muted data-disabled:pointer-events-none data-disabled:opacity-50',
+        typeof className === 'function' ? className(state) : className,
       )}
       {...props}
     >
-      {children}
+      {(state) => <>
+        <span className="min-w-0 flex-1">{typeof children === 'function' ? children(state) : children}</span>
+        {state.isSelected && <Check aria-hidden="true" className="size-4 shrink-0" />}
+      </>}
     </ListBoxItem>
   )
 }

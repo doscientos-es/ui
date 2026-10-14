@@ -73,8 +73,10 @@ export function AlertDialogContent({
       contentSlot="alert-dialog-content"
       overlaySlot="alert-dialog-overlay"
       role="alertdialog"
+      isDismissable={false}
       showCloseButton={false}
-      className={cn(size === 'sm' ? 'sm:max-w-xs' : 'sm:max-w-sm', className)}
+      size="sm"
+      className={cn(size === 'sm' && 'max-w-[20rem]', className)}
     >
       {children}
     </DialogContent>
@@ -122,7 +124,7 @@ export function AlertDialogCancel({
 }: Omit<React.ComponentProps<typeof Button>, 'onPress'>) {
   return (
     <DialogClose asChild>
-      <Button data-slot="alert-dialog-cancel" variant="outline" onClick={onClick} {...props}>
+      <Button data-slot="alert-dialog-cancel" variant="outline" autoFocus onClick={onClick} {...props}>
         {children}
       </Button>
     </DialogClose>

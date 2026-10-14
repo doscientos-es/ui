@@ -18,16 +18,20 @@ export function PageHeader({ className, ...props }: React.ComponentProps<'header
   return (
     <header
       data-slot="page-header"
-      className={cn(
-        'flex flex-col gap-4 py-3 sm:flex-row sm:items-center sm:justify-between',
-        className,
-      )}
+      className={cn('flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-3', className)}
       {...props}
     />
   )
 }
 export function PageHeaderHeading({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="page-header-heading" className={cn('min-w-0', className)} {...props} />
+  // basis-64: the heading keeps at least 16rem; actions wrap to their own row instead of squeezing it.
+  return (
+    <div
+      data-slot="page-header-heading"
+      className={cn('min-w-0 flex-1 basis-64', className)}
+      {...props}
+    />
+  )
 }
 export function PageHeaderTitle({ className, children, ...props }: React.ComponentProps<'h1'>) {
   return (
@@ -65,7 +69,7 @@ export function PageHeaderActions({ className, ...props }: React.ComponentProps<
   return (
     <div
       data-slot="page-header-actions"
-      className={cn('flex shrink-0 items-center gap-2', className)}
+      className={cn('flex flex-wrap items-center gap-2', className)}
       {...props}
     />
   )

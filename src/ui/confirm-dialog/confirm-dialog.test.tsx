@@ -49,5 +49,10 @@ describe('ConfirmDialog', () => {
 
     fireEvent.keyDown(screen.getByRole('alertdialog'), { key: 'Escape' })
     expect(onOpenChange).not.toHaveBeenCalledWith(false)
+    expect(screen.getByRole('button', { name: 'Confirmar' }).getAttribute('aria-disabled')).toBe('true')
+    expect(screen.getByRole('button', { name: 'Confirmar' }).hasAttribute('data-pending')).toBe(true)
+    fireEvent.click(screen.getByRole('button', { name: 'Confirmar' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Cancelar' }))
+    expect(onOpenChange).not.toHaveBeenCalled()
   })
 })

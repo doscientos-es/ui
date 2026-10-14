@@ -18,6 +18,7 @@ import {
 
 import { cn } from '../../lib/cn'
 import { floatingSurfaceClassName } from '../../lib/floating-surface'
+import { textControlClassName } from '../../lib/text-control'
 import { getTextMatchParts } from '../../lib/text-match'
 
 export const Combobox = AriaComboBox
@@ -29,7 +30,8 @@ export function ComboboxInput({ className, ...props }: InputProps) {
     <Input
       data-slot="combobox-input"
       className={cn(
-        'h-9 w-full rounded-lg border border-border bg-background px-2.5 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-3 focus-visible:ring-ring/50',
+        textControlClassName,
+        'h-9 px-2.5',
         className,
       )}
       {...props}
@@ -193,10 +195,10 @@ export function AutocompleteCombobox<T extends object>({
       !suggestion || !normalizedQuery
         ? undefined
         : items.find(
-            (item) =>
-              getItemLabel(item).toLocaleLowerCase().startsWith(normalizedQuery) &&
-              getItemLabel(item).length > inputValue.length,
-          ),
+          (item) =>
+            getItemLabel(item).toLocaleLowerCase().startsWith(normalizedQuery) &&
+            getItemLabel(item).length > inputValue.length,
+        ),
     [getItemLabel, inputValue.length, items, normalizedQuery, suggestion],
   )
   const suggestionLabel = suggestedItem ? getItemLabel(suggestedItem) : undefined

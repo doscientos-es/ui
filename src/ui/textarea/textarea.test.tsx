@@ -18,4 +18,13 @@ describe('Textarea', () => {
     const textarea = screen.getByRole('textbox', { name: 'Notas' })
     expect(textarea.classList.contains('box-border')).toBe(true)
   })
+
+  it('shares text-control states and only resizes vertically by default', () => {
+    render(<Textarea aria-label="Notas" aria-invalid />)
+    const textarea = screen.getByRole('textbox')
+    expect(textarea.classList.contains('resize-y')).toBe(true)
+    expect(textarea.classList.contains('text-base')).toBe(true)
+    expect(textarea.classList.contains('aria-invalid:focus-visible:ring-destructive/20')).toBe(true)
+    expect(textarea.classList.contains('motion-reduce:transition-none')).toBe(true)
+  })
 })
