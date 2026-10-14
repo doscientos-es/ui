@@ -124,7 +124,14 @@ export function AlertDialogCancel({
 }: Omit<React.ComponentProps<typeof Button>, 'onPress'>) {
   return (
     <DialogClose asChild>
-      <Button data-slot="alert-dialog-cancel" variant="outline" autoFocus onClick={onClick} {...props}>
+      {/* oxlint-disable-next-line jsx-a11y/no-autofocus -- Focus the safe action inside a user-opened, focus-managed modal. */}
+      <Button
+        data-slot="alert-dialog-cancel"
+        variant="outline"
+        autoFocus
+        onClick={onClick}
+        {...props}
+      >
         {children}
       </Button>
     </DialogClose>

@@ -17,11 +17,7 @@ export function Input({ className, type, ref, ...props }: InputProps) {
       ref={ref}
       type={type}
       data-slot="input"
-      className={cn(
-        textControlClassName,
-        'h-9 py-1',
-        className,
-      )}
+      className={cn(textControlClassName, 'h-9 py-1', className)}
       {...props}
     />
   )

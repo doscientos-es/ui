@@ -29,11 +29,7 @@ export function ComboboxInput({ className, ...props }: InputProps) {
   return (
     <Input
       data-slot="combobox-input"
-      className={cn(
-        textControlClassName,
-        'h-9 px-2.5',
-        className,
-      )}
+      className={cn(textControlClassName, 'h-9 px-2.5', className)}
       {...props}
     />
   )
@@ -195,10 +191,10 @@ export function AutocompleteCombobox<T extends object>({
       !suggestion || !normalizedQuery
         ? undefined
         : items.find(
-          (item) =>
-            getItemLabel(item).toLocaleLowerCase().startsWith(normalizedQuery) &&
-            getItemLabel(item).length > inputValue.length,
-        ),
+            (item) =>
+              getItemLabel(item).toLocaleLowerCase().startsWith(normalizedQuery) &&
+              getItemLabel(item).length > inputValue.length,
+          ),
     [getItemLabel, inputValue.length, items, normalizedQuery, suggestion],
   )
   const suggestionLabel = suggestedItem ? getItemLabel(suggestedItem) : undefined
@@ -240,7 +236,7 @@ export function AutocompleteCombobox<T extends object>({
         {suggestionLabel && (
           <span
             aria-hidden="true"
-            className="text-muted-foreground/60 pointer-events-none absolute inset-y-0 left-2.5 z-0 flex items-center text-sm whitespace-pre"
+            className="text-muted-foreground/60 pointer-events-none absolute inset-y-0 left-2.5 z-0 flex items-center text-base whitespace-pre md:text-sm"
           >
             <span className="text-transparent">{inputValue}</span>
             {suggestionLabel.slice(inputValue.length)}

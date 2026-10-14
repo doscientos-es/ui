@@ -301,7 +301,11 @@ export function DialogClose({ asChild = false, children, onClick, ...props }: Di
 /** Groups the title and description at the top of a dialog. */
 export function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
-    <div data-slot="dialog-header" className={cn('flex min-w-0 flex-col gap-2', className)} {...props} />
+    <div
+      data-slot="dialog-header"
+      className={cn('flex min-w-0 flex-col gap-2', className)}
+      {...props}
+    />
   )
 }
 
@@ -336,7 +340,10 @@ export function DialogTitle({
     <Heading
       slot="title"
       data-slot="dialog-title"
-      className={cn('font-heading text-lg leading-snug font-semibold tracking-tight break-words', className)}
+      className={cn(
+        'font-heading text-lg leading-snug font-semibold tracking-tight break-words',
+        className,
+      )}
       {...props}
     />
   )
@@ -355,7 +362,7 @@ export function DialogDescription({
 
   React.useEffect(() => {
     setDescriptionId?.(descriptionId)
-    return () => setDescriptionId?.((current) => current === descriptionId ? undefined : current)
+    return () => setDescriptionId?.((current) => (current === descriptionId ? undefined : current))
   }, [descriptionId, setDescriptionId])
 
   return (

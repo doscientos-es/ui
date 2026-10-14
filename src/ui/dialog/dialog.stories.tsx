@@ -98,6 +98,67 @@ export const LongContent: Story = {
       </DialogFooter>
     </Dialog>
   ),
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body)
+    await userEvent.click(within(canvasElement).getByRole('button', { name: 'Ver condiciones' }))
+    const dialog = await page.findByRole('dialog', { name: 'Condiciones del servicio' })
+    await waitFor(async () => {
+      const bounds = dialog.getBoundingClientRect()
+      const viewport = canvasElement.ownerDocument.documentElement
+      await expect(bounds.width).toBeLessThanOrEqual(512)
+      await expect(bounds.left).toBeGreaterThanOrEqual(15)
+      await expect(bounds.right).toBeLessThanOrEqual(viewport.clientWidth - 15)
+      await expect(bounds.height).toBeLessThanOrEqual(viewport.clientHeight - 31)
+    })
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(page.queryByRole('dialog')).not.toBeInTheDocument())
+  },
+}
+
+export const Sizes: Story = {
+  render: () => (
+    <div className="flex flex-wrap gap-3">
+      {(['sm', 'md', 'lg', 'xl', 'full'] as const).map((size) => (
+        <Dialog
+          key={size}
+          trigger={`Tamaño ${size}`}
+          size={size}
+          triggerProps={{ variant: 'outline' }}
+        >
+          <DialogHeader>
+            <DialogTitle>Una superficie para cada tarea</DialogTitle>
+            <DialogDescription>
+              El tamaño mediano es el predeterminado. Amplía solo cuando el contenido lo necesita.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose variant="outline">Cerrar</DialogClose>
+          </DialogFooter>
+        </Dialog>
+      ))}
+    </div>
+  ),
+}
+
+export const DefaultOpen: Story = {
+  render: () => (
+    <Dialog trigger="Nuevo registro" defaultOpen triggerProps={{ variant: 'outline' }}>
+      <DialogHeader>
+        <DialogTitle>Nuevo registro</DialogTitle>
+        <DialogDescription>
+          Un formulario breve no necesita ocupar toda la pantalla.
+        </DialogDescription>
+      </DialogHeader>
+      <label className="grid gap-2 text-sm" htmlFor="new-record-name">
+        Nombre
+        <Input id="new-record-name" placeholder="Escribe un nombre" />
+      </label>
+      <DialogFooter>
+        <DialogClose variant="outline">Cancelar</DialogClose>
+        <DialogClose>Crear registro</DialogClose>
+      </DialogFooter>
+    </Dialog>
+  ),
 }
 
 export const Loading: Story = {

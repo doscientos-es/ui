@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 
@@ -7,15 +7,23 @@ import { Select, SelectContent, SelectItem, SelectList, SelectTrigger, SelectVal
 function Example({ disabled = false }: { disabled?: boolean }) {
   return (
     <Select aria-label="Cliente" defaultSelectedKey="ana" isDisabled={disabled}>
-      <SelectTrigger className={(state) => state.isDisabled ? 'custom-disabled' : 'custom-trigger'}>
+      <SelectTrigger
+        className={(state) => (state.isDisabled ? 'custom-disabled' : 'custom-trigger')}
+      >
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
         <SelectList>
-          <SelectItem id="ana" textValue="Ana" className={(state) => state.isSelected ? 'custom-selected' : ''}>
+          <SelectItem
+            id="ana"
+            textValue="Ana"
+            className={(state) => (state.isSelected ? 'custom-selected' : '')}
+          >
             {(state) => <span>{state.isSelected ? 'Ana · seleccionada' : 'Ana'}</span>}
           </SelectItem>
-          <SelectItem id="sara" textValue="Sara">Sara</SelectItem>
+          <SelectItem id="sara" textValue="Sara">
+            Sara
+          </SelectItem>
         </SelectList>
       </SelectContent>
     </Select>
@@ -35,8 +43,10 @@ describe('Select', () => {
     expect(selected.classList.contains('custom-selected')).toBe(true)
     expect(selected.querySelector('svg')?.getAttribute('aria-hidden')).toBe('true')
     expect(screen.getByRole('option', { name: 'Sara' }).querySelector('svg')).toBeNull()
+    // happy-dom has no layout for React Aria's automatic option focus.
+    selected.focus()
     await user.keyboard('{ArrowDown}{Enter}')
-    expect(screen.queryByRole('listbox')).toBeNull()
+    await waitFor(() => expect(screen.queryByRole('listbox')).toBeNull())
     expect(trigger.textContent).toContain('Sara')
   })
 

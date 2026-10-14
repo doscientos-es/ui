@@ -187,7 +187,10 @@ function DrawerFooter({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="drawer-footer"
-      className={cn('mt-auto flex shrink-0 flex-col gap-2 border-t border-border bg-surface-subtle p-4', className)}
+      className={cn(
+        'mt-auto flex shrink-0 flex-col gap-2 border-t border-border bg-surface-subtle p-4',
+        className,
+      )}
       {...props}
     />
   )
@@ -198,7 +201,10 @@ function DrawerTitle({ className, ...props }: Omit<React.ComponentProps<typeof H
     <Heading
       slot="title"
       data-slot="drawer-title"
-      className={cn('text-lg leading-snug font-semibold tracking-tight break-words text-foreground', className)}
+      className={cn(
+        'text-lg leading-snug font-semibold tracking-tight break-words text-foreground',
+        className,
+      )}
       {...props}
     />
   )

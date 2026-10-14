@@ -64,6 +64,28 @@ que cada aplicación reconstruya el mismo dashboard: `canvas`, `sidebar`,
 monocroma; una marca puede redefinirlos mediante `--canvas`, `--sidebar`,
 `--surface-subtle` y `--border-strong`.
 
+## Diálogos y controles cómodos por defecto
+
+`Dialog` y `DialogContent` usan `size="md"` (máximo 32rem / 512px), sin depender de
+breakpoints ni de los tokens de ancho de la aplicación. Conservan un margen de 16px
+en móvil y desplazan el contenido largo dentro del panel, limitado por `100dvh`.
+
+- Tamaños: `sm` (24rem), `md` (32rem), `lg` (42rem), `xl` (56rem) y `full` (ancho disponible).
+- Usa `size="lg"` para formularios amplios y `full` solo cuando la tarea lo necesite;
+  `className` sigue permitiendo overrides explícitos.
+- Incluye `DialogTitle` y, cuando aporte contexto, `DialogDescription`. Ambos se
+  vinculan al diálogo para lectores de pantalla; el cierre no invade el encabezado.
+- `isDismissable={false}` evita cerrar al pulsar fuera. `isKeyboardDismissDisabled`
+  bloquea Escape; resérvalo para operaciones que realmente no puedan interrumpirse.
+- `AlertDialog` no cierra al pulsar fuera. `AlertDialogCancel` y `ConfirmDialog`
+  enfocan la cancelación inicialmente; `ConfirmDialog` conserva el estado pendiente.
+- `Input`, `Textarea` y `ComboboxInput` comparten foco, error y estados deshabilitados.
+  El texto es de 16px en viewports estrechos para evitar el zoom automático de iOS.
+- En dispositivos táctiles, botones de tamaño normal y controles de formulario
+  tienen una altura mínima de 44px. Los tamaños compactos explícitos se conservan.
+
+Storybook: **Components / Overlays / Dialog / Default Open**, **Sizes** y **Long Content**.
+
 ## Iconos de estado en badges
 
 `Badge` y `BadgeLink` incluyen un icono decorativo según `variant`: `success` → check,

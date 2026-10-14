@@ -81,4 +81,21 @@ describe('Drawer', () => {
 
     expect(screen.getByRole('dialog', { name: 'Filtros avanzados' })).toBeTruthy()
   })
+
+  it('constrains the panel height and lets long content scroll within it', () => {
+    render(
+      <Drawer open>
+        <DrawerTitle>Detalle</DrawerTitle>
+        <p>Contenido largo.</p>
+      </Drawer>,
+    )
+    const dialog = screen.getByRole('dialog')
+    const panel = dialog.parentElement
+    expect(dialog.classList.contains('min-h-0')).toBe(true)
+    expect(dialog.classList.contains('overflow-y-auto')).toBe(true)
+    expect(panel?.classList.contains('max-h-dvh')).toBe(true)
+    expect(panel?.classList.contains('overflow-hidden')).toBe(true)
+    expect(panel?.classList.contains('data-[side=right]:max-w-[24rem]')).toBe(true)
+    expect(panel?.getAttribute('data-close-button')).toBe('true')
+  })
 })

@@ -87,6 +87,16 @@ Usar iconos lineales, simples y de peso uniforme. Un icono no sustituye el texto
 - Error: explicar impacto y siguiente paso; evitar mensajes técnicos sin traducción.
 - Motion: 100–200ms para superficies y controles, easing suave, sin rebotes. Respetar `prefers-reduced-motion`.
 
+### Diálogos y formularios
+
+- Diálogo breve: ancho mediano (32rem) por defecto, alto según contenido y margen móvil.
+  Usar `size` antes de añadir clases; reservar `full` para tareas que realmente necesitan espacio.
+- Título y descripción alineados a la izquierda, con espacio reservado para cerrar y texto que pueda envolver.
+- Contenido largo: scroll dentro de la superficie, nunca controles fuera del viewport dinámico.
+- Confirmaciones: cancelación enfocada inicialmente y sin cierre accidental al pulsar fuera.
+- Controles: foco contrastado, error distinguible durante el foco y selección no comunicada solo por color.
+- Móvil: texto de entrada de 16px y acciones principales con objetivos táctiles de al menos 44px.
+
 ## Copy
 
 Escribir como un compañero experto: breve, directo y específico. Preferir “Aún no hay reservas” a “No se encontraron registros”. Las acciones empiezan con verbo: “Crear reserva”, “Ver facturas”, “Reintentar”. Evitar mayúsculas decorativas y frases genéricas como “Haz clic aquí”.

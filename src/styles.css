@@ -283,24 +283,33 @@
 /* Reserve room for the close action even when the title wraps or is used without a header. */
 [data-slot='dialog-content'][data-close-button] > [data-slot='dialog-header'],
 [data-slot='dialog-content'][data-close-button] > [data-slot='dialog-title'],
-[data-slot='drawer-content'][data-close-button] > [data-slot='drawer'] > [data-slot='drawer-title'] {
+[data-slot='drawer-content'][data-close-button]
+  > [data-slot='drawer']
+  > [data-slot='drawer-title'] {
   padding-inline-end: 2rem;
 }
 
-[data-slot='drawer-content'][data-close-button] > [data-slot='drawer'] > [data-slot='drawer-header'] {
+[data-slot='drawer-content'][data-close-button]
+  > [data-slot='drawer']
+  > [data-slot='drawer-header'] {
   padding-inline-end: 3.5rem;
 }
 
 /* Keep deliberate compact sizes on desktop; primary controls remain easy to tap on touchscreens. */
 @media (pointer: coarse) {
-  [data-slot='button']:is([data-size='default'], [data-size='lg'], [data-size='icon'], [data-size='icon-lg']),
+  :is(button, a)[data-variant]:is(
+      [data-size='default'],
+      [data-size='lg'],
+      [data-size='icon'],
+      [data-size='icon-lg']
+    ),
   [data-slot='input'],
   [data-slot='combobox-input'],
   [data-slot='select-trigger'] {
     min-height: 2.75rem;
   }
 
-  [data-slot='button']:is([data-size='icon'], [data-size='icon-lg']) {
+  :is(button, a)[data-variant]:is([data-size='icon'], [data-size='icon-lg']) {
     min-width: 2.75rem;
   }
 }

@@ -32,9 +32,14 @@ describe('AlertDialog', () => {
 
   it('does not dismiss when the space outside its panel is pressed', async () => {
     const onOpenChange = vi.fn()
-    render(<AlertDialog open onOpenChange={onOpenChange}><AlertDialogContent>
-      <AlertDialogTitle>Eliminar cliente</AlertDialogTitle><AlertDialogCancel />
-    </AlertDialogContent></AlertDialog>)
+    render(
+      <AlertDialog open onOpenChange={onOpenChange}>
+        <AlertDialogContent>
+          <AlertDialogTitle>Eliminar cliente</AlertDialogTitle>
+          <AlertDialogCancel />
+        </AlertDialogContent>
+      </AlertDialog>,
+    )
     const panel = screen.getByRole('alertdialog').parentElement
     if (!panel) throw new Error('Expected modal panel.')
     await userEvent.click(panel)

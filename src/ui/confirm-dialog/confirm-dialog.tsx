@@ -47,7 +47,13 @@ export function ConfirmDialog({
           {description ? <AlertDialogDescription>{description}</AlertDialogDescription> : null}
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <Button variant="outline" autoFocus isDisabled={pending} onPress={() => onOpenChange(false)}>
+          {/* oxlint-disable-next-line jsx-a11y/no-autofocus -- Focus the safe action inside a user-opened, focus-managed modal. */}
+          <Button
+            variant="outline"
+            autoFocus
+            isDisabled={pending}
+            onPress={() => onOpenChange(false)}
+          >
             {cancelLabel}
           </Button>
           <Button

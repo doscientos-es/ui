@@ -19,7 +19,7 @@ describe('Input', () => {
     const input = screen.getByRole('textbox')
     expect(input.classList.contains('text-base')).toBe(true)
     expect(input.classList.contains('md:text-sm')).toBe(true)
-    expect(input.classList.contains('aria-invalid:focus-visible:ring-destructive/20')).toBe(true)
+    expect(input.classList.contains('aria-invalid:focus-visible:ring-destructive')).toBe(true)
     expect(input.classList.contains('motion-reduce:transition-none')).toBe(true)
   })
 

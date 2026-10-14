@@ -132,7 +132,9 @@ describe('Dialog', () => {
     expect(dialog.classList.contains('w-full')).toBe(true)
     expect(dialog.classList.contains('max-w-[32rem]')).toBe(true)
     expect(dialog.getAttribute('data-size')).toBe('md')
-    expect(document.querySelector('[data-slot="dialog-overlay"]')?.classList.contains('p-4')).toBe(true)
+    expect(document.querySelector('[data-slot="dialog-overlay"]')?.classList.contains('p-4')).toBe(
+      true,
+    )
   })
 
   it('allows consumers to opt into a full-width dialog explicitly', () => {
@@ -188,44 +190,69 @@ describe('Dialog', () => {
     ['lg', 'max-w-[42rem]'],
     ['xl', 'max-w-[56rem]'],
   ] as const)('supports the %s size in the simple API', (size, widthClass) => {
-    render(<Dialog trigger="Abrir" defaultOpen size={size}><DialogTitle>Formulario</DialogTitle></Dialog>)
+    render(
+      <Dialog trigger="Abrir" defaultOpen size={size}>
+        <DialogTitle>Formulario</DialogTitle>
+      </Dialog>,
+    )
     expect(screen.getByRole('dialog').classList.contains(widthClass)).toBe(true)
   })
 
   it('still allows custom width overrides', () => {
-    render(<Dialog trigger="Abrir" defaultOpen className="max-w-none"><DialogTitle>Formulario</DialogTitle></Dialog>)
+    render(
+      <Dialog trigger="Abrir" defaultOpen className="max-w-none">
+        <DialogTitle>Formulario</DialogTitle>
+      </Dialog>,
+    )
     const dialog = screen.getByRole('dialog')
     expect(dialog.classList.contains('max-w-none')).toBe(true)
     expect(dialog.classList.contains('max-w-[32rem]')).toBe(false)
   })
 
   it('associates its description and removes the association when it unmounts', () => {
-    const content = (description: boolean) => <Dialog open><DialogContent>
-      <DialogTitle>Cliente</DialogTitle>
-      {description && <DialogDescription>Actualiza sus datos.</DialogDescription>}
-    </DialogContent></Dialog>
+    const content = (description: boolean) => (
+      <Dialog open>
+        <DialogContent>
+          <DialogTitle>Cliente</DialogTitle>
+          {description && <DialogDescription>Actualiza sus datos.</DialogDescription>}
+        </DialogContent>
+      </Dialog>
+    )
     const { rerender } = render(content(true))
     const dialog = screen.getByRole('dialog', { name: 'Cliente' })
-    expect(dialog.getAttribute('aria-describedby')).toBe(screen.getByText('Actualiza sus datos.').id)
+    expect(dialog.getAttribute('aria-describedby')).toBe(
+      screen.getByText('Actualiza sus datos.').id,
+    )
     rerender(content(false))
     expect(dialog.hasAttribute('aria-describedby')).toBe(false)
   })
 
   it('preserves an explicitly provided accessible description', () => {
-    render(<Dialog open><DialogContent aria-describedby="external-description">
-      <DialogTitle>Cliente</DialogTitle><DialogDescription>Ayuda local.</DialogDescription>
-      <p id="external-description">Ayuda personalizada.</p>
-    </DialogContent></Dialog>)
+    render(
+      <Dialog open>
+        <DialogContent aria-describedby="external-description">
+          <DialogTitle>Cliente</DialogTitle>
+          <DialogDescription>Ayuda local.</DialogDescription>
+          <p id="external-description">Ayuda personalizada.</p>
+        </DialogContent>
+      </Dialog>,
+    )
     expect(screen.getByRole('dialog').getAttribute('aria-describedby')).toBe('external-description')
   })
 
   it('can prevent outside dismissal without preventing Escape', async () => {
     const onOpenChange = vi.fn()
-    render(<Dialog open onOpenChange={onOpenChange}><DialogContent isDismissable={false}>
-      <DialogTitle>Edición</DialogTitle>
-    </DialogContent></Dialog>)
+    render(
+      <Dialog open onOpenChange={onOpenChange}>
+        <DialogContent isDismissable={false}>
+          <DialogTitle>Edición</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
     const dialog = screen.getByRole('dialog')
-    await userEvent.click(dialog.parentElement!)
+    const panel = dialog.parentElement
+    if (!panel) throw new Error('Expected modal panel.')
+    await userEvent.click(panel)
     expect(onOpenChange).not.toHaveBeenCalled()
     fireEvent.keyDown(dialog, { key: 'Escape' })
     expect(onOpenChange).toHaveBeenCalledWith(false)
@@ -233,9 +260,13 @@ describe('Dialog', () => {
 
   it('can prevent Escape dismissal', () => {
     const onOpenChange = vi.fn()
-    render(<Dialog open onOpenChange={onOpenChange}><DialogContent isKeyboardDismissDisabled>
-      <DialogTitle>Guardando</DialogTitle>
-    </DialogContent></Dialog>)
+    render(
+      <Dialog open onOpenChange={onOpenChange}>
+        <DialogContent isKeyboardDismissDisabled>
+          <DialogTitle>Guardando</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
     fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape' })
     expect(onOpenChange).not.toHaveBeenCalled()
   })
@@ -244,10 +275,15 @@ describe('Dialog', () => {
     const user = userEvent.setup()
     const onOpenClick = vi.fn()
     const onCloseClick = vi.fn()
-    render(<Dialog><DialogTrigger onClick={onOpenClick}>Editar</DialogTrigger>
-      <DialogContent><DialogTitle>Cliente</DialogTitle>
-        <DialogClose onClick={onCloseClick}>Cancelar</DialogClose>
-      </DialogContent></Dialog>)
+    render(
+      <Dialog>
+        <DialogTrigger onClick={onOpenClick}>Editar</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Cliente</DialogTitle>
+          <DialogClose onClick={onCloseClick}>Cancelar</DialogClose>
+        </DialogContent>
+      </Dialog>,
+    )
     const trigger = screen.getByRole('button', { name: 'Editar' })
     expect(trigger.getAttribute('aria-haspopup')).toBe('dialog')
     expect(trigger.getAttribute('aria-expanded')).toBe('false')
@@ -261,9 +297,16 @@ describe('Dialog', () => {
   })
 
   it('places the optional footer close action before the primary action in DOM order', () => {
-    render(<Dialog open><DialogContent><DialogTitle>Cliente</DialogTitle>
-      <DialogFooter showCloseButton><button type="button">Guardar</button></DialogFooter>
-    </DialogContent></Dialog>)
+    render(
+      <Dialog open>
+        <DialogContent>
+          <DialogTitle>Cliente</DialogTitle>
+          <DialogFooter showCloseButton>
+            <button type="button">Guardar</button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>,
+    )
     const footer = document.querySelector('[data-slot="dialog-footer"]')
     expect(footer?.firstElementChild?.textContent).toBe('Cerrar')
     expect(footer?.lastElementChild?.textContent).toBe('Guardar')

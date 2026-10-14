@@ -19,11 +19,7 @@ export function Textarea({ className, ref, ...props }: TextareaProps) {
     <AriaTextArea
       ref={ref}
       data-slot="textarea"
-      className={cn(
-        textControlClassName,
-        'min-h-24 resize-y py-2 leading-relaxed',
-        className,
-      )}
+      className={cn(textControlClassName, 'min-h-24 resize-y py-2 leading-relaxed', className)}
       {...props}
     />
   )
