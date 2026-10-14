@@ -90,9 +90,9 @@ export function MultiSelectCombobox<T extends object>({
               locked
                 ? undefined
                 : (keys) => {
-                  if (Array.isArray(state.value))
-                    state.setValue(state.value.filter((key) => !keys.has(key)))
-                }
+                    if (Array.isArray(state.value))
+                      state.setValue(state.value.filter((key) => !keys.has(key)))
+                  }
             }
           >
             <TagList
@@ -104,7 +104,7 @@ export function MultiSelectCombobox<T extends object>({
                   id={option.id}
                   textValue={option.label}
                   isDisabled={props.isDisabled}
-                  className="bg-muted text-foreground data-focus-visible:ring-ring/50 flex min-w-0 items-center gap-1 rounded-md py-1 pr-1 pl-2 text-sm outline-none data-focus-visible:ring-3"
+                  className="bg-muted text-foreground data-focus-visible:ring-ring/50 flex min-w-0 items-center gap-1 rounded-md py-1 pr-1 pl-2 text-sm outline-none data-disabled:opacity-50 data-focus-visible:ring-3"
                 >
                   <span className="min-w-0 wrap-break-word">{option.label}</span>
                   {!locked && (

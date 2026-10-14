@@ -86,6 +86,52 @@ en móvil y desplazan el contenido largo dentro del panel, limitado por `100dvh`
 
 Storybook: **Components / Overlays / Dialog / Default Open**, **Sizes** y **Long Content**.
 
+## Formularios modales y selección reutilizable
+
+Tres patrones de bajo coste componiendo las primitives existentes, sin dependencias nuevas:
+
+- `FormDialog`: título, descripción, formulario nativo, cancelación y `SubmitButton`.
+  Recibe `open`, `onOpenChange`, `onSubmit` y los campos como `children`.
+  Previene la navegación del submit, conserva validación HTML y entrega el evento
+  para leer `FormData`. La app guarda, muestra errores y cierra **solo tras el éxito**.
+- `loading` bloquea submit, cancelación, cierre, Escape y clicks fuera mientras se
+  guarda. `submitDisabled` solo bloquea el submit; `loadingLabel`, `submitLabel` y
+  `cancelLabel` permiten adaptar el copy. Pasa el estado pendiente de tu acción.
+- Conserva el ancho compacto de `Dialog`; usa `size` y `bodyClassName` para ampliar
+  o distribuir campos. `formProps` permite `ref`, `id`, `noValidate` y atributos
+  nativos. Para forms con `action` de React, compón `Dialog` y `SubmitButton` directamente.
+- El cierre al pulsar fuera es opt-in (`isDismissable`). No detecta cambios sin
+  guardar: compón `useFormDirty` y decide en `onOpenChange` si necesitas confirmar.
+- `SegmentedControl` + `SegmentedControlItem`: elección única con `value`,
+  `defaultValue` y `onChange`; cada segmento lleva `value`. Usa un `aria-label`
+  para el grupo y texto o un nombre accesible para cada opción. Soporta flechas,
+  orientación vertical, `name` para formularios, disabled y read-only.
+- Usa `Tabs` para paneles asociados y `ButtonGroup` para acciones independientes;
+  el segmented control se reserva para pocas opciones como vista o periodo.
+- `MultiSelectCombobox`: recibe `items`, `getItemKey` y `getItemLabel`; selección
+  controlada con `value` / `onChange` o inicial con `defaultValue` (arrays de claves).
+  Reutiliza los slots del combobox y delega filtrado, teclado y selección a React Aria.
+- Los seleccionados se muestran como tags eliminables con teclado y botones;
+  `label` o `aria-label`, `description`, `errorMessage`, `emptyState`, `selectedLabel`
+  y `removeLabel` adaptan contexto y copy. `removeLabel` es el verbo («Quitar»);
+  React Aria añade el nombre de cada tag. Disabled y read-only impiden eliminar.
+- `name` envía las claves como valores repetidos en `FormData`; `renderItem`
+  personaliza las opciones sin meter entidades de negocio en el paquete.
+  El filtrado es local: incluye también las opciones seleccionadas en `items`.
+  Fetching, caché y adaptación de resultados remotos siguen en la aplicación.
+
+### Adopción sin duplicidades
+
+Al actualizar la dependencia publicada, sustituye el wrapper visual
+`internal/projects/abaco/src/shared/ui/form-dialog.tsx` por un re-export o un adaptador
+fino de `FormDialog`; conserva el grid de dos columnas con `bodyClassName`.
+`EntityMultiCombobox` del backoffice puede quedarse como adaptador de datos e iconos
+de dominio sobre `MultiSelectCombobox`, eliminando su implementación de selección.
+No copies estos componentes a cada frontend ni migres imports antes de disponer de
+una versión del paquete que los exporte.
+
+Storybook: **Components / Forms / FormDialog**, **SegmentedControl** y **MultiSelectCombobox**.
+
 ## Iconos de estado en badges
 
 `Badge` y `BadgeLink` incluyen un icono decorativo según `variant`: `success` → check,
