@@ -1,6 +1,6 @@
 'use client'
 
-import { XIcon } from 'lucide-react'
+import { CheckIcon, XIcon } from 'lucide-react'
 import { useMemo, type ReactNode } from 'react'
 import { FieldError, Label, Tag, TagGroup, TagList, Text, type ComboBoxProps, type Key } from 'react-aria-components'
 
@@ -31,7 +31,8 @@ export type MultiSelectComboboxProps<T extends object> = Omit<
   placeholder?: string
   emptyState?: ReactNode
   selectedLabel?: string
-  removeLabel?: (label: string) => string
+  /** Verb for the remove action; React Aria appends the tag's accessible name. */
+  removeLabel?: string
 }
 
 /** Searchable multiple selection using the existing combobox slots and React Aria tags. */
@@ -46,7 +47,7 @@ export function MultiSelectCombobox<T extends object>({
   placeholder = 'Buscar…',
   emptyState = 'No hay resultados.',
   selectedLabel = 'Opciones seleccionadas',
-  removeLabel = (text) => `Quitar ${text}`,
+  removeLabel = 'Quitar',
   className,
   ...props
 }: MultiSelectComboboxProps<T>) {
@@ -59,7 +60,6 @@ export function MultiSelectCombobox<T extends object>({
   return (
     <Combobox<SelectionItem<T>, 'multiple'>
       {...props}
-      aria-label={props['aria-label'] ?? label}
       data-slot="multi-select-combobox"
       selectionMode="multiple"
       defaultItems={options}
@@ -80,7 +80,7 @@ export function MultiSelectCombobox<T extends object>({
               {(option) => (
                 <Tag id={option.id} textValue={option.label} isDisabled={props.isDisabled} className="flex min-w-0 items-center gap-1 rounded-md bg-muted py-1 pr-1 pl-2 text-sm text-foreground outline-none data-focus-visible:ring-3 data-focus-visible:ring-ring/50">
                   <span className="min-w-0 wrap-break-word">{option.label}</span>
-                  {!locked && <Button slot="remove" variant="ghost" size="icon-sm" aria-label={removeLabel(option.label)}><XIcon aria-hidden="true" /></Button>}
+                  {!locked && <Button slot="remove" variant="ghost" size="icon-sm" aria-label={removeLabel}><XIcon aria-hidden="true" /></Button>}
                 </Tag>
               )}
             </TagList>
@@ -91,7 +91,7 @@ export function MultiSelectCombobox<T extends object>({
       {errorMessage && <FieldError className="text-xs text-destructive">{errorMessage}</FieldError>}
       <ComboboxContent>
         <ComboboxList<SelectionItem<T>> emptyState={<p className="px-3 py-7 text-center text-sm text-muted-foreground">{emptyState}</p>}>
-          {(option) => <ComboboxItem id={option.id} textValue={option.label}>{renderItem ? renderItem(option.item) : option.label}</ComboboxItem>}
+          {(option) => <ComboboxItem id={option.id} textValue={option.label}>{({ isSelected }) => <><span className="min-w-0 break-words">{renderItem ? renderItem(option.item) : option.label}</span>{isSelected && <CheckIcon aria-hidden="true" className="size-4 shrink-0" />}</>}</ComboboxItem>}
         </ComboboxList>
       </ComboboxContent>
     </Combobox>
