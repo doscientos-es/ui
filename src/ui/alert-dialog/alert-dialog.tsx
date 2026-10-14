@@ -16,6 +16,8 @@ import {
   DialogTrigger,
 } from '../dialog/dialog'
 
+/* oxlint-disable jsx-a11y/no-autofocus -- Focus the safe action inside a focus-managed confirmation modal, not on page load. */
+
 export type AlertDialogProps = {
   children: React.ReactNode
   open: boolean
@@ -124,7 +126,6 @@ export function AlertDialogCancel({
 }: Omit<React.ComponentProps<typeof Button>, 'onPress'>) {
   return (
     <DialogClose asChild>
-      {/* oxlint-disable-next-line jsx-a11y/no-autofocus -- Focus the safe action inside a user-opened, focus-managed modal. */}
       <Button
         data-slot="alert-dialog-cancel"
         variant="outline"

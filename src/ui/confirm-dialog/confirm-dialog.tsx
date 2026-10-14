@@ -10,6 +10,8 @@ import {
 } from '../alert-dialog/alert-dialog'
 import { Button } from '../button/button'
 
+/* oxlint-disable jsx-a11y/no-autofocus -- Focus the safe action inside a focus-managed confirmation modal, not on page load. */
+
 export type ConfirmDialogProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -47,7 +49,6 @@ export function ConfirmDialog({
           {description ? <AlertDialogDescription>{description}</AlertDialogDescription> : null}
         </AlertDialogHeader>
         <AlertDialogFooter>
-          {/* oxlint-disable-next-line jsx-a11y/no-autofocus -- Focus the safe action inside a user-opened, focus-managed modal. */}
           <Button
             variant="outline"
             autoFocus
