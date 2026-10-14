@@ -30,7 +30,7 @@ export const Default: Story = {
         <Button variant="outline" onPress={() => setOpen(true)}>
           Editar registro
         </Button>
-        {saved && <p role="status">Registro actualizado.</p>}
+        {saved && <output>Registro actualizado.</output>}
         <FormDialog
           {...args}
           open={open}

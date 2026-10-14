@@ -7,6 +7,18 @@ import { FormDialog } from './form-dialog'
 
 const defaults = { open: true, title: 'Editar registro', onOpenChange: vi.fn(), onSubmit: vi.fn() }
 
+function getModalPanel() {
+  const panel = screen.getByRole('dialog').parentElement
+  if (!panel) throw new Error('Expected a modal panel.')
+  return panel
+}
+
+function getForm() {
+  const form = screen.getByRole('dialog').querySelector('form')
+  if (!form) throw new Error('Expected a form inside the dialog.')
+  return form
+}
+
 describe('FormDialog', () => {
   it('links its title and description and reuses the compact dialog defaults', () => {
     render(
@@ -61,7 +73,7 @@ describe('FormDialog', () => {
       </FormDialog>,
     )
     const dialog = screen.getByRole('dialog')
-    await userEvent.click(dialog.parentElement!)
+    await userEvent.click(getModalPanel())
     expect(onOpenChange).not.toHaveBeenCalled()
     await userEvent.click(screen.getByRole('button', { name: 'Cancelar' }))
     expect(onOpenChange).toHaveBeenCalledWith(false)
@@ -77,7 +89,7 @@ describe('FormDialog', () => {
         Campos
       </FormDialog>,
     )
-    await userEvent.click(screen.getByRole('dialog').parentElement!)
+    await userEvent.click(getModalPanel())
     expect(onOpenChange).toHaveBeenCalledWith(false)
   })
 
@@ -97,14 +109,14 @@ describe('FormDialog', () => {
       </FormDialog>,
     )
     const dialog = screen.getByRole('dialog')
-    const form = dialog.querySelector('form')!
+    const form = getForm()
     expect(form.getAttribute('aria-busy')).toBe('true')
     expect(screen.getByRole('button', { name: 'Creando…' }).hasAttribute('disabled')).toBe(true)
     expect(screen.getByRole('button', { name: 'Cancelar' }).hasAttribute('disabled')).toBe(true)
     expect(screen.queryByRole('button', { name: 'Cerrar diálogo' })).toBeNull()
     fireEvent.submit(form)
     fireEvent.keyDown(dialog, { key: 'Escape' })
-    await userEvent.click(dialog.parentElement!)
+    await userEvent.click(getModalPanel())
     expect(onSubmit).not.toHaveBeenCalled()
     expect(onOpenChange).not.toHaveBeenCalled()
   })
@@ -117,7 +129,7 @@ describe('FormDialog', () => {
         Campos
       </FormDialog>,
     )
-    fireEvent.submit(screen.getByRole('dialog').querySelector('form')!)
+    fireEvent.submit(getForm())
     expect(onSubmit).not.toHaveBeenCalled()
     await userEvent.click(screen.getByRole('button', { name: 'Cancelar' }))
     expect(onOpenChange).toHaveBeenCalledWith(false)
@@ -155,7 +167,8 @@ describe('FormDialog', () => {
         Campos
       </FormDialog>,
     )
-    const form = document.getElementById('edit-form')!
+    const form = document.getElementById('edit-form')
+    if (!form) throw new Error('Expected the custom form id.')
     expect(form.hasAttribute('novalidate')).toBe(true)
     expect(form.classList.contains('custom-form')).toBe(true)
     expect(document.querySelector('[data-slot="form-dialog-body"]')?.className).toContain(

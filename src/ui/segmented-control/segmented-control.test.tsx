@@ -102,9 +102,9 @@ describe('SegmentedControl', () => {
       </SegmentedControl>,
     )
     expect(screen.getByRole('radiogroup').className).toContain('custom-vertical')
-    const segment = screen.getByRole('radio').closest('label')!
-    expect(segment.className).toContain('custom-selected')
-    expect(segment.className).toContain('data-focus-visible:ring-3')
-    expect(segment.className).toContain('[@media(pointer:coarse)]:min-h-11')
+    const segment = screen.getByRole('radio').closest('label')
+    expect(segment?.className).toContain('custom-selected')
+    expect(segment?.className).toContain('data-focus-visible:ring-3')
+    expect(segment?.className).toContain('[@media(pointer:coarse)]:min-h-11')
   })
 })

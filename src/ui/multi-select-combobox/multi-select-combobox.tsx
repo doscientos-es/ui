@@ -90,9 +90,9 @@ export function MultiSelectCombobox<T extends object>({
               locked
                 ? undefined
                 : (keys) => {
-                    if (Array.isArray(state.value))
-                      state.setValue(state.value.filter((key) => !keys.has(key)))
-                  }
+                  if (Array.isArray(state.value))
+                    state.setValue(state.value.filter((key) => !keys.has(key)))
+                }
             }
           >
             <TagList
@@ -108,7 +108,13 @@ export function MultiSelectCombobox<T extends object>({
                 >
                   <span className="min-w-0 wrap-break-word">{option.label}</span>
                   {!locked && (
-                    <Button slot="remove" variant="ghost" size="icon-sm" aria-label={removeLabel}>
+                    <Button
+                      slot="remove"
+                      variant="ghost"
+                      size="icon-sm"
+                      className="[@media(pointer:coarse)]:min-h-11 [@media(pointer:coarse)]:min-w-11"
+                      aria-label={removeLabel}
+                    >
                       <XIcon aria-hidden="true" />
                     </Button>
                   )}
