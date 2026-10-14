@@ -1,0 +1,99 @@
+'use client'
+
+import { XIcon } from 'lucide-react'
+import { useMemo, type ReactNode } from 'react'
+import { FieldError, Label, Tag, TagGroup, TagList, Text, type ComboBoxProps, type Key } from 'react-aria-components'
+
+import { cn } from '../../lib/cn'
+import { Button } from '../button/button'
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxValue,
+} from '../combobox/combobox'
+
+type SelectionItem<T> = { id: Key; label: string; item: T }
+
+export type MultiSelectComboboxProps<T extends object> = Omit<
+  ComboBoxProps<SelectionItem<T>, 'multiple'>,
+  'children' | 'items' | 'defaultItems' | 'selectionMode' | 'allowsCustomValue'
+> & {
+  items: readonly T[]
+  getItemKey: (item: T) => Key
+  getItemLabel: (item: T) => string
+  renderItem?: (item: T) => ReactNode
+  label?: string
+  description?: ReactNode
+  errorMessage?: ReactNode
+  placeholder?: string
+  emptyState?: ReactNode
+  selectedLabel?: string
+  removeLabel?: (label: string) => string
+}
+
+/** Searchable multiple selection using the existing combobox slots and React Aria tags. */
+export function MultiSelectCombobox<T extends object>({
+  items,
+  getItemKey,
+  getItemLabel,
+  renderItem,
+  label,
+  description,
+  errorMessage,
+  placeholder = 'Buscar…',
+  emptyState = 'No hay resultados.',
+  selectedLabel = 'Opciones seleccionadas',
+  removeLabel = (text) => `Quitar ${text}`,
+  className,
+  ...props
+}: MultiSelectComboboxProps<T>) {
+  const options = useMemo(
+    () => items.map((item) => ({ id: getItemKey(item), label: getItemLabel(item), item })),
+    [items, getItemKey, getItemLabel],
+  )
+  const locked = props.isDisabled || props.isReadOnly
+
+  return (
+    <Combobox<SelectionItem<T>, 'multiple'>
+      {...props}
+      aria-label={props['aria-label'] ?? label}
+      data-slot="multi-select-combobox"
+      selectionMode="multiple"
+      defaultItems={options}
+      allowsEmptyCollection
+      className={(state) => cn('flex w-full min-w-0 flex-col gap-1.5', typeof className === 'function' ? className(state) : className)}
+    >
+      {label && <Label className="text-sm font-medium text-foreground">{label}</Label>}
+      <ComboboxInput placeholder={placeholder} />
+      <ComboboxValue<SelectionItem<T>>>
+        {({ selectedItems, state }) => (
+          <TagGroup
+            aria-label={selectedLabel}
+            onRemove={locked ? undefined : (keys) => {
+              if (Array.isArray(state.value)) state.setValue(state.value.filter((key) => !keys.has(key)))
+            }}
+          >
+            <TagList items={selectedItems.filter((item) => item !== null)} className="flex flex-wrap gap-1.5 empty:hidden">
+              {(option) => (
+                <Tag id={option.id} textValue={option.label} isDisabled={props.isDisabled} className="flex min-w-0 items-center gap-1 rounded-md bg-muted py-1 pr-1 pl-2 text-sm text-foreground outline-none data-focus-visible:ring-3 data-focus-visible:ring-ring/50">
+                  <span className="min-w-0 wrap-break-word">{option.label}</span>
+                  {!locked && <Button slot="remove" variant="ghost" size="icon-sm" aria-label={removeLabel(option.label)}><XIcon aria-hidden="true" /></Button>}
+                </Tag>
+              )}
+            </TagList>
+          </TagGroup>
+        )}
+      </ComboboxValue>
+      {description && <Text slot="description" className="text-xs text-muted-foreground">{description}</Text>}
+      {errorMessage && <FieldError className="text-xs text-destructive">{errorMessage}</FieldError>}
+      <ComboboxContent>
+        <ComboboxList<SelectionItem<T>> emptyState={<p className="px-3 py-7 text-center text-sm text-muted-foreground">{emptyState}</p>}>
+          {(option) => <ComboboxItem id={option.id} textValue={option.label}>{renderItem ? renderItem(option.item) : option.label}</ComboboxItem>}
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
+  )
+}
