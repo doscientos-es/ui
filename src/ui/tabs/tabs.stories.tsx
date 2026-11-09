@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { expect, userEvent, within } from 'storybook/test'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs'
 
@@ -17,4 +18,19 @@ export const Default: Story = {
       <TabsContent id="activity">No hay cambios pendientes.</TabsContent>
     </Tabs>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    canvas.getByRole('tab', { name: 'Resumen' }).focus()
+    await userEvent.keyboard('{ArrowRight}')
+    await expect(canvas.getByRole('tab', { name: 'Actividad' })).toHaveFocus()
+    await expect(canvas.getByRole('tab', { name: 'Actividad' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    )
+    await expect(canvas.getByRole('tabpanel', { name: 'Actividad' })).toHaveTextContent(
+      'No hay cambios pendientes.',
+    )
+    await userEvent.keyboard('{Home}')
+    await expect(canvas.getByRole('tab', { name: 'Resumen' })).toHaveFocus()
+  },
 }

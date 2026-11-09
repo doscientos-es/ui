@@ -37,14 +37,17 @@ export function DangerZone({
             data-slot="danger-zone-trigger"
             className="group/danger focus-visible:ring-ring/50 flex w-full items-center gap-3 px-4 text-left outline-none focus-visible:ring-3"
           >
-            <ShieldAlert className="text-destructive size-4 shrink-0" />
+            <ShieldAlert aria-hidden="true" className="text-destructive size-4 shrink-0" />
             <span className="flex flex-1 flex-col gap-0.5">
               <span className="font-heading text-destructive text-base leading-snug font-medium">
                 {title}
               </span>
               <span className="text-muted-foreground text-xs">{description}</span>
             </span>
-            <ChevronDown className="text-muted-foreground size-4 shrink-0 transition-transform group-aria-expanded/danger:rotate-180" />
+            <ChevronDown
+              aria-hidden="true"
+              className="text-muted-foreground size-4 shrink-0 transition-transform group-aria-expanded/danger:rotate-180 motion-reduce:transition-none"
+            />
           </DisclosureButton>
         </Heading>
         <DisclosurePanel data-slot="danger-zone-content">

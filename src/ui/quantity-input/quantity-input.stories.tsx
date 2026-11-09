@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { expect, userEvent, within } from 'storybook/test'
 
 import { QuantityInput } from './quantity-input'
 
@@ -19,5 +20,15 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {}
-export const WithLimits: Story = { args: { defaultValue: 1, minValue: 1, maxValue: 5 } }
+export const WithLimits: Story = {
+  args: { defaultValue: 1, minValue: 1, maxValue: 5 },
+  play: async ({ canvasElement }) => {
+    const input = within(canvasElement).getByRole('textbox', { name: 'Número de instancias' })
+    input.focus()
+    await userEvent.keyboard('{ArrowUp}')
+    await expect(input).toHaveValue('2')
+    await userEvent.keyboard('{ArrowDown}{ArrowDown}')
+    await expect(input).toHaveValue('1')
+  },
+}
 export const Disabled: Story = { args: { isDisabled: true } }

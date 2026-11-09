@@ -27,6 +27,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm quality
+      - run: pnpm exec vitest run --project unit --coverage
       - run: pnpm build
       - run: pnpm build-storybook
 
@@ -45,7 +46,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm test:storybook
+      - run: node scripts/test-ui-matrix.mjs
 
   visual-tests:
     name: Visual Tests / Chromatic

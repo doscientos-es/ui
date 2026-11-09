@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
+import { expect, userEvent, within } from 'storybook/test'
 
 import { Field, FieldDescription, FieldLabel } from '../field/field'
 import { OtpInput } from './otp-input'
@@ -31,6 +32,14 @@ export const Controlled: Story = {
         <FieldDescription>Introduce el código de seis dígitos.</FieldDescription>
       </Field>
     )
+  },
+  play: async ({ canvasElement }) => {
+    const input = within(canvasElement).getByRole('textbox', { name: 'Código de verificación' })
+    await userEvent.click(input)
+    await userEvent.keyboard('12a34567')
+    await expect(input).toHaveValue('123456')
+    await userEvent.keyboard('{Backspace}')
+    await expect(input).toHaveValue('12345')
   },
 }
 

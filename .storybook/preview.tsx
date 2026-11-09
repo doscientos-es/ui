@@ -1,13 +1,31 @@
 import type { Preview } from '@storybook/react-vite'
+import { useEffect, type ReactNode } from 'react'
 
 import '../src/styles.css'
 import './preview.css'
 import { doscientosTheme } from './theme'
 
+function ThemeCanvas({ dark, children }: { dark: boolean; children: ReactNode }) {
+  useEffect(() => {
+    // Portals live under body, not inside the canvas. Theme both locations.
+    const root = document.documentElement
+    const previous = root.classList.contains('dark')
+    root.classList.toggle('dark', dark)
+    return () => {
+      root.classList.toggle('dark', previous)
+    }
+  }, [dark])
+  return <div className={dark ? 'storybook-canvas dark' : 'storybook-canvas'}>{children}</div>
+}
+
 const preview: Preview = {
   tags: ['autodocs', 'test:ui'],
   initialGlobals: {
-    theme: 'light',
+    theme:
+      (import.meta as ImportMeta & { env: Record<string, string | undefined> }).env
+        .VITE_UI_TEST_THEME === 'dark'
+        ? 'dark'
+        : 'light',
   },
   globalTypes: {
     theme: {
@@ -42,6 +60,7 @@ const preview: Preview = {
         'claro escritorio': { theme: 'light', viewport: 'desktop' },
         'oscuro escritorio': { theme: 'dark', viewport: 'desktop' },
         'claro móvil': { theme: 'light', viewport: 'mobile' },
+        'oscuro móvil': { theme: 'dark', viewport: 'mobile' },
       },
     },
     options: {
@@ -52,14 +71,10 @@ const preview: Preview = {
   },
   decorators: [
     (Story, context) => {
-      const canvasClassName = ['storybook-canvas', context.globals.theme === 'dark' && 'dark']
-        .filter(Boolean)
-        .join(' ')
-
       return (
-        <div className={canvasClassName}>
+        <ThemeCanvas dark={context.globals.theme === 'dark'}>
           <Story />
-        </div>
+        </ThemeCanvas>
       )
     },
   ],

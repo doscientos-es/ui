@@ -115,12 +115,12 @@ export function Switch({
               aria-hidden="true"
               data-slot="switch-control"
               className={cn(
-                'relative inline-flex shrink-0 items-center overflow-hidden rounded-full border border-border bg-input shadow-inner',
+                'relative inline-flex shrink-0 items-center overflow-hidden rounded-full border border-input bg-input shadow-inner',
                 'transition-[background-color,border-color,box-shadow] duration-200 ease-out motion-reduce:transition-none',
-                'group-data-hovered/switch:bg-muted-foreground/25',
+                'group-data-hovered/switch:bg-muted-foreground',
                 'group-data-selected/switch:border-primary group-data-selected/switch:bg-primary',
                 'group-data-selected/switch:group-data-hovered/switch:bg-primary/85',
-                'group-data-focus-visible/switch:ring-3 group-data-focus-visible/switch:ring-ring/50',
+                'group-data-focus-visible/switch:ring-3 group-data-focus-visible/switch:ring-ring',
                 styles.control,
               )}
             >

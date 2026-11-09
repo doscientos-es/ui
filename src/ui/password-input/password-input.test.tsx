@@ -28,4 +28,21 @@ describe('PasswordInput', () => {
     rerender(<PasswordInput aria-label="Contraseña" indicator={<output>Falta una norma</output>} />)
     expect(screen.getByRole('status').textContent).toContain('Falta una norma')
   })
+
+  it('disables the visibility action with the field', async () => {
+    const user = userEvent.setup()
+    render(<PasswordInput aria-label="Contraseña" disabled defaultValue="demo-password" />)
+    const toggle = screen.getByRole('button', { name: 'Mostrar contraseña' })
+    expect((toggle as HTMLButtonElement).disabled).toBe(true)
+    await user.click(toggle)
+    expect(screen.getByLabelText('Contraseña').getAttribute('type')).toBe('password')
+  })
+
+  it('allows inspecting a read-only password without editing it', async () => {
+    const user = userEvent.setup()
+    render(<PasswordInput aria-label="Contraseña" readOnly defaultValue="demo-password" />)
+    await user.click(screen.getByRole('button', { name: 'Mostrar contraseña' }))
+    expect((screen.getByLabelText('Contraseña') as HTMLInputElement).readOnly).toBe(true)
+    expect(screen.getByLabelText('Contraseña').getAttribute('type')).toBe('text')
+  })
 })

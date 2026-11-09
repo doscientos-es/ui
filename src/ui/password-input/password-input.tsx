@@ -15,17 +15,30 @@ export type PasswordInputProps = Omit<InputProps, 'type'> & {
 }
 
 /** Password input with an explicit visibility toggle and optional feedback indicator. */
-export function PasswordInput({ indicator, ref, ...props }: PasswordInputProps) {
+export function PasswordInput({
+  indicator,
+  ref,
+  disabled,
+  readOnly,
+  ...props
+}: PasswordInputProps) {
   const [isVisible, setIsVisible] = useState(false)
 
   return (
     <InputGroup>
-      <InputGroupInput {...props} ref={ref} type={isVisible ? 'text' : 'password'} />
+      <InputGroupInput
+        {...props}
+        ref={ref}
+        disabled={disabled}
+        readOnly={readOnly}
+        type={isVisible ? 'text' : 'password'}
+      />
       {indicator ? <InputGroupAddon align="inline-end">{indicator}</InputGroupAddon> : null}
       <InputGroupAddon align="inline-end">
         <InputGroupButton
           aria-label={isVisible ? 'Ocultar contraseña' : 'Mostrar contraseña'}
           aria-pressed={isVisible}
+          isDisabled={disabled}
           onPress={() => setIsVisible((visible) => !visible)}
           size="icon-sm"
           type="button"

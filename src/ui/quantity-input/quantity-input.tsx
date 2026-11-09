@@ -39,7 +39,7 @@ export function QuantityInput({
     >
       <AriaGroup
         data-slot="quantity-input-group"
-        className="border-border bg-background text-foreground focus-within:border-ring focus-within:ring-ring/50 group-data-invalid/quantity-input:border-destructive flex h-8 min-w-0 items-stretch overflow-hidden rounded-lg border transition-[border-color,box-shadow] focus-within:ring-3"
+        className="border-input bg-background text-foreground focus-within:border-ring focus-within:ring-ring group-data-invalid/quantity-input:border-destructive flex h-8 min-w-0 items-stretch overflow-hidden rounded-lg border transition-[border-color,box-shadow] focus-within:ring-3 motion-reduce:transition-none"
       >
         <AriaButton
           slot="decrement"
@@ -52,7 +52,7 @@ export function QuantityInput({
         <AriaInput
           data-slot="quantity-input-value"
           className={cn(
-            'w-14 min-w-0 bg-transparent px-1 text-center text-sm tabular-nums outline-none',
+            'w-14 min-w-0 bg-transparent px-1 text-center text-sm text-foreground tabular-nums outline-none',
             inputClassName,
           )}
         />

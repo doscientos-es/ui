@@ -58,10 +58,12 @@ export function AccordionTrigger({
         {children}
         <ChevronDownIcon
           data-slot="accordion-trigger-icon"
+          aria-hidden="true"
           className="pointer-events-none shrink-0 group-aria-expanded/accordion-trigger:hidden"
         />
         <ChevronUpIcon
           data-slot="accordion-trigger-icon"
+          aria-hidden="true"
           className="pointer-events-none hidden shrink-0 group-aria-expanded/accordion-trigger:inline"
         />
       </AccordionTriggerPrimitive>
@@ -74,7 +76,7 @@ export function AccordionContent({ className, children, ...props }: DisclosurePa
   return (
     <AccordionContentPrimitive
       data-slot="accordion-content"
-      className="text-muted-foreground data-open:animate-accordion-down data-closed:animate-accordion-up h-(--disclosure-panel-height) overflow-clip text-sm transition-[height]"
+      className="text-muted-foreground data-open:animate-accordion-down data-closed:animate-accordion-up h-(--disclosure-panel-height) overflow-clip text-sm transition-[height] motion-reduce:animate-none motion-reduce:transition-none"
       {...props}
     >
       <div

@@ -7,6 +7,8 @@ body,
 /* React Aria renders overlays under <body>. Match Storybook's native font so
  * portals and Docs controls inherit the same typeface as the documentation. */
 body {
+  color: var(--ui-foreground);
+  background: var(--ui-background);
   font-family:
     'Nunito Sans',
     -apple-system,
@@ -25,10 +27,10 @@ button,
 input,
 select,
 textarea {
-  font: inherit;
+  font-family: inherit;
 }
 
 .storybook-canvas {
-  min-width: 20rem;
+  min-width: 0;
   color: var(--ui-foreground);
 }

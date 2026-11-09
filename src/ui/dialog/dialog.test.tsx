@@ -98,6 +98,7 @@ describe('Dialog', () => {
     expect(dialog.classList.contains('box-border')).toBe(true)
     expect(dialog.classList.contains('max-h-[calc(100dvh-2rem)]')).toBe(true)
     expect(dialog.classList.contains('min-h-0')).toBe(true)
+    expect(dialog.classList.contains('min-w-0')).toBe(true)
     expect(dialog.classList.contains('overflow-x-hidden')).toBe(true)
     expect(dialog.parentElement?.classList.contains('w-full')).toBe(true)
     expect(dialog.parentElement?.classList.contains('max-h-full')).toBe(true)

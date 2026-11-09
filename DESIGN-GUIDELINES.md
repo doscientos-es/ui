@@ -25,7 +25,8 @@ No buscamos una copia literal de una referencia concreta. Buscamos el mismo leng
 - En layouts enmarcados, `--canvas` es la capa exterior y `--background` el lienzo de trabajo; no resolver ambas con el mismo color.
 - Surface primaria: blanco (`--card`) sobre canvas.
 - `--sidebar` y `--surface-subtle` separan navegación, toolbars y footers sin introducir nuevas elevaciones.
-- Border: gris muy claro, 1px, bajo contraste.
+- Bordes decorativos: gris muy claro, 1px, bajo contraste (`border`). Límites necesarios
+  de campos y selección: `input`, con contraste mínimo 3:1 contra la superficie.
 - Elevación: sombra difusa y corta. Nada de sombras negras duras.
 - Radios: `0.75rem` base; `1rem–1.25rem` para cards, drawers y paneles principales.
 - Una pantalla debe tener como máximo tres niveles de elevación: canvas, surface, floating.
@@ -108,6 +109,46 @@ Escribir como un compañero experto: breve, directo y específico. Preferir “A
 - No comunicar estado solo con color.
 - Probar contenido largo, zoom, viewport estrecho, loading, error y empty.
 - Cada primitive pública necesita story con estado base y, cuando aplique, estados interactivos.
+
+### Tiers: qué reutilizar y dónde
+
+Los tiers describen responsabilidad, no un nivel de accesibilidad ni de calidad:
+
+| Tier              | Responsabilidad                                                     | Ejemplos                                                                  | Dónde vive           |
+| ----------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------- | -------------------- |
+| 0 · Foundations   | Tokens semánticos, tipografía, foco, motion, marca y utilidades     | `styles.css`, `cn`, `BrandMark`                                           | `@doscientos/ui`     |
+| 1 · Primitives    | Una interacción o una pieza visual, con estados consistentes        | `Button`, `Input`, `Checkbox`, `Dialog`, `Badge`                          | `@doscientos/ui`     |
+| 2 · Composiciones | Combinar primitives para tareas transversales, sin datos de negocio | `FormDialog`, `MultiSelectCombobox`, `MetricCard`, `AppShell`, `Calendar` | `@doscientos/ui`     |
+| 3 · Recetas       | Pantallas completas, rutas, responsive y estados de datos           | Listado, detalle, creación, ajustes                                       | Storybook y starters |
+| Producto          | Entidades, permisos, fetching y comportamiento de un cliente        | Reservas, facturas, clientes                                              | Aplicación           |
+
+Antes de añadir un componente, busca en el catálogo y compón el tier inferior.
+No dupliques una primitive para cambiar marca o densidad: usa tokens y props.
+Las recetas muestran cómo combinar el sistema; no son otro paquete de componentes.
+
+### Contrato de calidad de todos los tiers
+
+- **Nombre y semántica:** controles etiquetados, headings coherentes, iconos decorativos
+  ocultos, errores vinculados al campo y estado expresado con texto, no solo color.
+- **Teclado:** interacción principal, Escape y restauración de foco en overlays;
+  selección con flechas donde corresponda y alternativa al drag-and-drop.
+- **Estados:** base, hover, focus, disabled, read-only, pending, invalid y empty según
+  aplique. Un estado deshabilitado no debe mantener acciones auxiliares activas.
+- **Contraste:** AA para texto (4.5:1 normal; 3:1 grande) y 3:1 para indicadores
+  necesarios de controles y foco. Bordes decorativos no necesitan 3:1.
+- **Temas:** comprobar claro y oscuro, incluidos overlays portaled. Una marca que
+  sustituye tokens debe volver a comprobar sus propios pares de colores.
+- **Responsive:** probar 375px y contenido largo; permitir scroll local en tablas
+  y calendarios, no desbordar toda la página. Revisar además zoom/reflow a 320px.
+- **Motion y tacto:** respetar reduced motion; mantener objetivos de 24px como
+  mínimo AA con sus excepciones y preferir 44px para acciones táctiles principales.
+- **Pruebas:** regresión unitaria del contrato, story representativa y `play` para
+  interacción crítica. El guard del catálogo exige tests y stories por familia
+  exportada; importar un componente no demuestra que todas sus ramas estén probadas.
+
+La matriz de Storybook ejecuta interacciones y axe en cuatro combinaciones de
+tema/viewport. No equivale a certificación WCAG ni sustituye revisión visual,
+lectores de pantalla, zoom, tacto real o pruebas en otros navegadores.
 
 ## Checklist para agentes y Augment
 

@@ -1,12 +1,54 @@
+@layer theme, base, components, utilities;
 @import 'tailwindcss/theme' layer(theme);
 @import 'tailwindcss/utilities' layer(utilities);
 @import 'sileo/styles.css';
 @source "./";
 @custom-variant dark (&:is(.dark *));
 
+/* Components work without imposing Tailwind Preflight on the host application.
+ * Utilities and consumer styles still override these low-specificity defaults. */
+@layer base {
+  :where([data-slot]) {
+    box-sizing: border-box;
+  }
+  :where(button[data-slot], input[data-slot], textarea[data-slot], select[data-slot]) {
+    font: inherit;
+    color: inherit;
+    border: 0 solid;
+  }
+  :where(button[data-slot], input[data-slot], textarea[data-slot]) {
+    background-color: transparent;
+  }
+  :where(a[data-slot]) {
+    color: inherit;
+    text-decoration: inherit;
+  }
+  :where(h1[data-slot], h2[data-slot], h3[data-slot], p[data-slot], ul[data-slot], ol[data-slot]) {
+    margin: 0;
+  }
+  :where(ul[data-slot], ol[data-slot]) {
+    padding: 0;
+    list-style: none;
+  }
+}
+
+[data-slot='calendar'] {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  color: var(--ui-foreground);
+}
+
+.dsc-calendar__instructions {
+  margin-bottom: 0.75rem;
+  color: var(--ui-muted-foreground);
+  font-size: 0.875rem;
+}
+
 .dsc-calendar__month-grid {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
+  min-width: 42rem;
 }
 .dsc-calendar__month-day {
   min-height: 7rem;
@@ -17,7 +59,7 @@
 .dsc-calendar__time-axis time {
   display: block;
   font-size: 0.75rem;
-  opacity: 0.65;
+  color: var(--ui-muted-foreground);
 }
 .dsc-calendar__month-day button,
 .dsc-calendar__agenda-item {
@@ -27,18 +69,23 @@
   padding: 0.35rem 0.5rem;
   border: 0;
   border-radius: 0.4rem;
-  background: color-mix(in srgb, currentColor 8%, transparent);
+  background: var(--ui-secondary);
+  color: var(--ui-secondary-foreground);
   text-align: left;
   cursor: pointer;
 }
 .dsc-calendar__time-grid {
   display: grid;
-  grid-template-columns: 4rem repeat(var(--calendar-days, 1), minmax(0, 1fr));
+  grid-template-columns: 4rem repeat(var(--calendar-columns, 1), minmax(8rem, 1fr));
   min-height: 36rem;
+}
+.dsc-calendar__time-scroll {
+  overflow-x: auto;
 }
 .dsc-calendar__time-axis {
   display: grid;
   grid-template-rows: repeat(var(--calendar-hours), minmax(2rem, 1fr));
+  padding-top: 3rem;
 }
 .dsc-calendar__resource-column {
   position: relative;
@@ -52,8 +99,13 @@
   );
 }
 .dsc-calendar__resource-label {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  height: 3rem;
   padding: 0.6rem;
   font-weight: 650;
+  font-size: 0.75rem;
   border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent);
 }
 .dsc-calendar__time-item {
@@ -63,7 +115,8 @@
   padding: 0.5rem;
   border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
   border-radius: 0.5rem;
-  background: color-mix(in srgb, currentColor 10%, white);
+  background: var(--ui-secondary);
+  color: var(--ui-secondary-foreground);
   cursor: grab;
   transition:
     transform 0.16s,
@@ -79,6 +132,24 @@
 }
 .dsc-calendar__agenda-item {
   padding: 0.7rem;
+}
+
+:is(
+  [data-slot='calendar'],
+  .dsc-calendar__time-scroll,
+  [data-slot='calendar'] button
+):focus-visible {
+  outline: 2px solid var(--ui-ring);
+  outline-offset: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dsc-calendar__time-item {
+    transition: none;
+  }
+  .dsc-calendar__time-item.is-dragging {
+    transform: none;
+  }
 }
 
 /*
@@ -108,9 +179,9 @@
   --ui-destructive-foreground: var(--destructive-foreground, #ffffff);
   --ui-success: var(--success, #166534);
   --ui-warning: var(--warning, #854d0e);
-  --ui-info: var(--info, #0369a1);
+  --ui-info: var(--info, #075985);
   --ui-border: var(--border, #e6e6e3);
-  --ui-input: var(--input, var(--ui-border));
+  --ui-input: var(--input, #858981);
   --ui-ring: var(--ring, var(--ui-primary));
   --ui-sidebar: var(--sidebar, #f4f4f2);
   --ui-sidebar-foreground: var(--sidebar-foreground, var(--ui-foreground));
@@ -139,12 +210,12 @@
   --ui-accent: var(--accent, #bdff7b);
   --ui-accent-foreground: var(--accent-foreground, #1a2e18);
   --ui-destructive: var(--destructive, oklch(0.704 0.191 22.216));
-  --ui-destructive-foreground: var(--destructive-foreground, #ffffff);
+  --ui-destructive-foreground: var(--destructive-foreground, #171717);
   --ui-success: var(--success, #22c55e);
   --ui-warning: var(--warning, #eab308);
   --ui-info: var(--info, #38bdf8);
   --ui-border: var(--border, oklch(1 0 0 / 15%));
-  --ui-input: var(--input, var(--ui-border));
+  --ui-input: var(--input, #777c74);
   --ui-ring: var(--ring, var(--ui-primary));
   --ui-sidebar: var(--sidebar, oklch(0.17 0 0));
   --ui-sidebar-foreground: var(--sidebar-foreground, var(--ui-foreground));
@@ -382,6 +453,13 @@
   transition:
     background-color 150ms ease,
     color 150ms ease;
+}
+
+[data-slot='app-shell-sidebar-header'] a:focus-visible,
+[data-slot='app-shell-sidebar-content'] a:focus-visible,
+[data-slot='app-shell-sidebar-footer'] a:focus-visible {
+  outline: 2px solid var(--ui-ring);
+  outline-offset: 2px;
 }
 
 [data-slot='app-shell-sidebar-content'] a[aria-current='page'],

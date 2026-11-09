@@ -7,6 +7,8 @@ import { Button } from '../button/button'
 export function FilterBar({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
+      role="group"
+      aria-label="Filtros"
       data-slot="filter-bar"
       className={cn('flex flex-wrap items-center gap-2', className)}
       {...props}
@@ -29,6 +31,7 @@ export function FilterGroup({ className, ...props }: React.ComponentProps<'div'>
 export function ActiveFilters({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
+      role="group"
       data-slot="active-filters"
       aria-label="Filtros activos"
       className={cn('flex flex-wrap items-center gap-1.5', className)}
@@ -47,8 +50,14 @@ export function FilterChip({
   onRemove: () => void
 }) {
   return (
-    <Button size="sm" variant="outline" onPress={onRemove} {...props}>
-      {children} ×
+    <Button
+      size="sm"
+      variant="outline"
+      aria-label={typeof children === 'string' ? `Quitar filtro: ${children}` : 'Quitar filtro'}
+      onPress={onRemove}
+      {...props}
+    >
+      {children} <span aria-hidden="true">×</span>
     </Button>
   )
 }

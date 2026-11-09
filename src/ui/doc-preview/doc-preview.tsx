@@ -50,10 +50,10 @@ function Fallback({
 
   return (
     <div className="text-muted-foreground flex flex-col items-center justify-center gap-2 py-14">
-      <Icon className="size-9 opacity-30" />
+      <Icon aria-hidden="true" className="size-9 opacity-30" />
       <p className="text-sm">{message}</p>
-      {mimeType ? <p className="font-mono text-xs opacity-50">{mimeType}</p> : null}
-      <p className="text-xs opacity-50">Usa el botón Descargar para abrir el archivo.</p>
+      {mimeType ? <p className="font-mono text-xs">{mimeType}</p> : null}
+      <p className="text-xs">Usa el botón Descargar para abrir el archivo.</p>
     </div>
   )
 }

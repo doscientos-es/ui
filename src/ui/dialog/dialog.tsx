@@ -242,7 +242,7 @@ export function DialogContent({
             data-close-button={showCloseButton || undefined}
             aria-describedby={descriptionId}
             className={cn(
-              'relative mx-auto grid box-border max-h-[calc(100dvh-2rem)] min-h-0 w-full gap-5 overflow-x-hidden overflow-y-auto overscroll-contain rounded-xl bg-popover p-6 text-sm text-popover-foreground shadow-[var(--ui-shadow-floating)] ring-1 ring-foreground/10 outline-none',
+              'relative mx-auto grid box-border max-h-[calc(100dvh-2rem)] min-h-0 min-w-0 w-full gap-5 overflow-x-hidden overflow-y-auto overscroll-contain rounded-xl bg-popover p-6 text-sm text-popover-foreground shadow-[var(--ui-shadow-floating)] ring-1 ring-foreground/10 outline-none',
               dialogSizes[size],
               className,
             )}

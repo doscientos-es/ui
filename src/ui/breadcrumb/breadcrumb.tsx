@@ -31,7 +31,10 @@ export function BreadcrumbLink({ className, ...props }: React.ComponentProps<typ
   return (
     <AriaLink
       data-slot="breadcrumb-link"
-      className={cn('transition-colors hover:text-foreground', className)}
+      className={cn(
+        'rounded-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2',
+        className,
+      )}
       {...props}
     />
   )

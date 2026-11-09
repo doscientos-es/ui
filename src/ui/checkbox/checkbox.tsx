@@ -28,8 +28,9 @@ export function Checkbox({ className, children, ...props }: CheckboxProps) {
           <>
             <span
               aria-hidden="true"
+              data-slot="checkbox-control"
               className={cn(
-                'border-border bg-background text-primary-foreground group-data-selected:border-primary group-data-selected:bg-primary group-data-focus-visible:ring-ring/50 grid size-4 place-items-center rounded border transition-colors group-data-focus-visible:ring-3',
+                'border-input bg-background text-primary-foreground group-data-selected:border-primary group-data-selected:bg-primary group-data-focus-visible:ring-ring grid size-4 place-items-center rounded border transition-colors motion-reduce:transition-none group-data-focus-visible:ring-3',
                 state.isIndeterminate && 'border-primary bg-primary',
               )}
             >

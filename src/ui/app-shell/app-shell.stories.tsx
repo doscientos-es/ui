@@ -22,7 +22,10 @@ export const Default: Story = {
       <AppShellSidebar aria-label="Navegación principal">
         <div className="px-4 py-5 font-semibold">doscientos</div>
         <nav className="flex flex-1 flex-col gap-1 px-2 py-1" aria-label="Navegación principal">
-          <a className="bg-secondary rounded-md px-3 py-2 text-sm font-medium" href="#clientes">
+          <a
+            className="bg-secondary text-secondary-foreground rounded-md px-3 py-2 text-sm font-medium"
+            href="#clientes"
+          >
             Clientes
           </a>
           <a className="text-muted-foreground rounded-md px-3 py-2 text-sm" href="#facturas">

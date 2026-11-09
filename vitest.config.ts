@@ -14,6 +14,13 @@ export default defineConfig({
     },
   },
   test: {
+    coverage: {
+      provider: 'v8',
+      include: ['src/ui/**/*.{ts,tsx}', 'src/hooks/**/*.ts', 'src/lib/**/*.ts'],
+      exclude: ['**/*.test.*', '**/*.stories.*', '**/index.ts', 'src/generated-entrypoints/**'],
+      reporter: ['text', 'json-summary', 'html'],
+      thresholds: { lines: 85, statements: 80, functions: 80, branches: 80 },
+    },
     projects: [
       {
         extends: true,
@@ -21,6 +28,7 @@ export default defineConfig({
           name: 'unit',
           environment: 'happy-dom',
           pool: 'threads',
+          maxWorkers: 4,
           include: ['src/**/*.test.{ts,tsx}'],
           setupFiles: ['./src/test/setup.ts'],
         },
@@ -38,6 +46,10 @@ export default defineConfig({
           browser: {
             enabled: true,
             headless: true,
+            viewport:
+              process.env.UI_TEST_MOBILE === '1'
+                ? { width: 375, height: 812 }
+                : { width: 1280, height: 900 },
             provider: playwright({}),
             instances: [{ browser: 'chromium' }],
           },

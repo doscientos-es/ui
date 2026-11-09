@@ -238,6 +238,24 @@ No añadas hooks de Next, React Router ni TanStack Router al paquete. Las storie
   `.dark` en la raíz del documento, no solo en un contenedor del contenido.
 - No hay integración con un router implícita: la aplicación configura navegación
   SPA mediante las APIs del router o del proveedor de React Aria según corresponda.
+- Los resets de formulario, links y listas se limitan a elementos con `data-slot`
+  dentro de la capa CSS `base`; no se impone Preflight global al consumidor.
+- `--input` distingue límites necesarios de controles (3:1) de `--border`, reservado
+  para separadores decorativos. Comprueba ambos temas si tu marca redefine `--input`.
+
+### Calendar
+
+`Calendar` es una composición de agenda, mes y horario semanal/diario; no es un
+selector de fechas. Usa fechas locales, semana desde el lunes y eventos con `id`
+único. `getItemLabel` da nombre accesible cuando `renderItem` no aporta texto.
+
+- `onItemMove` habilita edición; `editable={false}` en un evento la bloquea.
+- Alt + ↑/↓ mueve por `minuteStep`, Alt + RePág/AvPág cambia de día y Alt + ←/→
+  cambia de recurso. El resultado se anuncia y se conserva el foco si sigue visible.
+- La aplicación actualiza `items`, valida colisiones/permisos y decide persistencia.
+  El componente conserva duración y no modifica las fechas recibidas.
+- Usa `agenda` en móvil cuando sea preferible a desplazar el horario horizontalmente.
+  No incluye recurrencia, resolución de solapes ni edición/redimensionado táctil.
 
 ## Desarrollo
 
@@ -249,14 +267,19 @@ No añadas hooks de Next, React Router ni TanStack Router al paquete. Las storie
   staging automático, tests ni build. CI comprueba el contenido realmente subido.
 - `pnpm test`: pruebas del contrato de empaquetado, unitarias y de renderizado.
 - `pnpm test:storybook`: renderizado, accesibilidad e interacciones de todas las stories en Chromium.
+- `node scripts/test-ui-matrix.mjs`: stories en claro/oscuro × escritorio/móvil,
+  con informes JSON temporales y exit code fallido si falla alguna combinación.
+- `pnpm exec vitest run --project unit --coverage`: cobertura de todo `src/ui`,
+  hooks y utilidades, incluidos archivos nunca importados. Stories, tests y barrels
+  no inflan el informe. La representación de familias se comprueba por separado.
 - `pnpm typecheck`: contrato TypeScript.
 - `pnpm build`: distribución JS, tipos y CSS Tailwind compilado.
 - `pnpm storybook`: catálogo local en el puerto 6006.
 - `pnpm build-storybook`: sitio estático en `storybook-static/`, listo para publicar en `ui.doscientos.es`.
 
 Storybook genera documentación automática para todo el catálogo y ofrece temas
-claro/oscuro y viewports móvil, tablet y escritorio. Chromatic captura cada
-story en claro escritorio, oscuro escritorio y claro móvil. Para activar el job
+claro/oscuro y viewports móvil, tablet y escritorio. Chromatic está configurado para
+claro/oscuro en escritorio/móvil. Para activar el job
 visual de CI, configura `CHROMATIC_PROJECT_TOKEN` como secreto del repositorio;
 el valor se consume mediante el entorno y nunca se pasa como argumento del CLI.
 
@@ -269,6 +292,12 @@ un flujo `play` que cubra su comportamiento principal con teclado y foco.
 
 Las stories deben usar datos ficticios y permanecer independientes de rutas,
 APIs, autenticación y estado de producto.
+
+Los [tiers y el contrato de calidad](./DESIGN-GUIDELINES.md#tiers-qué-reutilizar-y-dónde)
+definen cuándo usar foundations, primitives, composiciones y recetas. Axe detecta
+problemas automatizables, no certifica accesibilidad completa. Antes de entregar
+una web, revisa manualmente teclado, foco, zoom, contenido largo y lector de pantalla
+con sus colores de marca reales.
 
 ## Criterio de crecimiento
 

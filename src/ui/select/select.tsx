@@ -26,7 +26,7 @@ export function SelectTrigger({ className, children, ...props }: ButtonProps) {
       data-slot="select-trigger"
       className={(state) =>
         cn(
-          'group/select-trigger box-border flex h-9 w-full min-w-0 items-center gap-2 rounded-lg border border-border bg-background px-3 text-left text-base text-foreground shadow-[var(--ui-shadow-hairline)] outline-none transition-[background-color,border-color,box-shadow] enabled:hover:border-border-strong data-focus-visible:border-ring data-focus-visible:ring-3 data-focus-visible:ring-ring data-disabled:cursor-not-allowed data-disabled:opacity-50 in-data-invalid:border-destructive in-data-invalid:data-focus-visible:border-destructive in-data-invalid:data-focus-visible:ring-destructive motion-reduce:transition-none md:text-sm',
+          'group/select-trigger box-border flex h-9 w-full min-w-0 items-center gap-2 rounded-lg border border-input bg-background px-3 text-left text-base text-foreground shadow-[var(--ui-shadow-hairline)] outline-none transition-[background-color,border-color,box-shadow] enabled:hover:border-muted-foreground data-focus-visible:border-ring data-focus-visible:ring-3 data-focus-visible:ring-ring data-disabled:cursor-not-allowed data-disabled:opacity-50 in-data-invalid:border-destructive in-data-invalid:data-focus-visible:border-destructive in-data-invalid:data-focus-visible:ring-destructive motion-reduce:transition-none md:text-sm',
           typeof className === 'function' ? className(state) : className,
         )
       }
