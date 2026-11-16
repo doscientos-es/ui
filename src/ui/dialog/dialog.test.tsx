@@ -100,6 +100,7 @@ describe('Dialog', () => {
     expect(dialog.classList.contains('min-h-0')).toBe(true)
     expect(dialog.classList.contains('min-w-0')).toBe(true)
     expect(dialog.classList.contains('overflow-x-hidden')).toBe(true)
+    expect(dialog.className).toContain('[&[data-close-button]_[data-slot=dialog-title]]:pr-10')
     expect(dialog.parentElement?.classList.contains('w-full')).toBe(true)
     expect(dialog.parentElement?.classList.contains('max-h-full')).toBe(true)
     expect(dialog.parentElement?.classList.contains('min-h-0')).toBe(true)

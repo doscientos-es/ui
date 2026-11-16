@@ -81,8 +81,8 @@ en móvil y desplazan el contenido largo dentro del panel, limitado por `100dvh`
   enfocan la cancelación inicialmente; `ConfirmDialog` conserva el estado pendiente.
 - `Input`, `Textarea` y `ComboboxInput` comparten foco, error y estados deshabilitados.
   El texto es de 16px en viewports estrechos para evitar el zoom automático de iOS.
-- En dispositivos táctiles, botones de tamaño normal y controles de formulario
-  tienen una altura mínima de 44px. Los tamaños compactos explícitos se conservan.
+- En viewports estrechos, los botones normales, grandes y de icono normal/grande
+  alcanzan 44px. Los tamaños compactos explícitos se conservan.
 
 Storybook: **Components / Overlays / Dialog / Default Open**, **Sizes** y **Long Content**.
 
@@ -100,8 +100,12 @@ Tres patrones de bajo coste componiendo las primitives existentes, sin dependenc
 - Conserva el ancho compacto de `Dialog`; usa `size` y `bodyClassName` para ampliar
   o distribuir campos. `formProps` permite `ref`, `id`, `noValidate` y atributos
   nativos. Para forms con `action` de React, compón `Dialog` y `SubmitButton` directamente.
-- El cierre al pulsar fuera es opt-in (`isDismissable`). No detecta cambios sin
-  guardar: compón `useFormDirty` y decide en `onOpenChange` si necesitas confirmar.
+- El cierre al pulsar fuera es opt-in (`isDismissable`). Pasa `isDirty` para pedir
+  confirmación antes de cerrar por Cancelar, Escape, la × o fuera. La app controla
+  ese estado: puede usar `useFormDirty` con `formProps.ref` para controles nativos
+  con `name`, o su propio estado para controles complejos. `discardConfirmation`
+  permite personalizar los textos. El cierre tras guardar sigue siendo responsabilidad de la app.
+- En formularios largos se desplazan los campos; título y acciones permanecen visibles.
 - `SegmentedControl` + `SegmentedControlItem`: elección única con `value`,
   `defaultValue` y `onChange`; cada segmento lleva `value`. Usa un `aria-label`
   para el grupo y texto o un nombre accesible para cada opción. Soporta flechas,

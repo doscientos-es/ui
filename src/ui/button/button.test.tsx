@@ -94,4 +94,17 @@ describe('Button', () => {
 
     expect(button).toHaveProperty('disabled', true)
   })
+
+  it('provides larger mobile targets without changing compact button sizes', () => {
+    render(
+      <>
+        <Button>Guardar</Button>
+        <Button size="icon" aria-label="Cerrar">×</Button>
+        <Button size="sm">Compacto</Button>
+      </>,
+    )
+    expect(screen.getByRole('button', { name: 'Guardar' }).className).toContain('max-sm:h-11')
+    expect(screen.getByRole('button', { name: 'Cerrar' }).className).toContain('max-sm:size-11')
+    expect(screen.getByRole('button', { name: 'Compacto' }).className).not.toContain('max-sm:h-11')
+  })
 })

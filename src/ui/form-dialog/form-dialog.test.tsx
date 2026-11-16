@@ -93,6 +93,58 @@ describe('FormDialog', () => {
     expect(onOpenChange).toHaveBeenCalledWith(false)
   })
 
+  it.each(['cancel', 'close', 'escape', 'outside'] as const)(
+    'asks before discarding changes through %s',
+    async (dismissal) => {
+      const onOpenChange = vi.fn()
+      render(
+        <FormDialog {...defaults} isDirty isDismissable onOpenChange={onOpenChange}>
+          <Input name="name" aria-label="Nombre" defaultValue="Ana" />
+        </FormDialog>,
+      )
+      if (dismissal === 'cancel') await userEvent.click(screen.getByRole('button', { name: 'Cancelar' }))
+      if (dismissal === 'close') await userEvent.click(screen.getByRole('button', { name: 'Cerrar diálogo' }))
+      if (dismissal === 'escape') fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape' })
+      if (dismissal === 'outside') await userEvent.click(getModalPanel())
+
+      expect(onOpenChange).not.toHaveBeenCalled()
+      expect(screen.getByRole('alertdialog', { name: '¿Descartar los cambios?' })).toBeTruthy()
+      await userEvent.click(screen.getByRole('button', { name: 'Seguir editando' }))
+      expect(screen.queryByRole('alertdialog')).toBeNull()
+      expect(screen.getByRole('textbox', { name: 'Nombre' })).toHaveProperty('value', 'Ana')
+      expect(onOpenChange).not.toHaveBeenCalled()
+    },
+  )
+
+  it('discards only after confirmation and supports custom confirmation copy', async () => {
+    const onOpenChange = vi.fn()
+    render(
+      <FormDialog
+        {...defaults}
+        isDirty
+        onOpenChange={onOpenChange}
+        discardConfirmation={{ title: '¿Salir?', confirmLabel: 'Salir sin guardar' }}
+      >
+        Campos
+      </FormDialog>,
+    )
+    await userEvent.click(screen.getByRole('button', { name: 'Cancelar' }))
+    expect(screen.getByRole('alertdialog', { name: '¿Salir?' })).toBeTruthy()
+    await userEvent.click(screen.getByRole('button', { name: 'Salir sin guardar' }))
+    expect(onOpenChange).toHaveBeenCalledExactlyOnceWith(false)
+  })
+
+  it('does not reopen a stale discard confirmation after an external close', async () => {
+    const props = { ...defaults, isDirty: true }
+    const { rerender } = render(<FormDialog {...props}>Campos</FormDialog>)
+    await userEvent.click(screen.getByRole('button', { name: 'Cancelar' }))
+    expect(screen.getByRole('alertdialog')).toBeTruthy()
+    rerender(<FormDialog {...props} open={false}>Campos</FormDialog>)
+    rerender(<FormDialog {...props}>Campos</FormDialog>)
+    expect(screen.queryByRole('alertdialog')).toBeNull()
+    expect(screen.getByRole('dialog')).toBeTruthy()
+  })
+
   it('keeps pending operations open and prevents repeat submissions', async () => {
     const onOpenChange = vi.fn()
     const onSubmit = vi.fn()
@@ -175,6 +227,16 @@ describe('FormDialog', () => {
       'sm:grid-cols-2',
     )
     await waitFor(() => expect(formRef).toHaveBeenCalledWith(form))
+  })
+
+  it('keeps the form header and actions outside the scrollable body', () => {
+    render(<FormDialog {...defaults}>Campos</FormDialog>)
+    const form = getForm()
+    const body = form.querySelector('[data-slot="form-dialog-body"]')
+    expect(body?.classList.contains('overflow-y-auto')).toBe(true)
+    expect(body?.previousElementSibling?.getAttribute('data-slot')).toBe('dialog-header')
+    expect(body?.nextElementSibling?.getAttribute('data-slot')).toBe('dialog-footer')
+    expect(form.classList.contains('min-h-0')).toBe(true)
   })
 
   it('renders nothing while closed', () => {

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { useState } from 'react'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 
 import { Button } from '../button/button'
@@ -52,30 +53,39 @@ export const Information: Story = {
 }
 
 export const Form: Story = {
-  render: () => (
-    <Dialog trigger="Editar cliente" triggerProps={{ variant: 'outline' }}>
-      <DialogHeader>
-        <DialogTitle>Editar cliente</DialogTitle>
-        <DialogDescription>Actualiza los datos de contacto.</DialogDescription>
-      </DialogHeader>
-      <div className="grid gap-3">
-        <label className="grid gap-1 text-sm" htmlFor="dialog-client-name">
-          Nombre
-          <Input id="dialog-client-name" defaultValue="Ana García" />
-        </label>
-        <label className="grid gap-1 text-sm" htmlFor="dialog-client-email">
-          Email
-          <Input id="dialog-client-email" type="email" defaultValue="ana@ejemplo.es" />
-        </label>
-      </div>
-      <DialogFooter>
-        <DialogClose variant="outline">Cancelar</DialogClose>
-        <DialogClose asChild>
-          <Button>Guardar cambios</Button>
-        </DialogClose>
-      </DialogFooter>
-    </Dialog>
-  ),
+  render: function Example() {
+    const [open, setOpen] = useState(false)
+    const [savedName, setSavedName] = useState('Ana García')
+    return (
+      <>
+        <output>Nombre guardado: {savedName}</output>
+        <DialogRoot open={open} onOpenChange={setOpen}>
+          <DialogTrigger variant="outline">Editar cliente</DialogTrigger>
+          <DialogContent>
+            <form className="grid gap-5" onSubmit={(event) => {
+              event.preventDefault()
+              const name = new FormData(event.currentTarget).get('name')
+              if (typeof name === 'string') setSavedName(name)
+              setOpen(false)
+            }}>
+              <DialogHeader>
+                <DialogTitle>Editar cliente</DialogTitle>
+                <DialogDescription>Actualiza los datos de contacto.</DialogDescription>
+              </DialogHeader>
+              <label className="grid gap-1 text-sm" htmlFor="dialog-client-name">
+                Nombre
+                <Input id="dialog-client-name" name="name" defaultValue={savedName} required />
+              </label>
+              <DialogFooter>
+                <DialogClose variant="outline">Cancelar</DialogClose>
+                <Button type="submit">Guardar cambios</Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </DialogRoot>
+      </>
+    )
+  },
 }
 
 export const LongContent: Story = {
