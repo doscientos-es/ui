@@ -62,12 +62,15 @@ export const Form: Story = {
         <DialogRoot open={open} onOpenChange={setOpen}>
           <DialogTrigger variant="outline">Editar cliente</DialogTrigger>
           <DialogContent>
-            <form className="grid gap-5" onSubmit={(event) => {
-              event.preventDefault()
-              const name = new FormData(event.currentTarget).get('name')
-              if (typeof name === 'string') setSavedName(name)
-              setOpen(false)
-            }}>
+            <form
+              className="grid gap-5"
+              onSubmit={(event) => {
+                event.preventDefault()
+                const name = new FormData(event.currentTarget).get('name')
+                if (typeof name === 'string') setSavedName(name)
+                setOpen(false)
+              }}
+            >
               <DialogHeader>
                 <DialogTitle>Editar cliente</DialogTitle>
                 <DialogDescription>Actualiza los datos de contacto.</DialogDescription>
@@ -85,6 +88,16 @@ export const Form: Story = {
         </DialogRoot>
       </>
     )
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const page = within(canvasElement.ownerDocument.body)
+    await userEvent.click(canvas.getByRole('button', { name: 'Editar cliente' }))
+    const name = await page.findByRole('textbox', { name: 'Nombre' })
+    await userEvent.clear(name)
+    await userEvent.type(name, 'Lucía{Enter}')
+    await waitFor(() => expect(page.queryByRole('dialog')).not.toBeInTheDocument())
+    await expect(canvas.getByRole('status')).toHaveTextContent('Nombre guardado: Lucía')
   },
 }
 

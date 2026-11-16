@@ -102,8 +102,10 @@ describe('FormDialog', () => {
           <Input name="name" aria-label="Nombre" defaultValue="Ana" />
         </FormDialog>,
       )
-      if (dismissal === 'cancel') await userEvent.click(screen.getByRole('button', { name: 'Cancelar' }))
-      if (dismissal === 'close') await userEvent.click(screen.getByRole('button', { name: 'Cerrar diálogo' }))
+      if (dismissal === 'cancel')
+        await userEvent.click(screen.getByRole('button', { name: 'Cancelar' }))
+      if (dismissal === 'close')
+        await userEvent.click(screen.getByRole('button', { name: 'Cerrar diálogo' }))
       if (dismissal === 'escape') fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape' })
       if (dismissal === 'outside') await userEvent.click(getModalPanel())
 
@@ -139,7 +141,11 @@ describe('FormDialog', () => {
     const { rerender } = render(<FormDialog {...props}>Campos</FormDialog>)
     await userEvent.click(screen.getByRole('button', { name: 'Cancelar' }))
     expect(screen.getByRole('alertdialog')).toBeTruthy()
-    rerender(<FormDialog {...props} open={false}>Campos</FormDialog>)
+    rerender(
+      <FormDialog {...props} open={false}>
+        Campos
+      </FormDialog>,
+    )
     rerender(<FormDialog {...props}>Campos</FormDialog>)
     expect(screen.queryByRole('alertdialog')).toBeNull()
     expect(screen.getByRole('dialog')).toBeTruthy()

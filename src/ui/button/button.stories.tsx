@@ -65,6 +65,19 @@ export const Sizes: Story = {
       </Button>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    if (canvasElement.ownerDocument.documentElement.clientWidth >= 640) return
+    const canvas = within(canvasElement)
+    await expect(
+      canvas.getByRole('button', { name: 'Default' }).getBoundingClientRect().height,
+    ).toBeGreaterThanOrEqual(44)
+    await expect(
+      canvas.getByRole('button', { name: 'Añadir' }).getBoundingClientRect().height,
+    ).toBeGreaterThanOrEqual(44)
+    await expect(
+      canvas.getByRole('button', { name: 'Small' }).getBoundingClientRect().height,
+    ).toBeLessThan(44)
+  },
 }
 export const WithIcon: Story = {
   args: {

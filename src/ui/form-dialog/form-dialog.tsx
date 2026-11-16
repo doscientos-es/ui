@@ -1,6 +1,12 @@
 'use client'
 
-import { type ComponentProps, type FormEventHandler, type ReactNode, useEffect, useState } from 'react'
+import {
+  type ComponentProps,
+  type FormEventHandler,
+  type ReactNode,
+  useEffect,
+  useState,
+} from 'react'
 
 import { cn } from '../../lib/cn'
 import { Button } from '../button/button'
@@ -108,12 +114,19 @@ export function FormDialog({
             </DialogHeader>
             <div
               data-slot="form-dialog-body"
-              className={cn('grid min-h-0 flex-1 gap-4 overflow-y-auto overscroll-contain px-6 py-5', bodyClassName)}
+              className={cn(
+                'grid min-h-0 flex-1 gap-4 overflow-y-auto overscroll-contain px-6 py-5',
+                bodyClassName,
+              )}
             >
               {children}
             </div>
             <DialogFooter className="m-0 shrink-0">
-              <Button variant="outline" isDisabled={loading} onPress={() => requestOpenChange(false)}>
+              <Button
+                variant="outline"
+                isDisabled={loading}
+                onPress={() => requestOpenChange(false)}
+              >
                 {cancelLabel}
               </Button>
               <SubmitButton
@@ -132,7 +145,10 @@ export function FormDialog({
         open={open && isDirty && !loading && discardOpen}
         onOpenChange={setDiscardOpen}
         title={discardConfirmation?.title ?? '¿Descartar los cambios?'}
-        description={discardConfirmation?.description ?? 'Los cambios de este formulario todavía no se han guardado.'}
+        description={
+          discardConfirmation?.description ??
+          'Los cambios de este formulario todavía no se han guardado.'
+        }
         confirmLabel={discardConfirmation?.confirmLabel ?? 'Descartar cambios'}
         cancelLabel={discardConfirmation?.cancelLabel ?? 'Seguir editando'}
         destructive

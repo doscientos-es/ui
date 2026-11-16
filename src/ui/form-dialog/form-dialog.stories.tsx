@@ -132,14 +132,15 @@ export const UnsavedChanges: Story = {
     await userEvent.click(within(canvasElement).getByRole('button', { name: 'Editar nombre' }))
     const input = await page.findByRole('textbox', { name: 'Nombre' })
     await userEvent.type(input, ' García')
-    await userEvent.click(page.getByRole('button', { name: 'Cancelar' }))
+    const cancel = page.getByRole('button', { name: 'Cancelar' })
+    await userEvent.click(cancel)
     await waitFor(() =>
       expect(page.getByRole('alertdialog', { name: '¿Descartar los cambios?' })).toBeVisible(),
     )
     await userEvent.click(page.getByRole('button', { name: 'Seguir editando' }))
     await waitFor(() => expect(page.queryByRole('alertdialog')).not.toBeInTheDocument())
     await expect(input).toHaveValue('Ana García')
-    await userEvent.click(input)
+    await waitFor(() => expect(cancel).toHaveFocus())
     await userEvent.keyboard('{Escape}')
     await userEvent.click(await page.findByRole('button', { name: 'Descartar cambios' }))
     await waitFor(() => expect(page.queryByRole('dialog')).not.toBeInTheDocument())
@@ -147,7 +148,11 @@ export const UnsavedChanges: Story = {
 }
 
 export const LongContent: Story = {
-  args: { title: 'Formulario con varios campos y un título largo', size: 'lg', bodyClassName: 'sm:grid-cols-2' },
+  args: {
+    title: 'Formulario con varios campos y un título largo',
+    size: 'lg',
+    bodyClassName: 'sm:grid-cols-2',
+  },
   render: (args) => (
     <FormDialog {...args}>
       {Array.from({ length: 30 }, (_, index) => (

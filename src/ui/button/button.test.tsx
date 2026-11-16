@@ -99,7 +99,9 @@ describe('Button', () => {
     render(
       <>
         <Button>Guardar</Button>
-        <Button size="icon" aria-label="Cerrar">×</Button>
+        <Button size="icon" aria-label="Cerrar">
+          ×
+        </Button>
         <Button size="sm">Compacto</Button>
       </>,
     )
