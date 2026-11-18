@@ -35,7 +35,7 @@ function stop(exitCode = 0) {
 for (const signal of ['SIGINT', 'SIGTERM']) process.once(signal, () => stop())
 for (const child of processes) {
   child.once('error', (error) => {
-    console.error(error)
+    process.stderr.write(`${error.message}\n`)
     stop(1)
   })
   child.once('exit', (code) => {
