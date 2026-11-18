@@ -7,10 +7,7 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
   AlertDialogTrigger,
 } from './alert-dialog'
 
@@ -28,11 +25,10 @@ export const Confirmation: Story = {
     return (
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogTrigger variant="destructive">Eliminar ejemplo</AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>¿Eliminar este ejemplo?</AlertDialogTitle>
-            <AlertDialogDescription>Esta acción no se puede deshacer.</AlertDialogDescription>
-          </AlertDialogHeader>
+        <AlertDialogContent
+          title="¿Eliminar este ejemplo?"
+          description="Esta acción no se puede deshacer."
+        >
           <AlertDialogFooter>
             <AlertDialogCancel />
             <AlertDialogAction variant="destructive" onPress={() => setOpen(false)}>

@@ -1,12 +1,14 @@
 'use client'
 
 import type { VariantProps } from 'class-variance-authority'
+import { LoaderCircle } from 'lucide-react'
 import type * as React from 'react'
 import {
   Button as ButtonPrimitive,
   type ButtonProps as ButtonPrimitiveProps,
   Link as LinkPrimitive,
   type LinkProps as LinkPrimitiveProps,
+  ProgressBar,
 } from 'react-aria-components'
 
 import { useActionRipple } from '../../lib/action-ripple'
@@ -24,8 +26,46 @@ export type ButtonProps = Omit<ButtonPrimitiveProps, 'className' | 'ref'> &
     variant?: VariantProps<typeof buttonVariants>['variant']
     /** Preset height, spacing and icon dimensions. */
     size?: VariantProps<typeof buttonVariants>['size']
+    /** Optional progress label for `isPending`. Space is reserved before the action starts. */
+    pendingLabel?: string
     className?: string
   }
+
+function ButtonPendingContent({
+  children,
+  isPending,
+  label,
+}: {
+  children: React.ReactNode
+  isPending: boolean
+  label: string
+}) {
+  const layer = 'col-start-1 row-start-1 flex items-center justify-center gap-[inherit]'
+
+  return (
+    <span className="inline-grid gap-[inherit]">
+      <span aria-hidden={isPending || undefined} className={cn(layer, isPending && 'invisible')}>
+        {children}
+      </span>
+      <span
+        aria-hidden={!isPending || undefined}
+        className={cn(
+          layer,
+          'pointer-events-none motion-safe:transition-opacity motion-safe:duration-150',
+          !isPending && 'opacity-0',
+        )}
+      >
+        <ProgressBar aria-label={label} isIndeterminate className="flex items-center">
+          <LoaderCircle
+            aria-hidden="true"
+            className={cn('size-3.5', isPending && 'motion-safe:animate-spin')}
+          />
+        </ProgressBar>
+        <span>{label}</span>
+      </span>
+    </span>
+  )
+}
 
 /**
  * Accessible button with visual variants and a press ripple.
@@ -42,6 +82,7 @@ export function Button({
   ref,
   onClick,
   onPress,
+  pendingLabel,
   ...props
 }: ButtonProps) {
   const { ripple, triggerRipple } = useActionRipple(variant !== 'link')
@@ -62,12 +103,21 @@ export function Button({
       }}
       {...props}
     >
-      {(renderProps) => (
-        <>
-          {typeof children === 'function' ? children(renderProps) : children}
-          {ripple}
-        </>
-      )}
+      {(renderProps) => {
+        const content = typeof children === 'function' ? children(renderProps) : children
+        return (
+          <>
+            {pendingLabel ? (
+              <ButtonPendingContent label={pendingLabel} isPending={renderProps.isPending}>
+                {content}
+              </ButtonPendingContent>
+            ) : (
+              content
+            )}
+            {ripple}
+          </>
+        )
+      }}
     </ButtonPrimitive>
   )
 }

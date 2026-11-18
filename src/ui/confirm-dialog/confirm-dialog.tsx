@@ -1,13 +1,6 @@
 import type * as React from 'react'
 
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '../alert-dialog/alert-dialog'
+import { AlertDialog, AlertDialogFooter } from '../alert-dialog/alert-dialog'
 import { Button } from '../button/button'
 
 /* oxlint-disable jsx-a11y/no-autofocus -- Focus the safe action inside a focus-managed confirmation modal, not on page load. */
@@ -39,33 +32,29 @@ export function ConfirmDialog({
   return (
     <AlertDialog
       open={open}
+      title={title}
+      description={description}
       onOpenChange={(nextOpen) => {
         if (!pending || nextOpen) onOpenChange(nextOpen)
       }}
     >
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
-          {description ? <AlertDialogDescription>{description}</AlertDialogDescription> : null}
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <Button
-            variant="outline"
-            autoFocus
-            isDisabled={pending}
-            onPress={() => onOpenChange(false)}
-          >
-            {cancelLabel}
-          </Button>
-          <Button
-            variant={destructive ? 'destructive' : 'default'}
-            isPending={pending}
-            onPress={onConfirm}
-          >
-            {confirmLabel}
-          </Button>
-        </AlertDialogFooter>
-      </AlertDialogContent>
+      <AlertDialogFooter>
+        <Button
+          variant="outline"
+          autoFocus
+          isDisabled={pending}
+          onPress={() => onOpenChange(false)}
+        >
+          {cancelLabel}
+        </Button>
+        <Button
+          variant={destructive ? 'destructive' : 'default'}
+          isPending={pending}
+          onPress={onConfirm}
+        >
+          {confirmLabel}
+        </Button>
+      </AlertDialogFooter>
     </AlertDialog>
   )
 }

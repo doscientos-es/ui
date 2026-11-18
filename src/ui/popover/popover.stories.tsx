@@ -6,26 +6,29 @@ import { Button } from '../button/button'
 import { Checkbox } from '../checkbox/checkbox'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
 
-const meta = { title: 'Components/Overlays/Popover', component: PopoverContent } satisfies Meta<
-  typeof PopoverContent
->
+const meta = {
+  title: 'Components/Overlays/Popover',
+  component: PopoverContent,
+  tags: ['test:ui'],
+} satisfies Meta<typeof PopoverContent>
 export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
-    <Popover trigger="Ver detalles" triggerProps={{ variant: 'outline' }}>
-      <div className="p-2">
-        <p className="font-medium">Cliente activo</p>
-        <p className="text-muted-foreground mt-1 text-sm">Actualizado hace 2 minutos.</p>
-      </div>
-    </Popover>
+    <Popover
+      trigger="Ver detalles"
+      triggerProps={{ variant: 'outline' }}
+      title="Cliente activo"
+      description="Actualizado hace 2 minutos."
+    />
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const page = within(canvasElement.ownerDocument.body)
     await userEvent.click(canvas.getByRole('button', { name: 'Ver detalles' }))
-    await waitFor(() => expect(page.getByText('Cliente activo')).toBeVisible())
+    const dialog = await page.findByRole('dialog', { name: 'Cliente activo' })
+    await expect(dialog).toHaveAccessibleDescription('Actualizado hace 2 minutos.')
     await userEvent.keyboard('{Escape}')
     await waitFor(() => expect(page.queryByText('Cliente activo')).not.toBeInTheDocument())
     await expect(canvas.getByRole('button', { name: 'Ver detalles' })).toHaveFocus()
@@ -40,15 +43,13 @@ function FiltersPopover() {
     <Popover
       trigger="Filtrar facturas"
       triggerProps={{ variant: 'outline' }}
+      title="Estado de las facturas"
+      description="Refina los resultados del listado."
       open={isOpen}
       onOpenChange={setIsOpen}
-      className="w-72 p-4"
+      className="w-72"
     >
       <div className="space-y-4">
-        <div>
-          <p className="font-medium">Estado de las facturas</p>
-          <p className="text-muted-foreground mt-1 text-sm">Refina los resultados del listado.</p>
-        </div>
         <Checkbox isSelected={onlyOverdue} onChange={setOnlyOverdue}>
           Mostrar solo vencidas
         </Checkbox>

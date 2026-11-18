@@ -4,22 +4,23 @@ import { XIcon } from 'lucide-react'
 import * as React from 'react'
 import {
   Dialog as AriaDialog,
-  Heading,
   Modal,
   ModalOverlay,
   type ModalOverlayProps,
-  Text,
 } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
 import { Button } from '../button/button'
+import {
+  OverlayDescription,
+  OverlayHeader,
+  type OverlayHeaderProps,
+  OverlayTitle,
+} from '../overlay-header'
+import { OverlayDescriptionContext, overlayHeaderClassName } from '../overlay-header-shared'
+import { DialogContext, useDialogContext } from './dialog-context'
 
-type DialogContextValue = { open: boolean; setOpen: (open: boolean) => void }
 type SlottableProps = React.HTMLAttributes<HTMLElement> & { 'data-slot'?: string }
-const DialogContext = React.createContext<DialogContextValue | null>(null)
-const DialogDescriptionContext = React.createContext<{
-  setDescriptionId: React.Dispatch<React.SetStateAction<string | undefined>>
-} | null>(null)
 
 const dialogSizes = {
   sm: 'max-w-[24rem]',
@@ -30,12 +31,6 @@ const dialogSizes = {
 } as const
 
 export type DialogSize = keyof typeof dialogSizes
-
-function useDialogContext() {
-  const context = React.useContext(DialogContext)
-  if (!context) throw new Error('Dialog components must be rendered within Dialog.')
-  return context
-}
 
 /** Props for a controlled or uncontrolled dialog state container. */
 export type DialogRootProps = {
@@ -139,7 +134,7 @@ export function DialogOverlay({ children, className, ...props }: DialogOverlayPr
       isOpen={open}
       onOpenChange={setOpen}
       className={cn(
-        'fixed inset-0 isolate z-50 grid box-border h-dvh min-h-0 place-items-center overflow-hidden bg-black/20 p-4 supports-backdrop-filter:backdrop-blur-xs motion-safe:data-entering:animate-ui-overlay-in motion-safe:data-exiting:animate-ui-overlay-out',
+        'motion-safe:data-entering:animate-ui-overlay-in motion-safe:data-exiting:animate-ui-overlay-out fixed inset-0 isolate z-50 box-border grid h-dvh min-h-0 place-items-center overflow-hidden bg-black/20 p-4 supports-backdrop-filter:backdrop-blur-xs',
         className,
       )}
       {...props}
@@ -151,21 +146,24 @@ export function DialogOverlay({ children, className, ...props }: DialogOverlayPr
 
 export type DialogContentProps = Omit<
   React.ComponentProps<typeof AriaDialog>,
-  'children' | 'className'
-> & {
-  children?: React.ReactNode
-  className?: string
-  contentSlot?: string
-  /** Whether pressing outside the panel dismisses it. Escape remains available. */
-  isDismissable?: boolean
-  /** Prevents Escape dismissal, for example while saving. */
-  isKeyboardDismissDisabled?: boolean
-  onOverlayClick?: React.MouseEventHandler<HTMLDivElement>
-  overlaySlot?: string
-  showCloseButton?: boolean
-  /** Comfortable form width by default; larger surfaces are opt-in. */
-  size?: DialogSize
-}
+  'children' | 'className' | 'title'
+> &
+  OverlayHeaderProps & {
+    children?: React.ReactNode
+    className?: string
+    contentSlot?: string
+    /** Whether pressing outside the panel dismisses it. Escape remains available. */
+    isDismissable?: boolean
+    /** Prevents Escape dismissal, for example while saving. */
+    isKeyboardDismissDisabled?: boolean
+    onOverlayClick?: React.MouseEventHandler<HTMLDivElement>
+    overlaySlot?: string
+    showCloseButton?: boolean
+    /** Accessible label for the close button. */
+    closeLabel?: string
+    /** Comfortable form width by default; larger surfaces are opt-in. */
+    size?: DialogSize
+  }
 
 type SimpleDialogProps = DialogRootProps &
   Omit<DialogContentProps, 'children'> & {
@@ -175,24 +173,31 @@ type SimpleDialogProps = DialogRootProps &
     triggerProps?: Omit<DialogTriggerProps, 'asChild' | 'children'>
   }
 
-export type DialogProps = DialogRootProps | SimpleDialogProps
+type StandaloneDialogProps = DialogRootProps &
+  Omit<DialogContentProps, 'children'> &
+  ({ title: React.ReactNode } | { description: React.ReactNode }) & {
+    trigger?: never
+    triggerProps?: never
+  }
+
+export type DialogProps = DialogRootProps | SimpleDialogProps | StandaloneDialogProps
 
 /**
- * A modal dialog with a simple trigger API.
- * Omit {@link trigger} and compose {@link DialogRoot}, {@link DialogTrigger} and {@link DialogContent} directly.
+ * A modal dialog with a trigger, or a standalone dialog when given a title/description.
+ * For advanced composition, use {@link DialogRoot}, {@link DialogTrigger} and {@link DialogContent}.
  */
 export function Dialog(props: DialogProps) {
-  if (!('trigger' in props)) return <DialogRoot {...props} />
+  if (!('trigger' in props) && !('title' in props) && !('description' in props)) {
+    return <DialogRoot {...props} />
+  }
 
   const { children, trigger, triggerProps, defaultOpen, onOpenChange, open, ...contentProps } =
     props
 
   return (
     <DialogRoot defaultOpen={defaultOpen} onOpenChange={onOpenChange} open={open}>
-      {typeof trigger === 'string' ? (
-        <DialogTrigger {...triggerProps}>{trigger}</DialogTrigger>
-      ) : (
-        <DialogTrigger asChild {...triggerProps}>
+      {trigger !== undefined && (
+        <DialogTrigger {...triggerProps} asChild={typeof trigger !== 'string'}>
           {trigger}
         </DialogTrigger>
       )}
@@ -201,17 +206,21 @@ export function Dialog(props: DialogProps) {
   )
 }
 
-/** Focus-managed modal content. Include a {@link DialogTitle} to give it an accessible name. */
+/** Focus-managed modal content. Give it a title prop or compose a {@link DialogTitle}. */
 export function DialogContent({
   children,
   className,
+  closeLabel = 'Cerrar diálogo',
   contentSlot = 'dialog-content',
+  description,
+  headerClassName,
   isDismissable = true,
   isKeyboardDismissDisabled = false,
   onOverlayClick,
   overlaySlot = 'dialog-overlay',
   showCloseButton = true,
   size = 'md',
+  title,
   ...props
 }: DialogContentProps) {
   const { setOpen } = useDialogContext()
@@ -242,18 +251,27 @@ export function DialogContent({
             data-close-button={showCloseButton || undefined}
             aria-describedby={descriptionId}
             className={cn(
-              'relative mx-auto grid box-border max-h-[calc(100dvh-2rem)] min-h-0 min-w-0 w-full gap-5 overflow-x-hidden overflow-y-auto overscroll-contain rounded-xl bg-popover p-6 text-sm text-popover-foreground shadow-[var(--ui-shadow-floating)] ring-1 ring-foreground/10 outline-none [&[data-close-button]_[data-slot=dialog-title]]:pr-10',
+              'bg-popover text-popover-foreground ring-foreground/10 relative mx-auto box-border grid max-h-[calc(100dvh-2rem)] min-h-0 w-full min-w-0 gap-5 overflow-x-hidden overflow-y-auto overscroll-contain rounded-xl p-6 text-sm shadow-[var(--ui-shadow-floating)] ring-1 outline-none [&[data-close-button]_[data-slot=dialog-title]]:pr-10',
               dialogSizes[size],
               className,
             )}
             {...props}
           >
-            <DialogDescriptionContext.Provider value={{ setDescriptionId }}>
+            <OverlayDescriptionContext.Provider value={setDescriptionId}>
+              <OverlayHeader
+                slotPrefix="dialog"
+                title={title}
+                description={description}
+                headerClassName={cn(
+                  showCloseButton && '[&>[data-slot=dialog-description]]:pr-10',
+                  headerClassName,
+                )}
+              />
               {children}
-            </DialogDescriptionContext.Provider>
+            </OverlayDescriptionContext.Provider>
             {showCloseButton ? (
               <Button
-                aria-label="Cerrar diálogo"
+                aria-label={closeLabel}
                 data-slot="dialog-close"
                 variant="ghost"
                 className="absolute top-3 right-3"
@@ -301,11 +319,7 @@ export function DialogClose({ asChild = false, children, onClick, ...props }: Di
 /** Groups the title and description at the top of a dialog. */
 export function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
-    <div
-      data-slot="dialog-header"
-      className={cn('flex min-w-0 flex-col gap-2', className)}
-      {...props}
-    />
+    <div data-slot="dialog-header" className={cn(overlayHeaderClassName, className)} {...props} />
   )
 }
 
@@ -320,7 +334,7 @@ export function DialogFooter({
     <div
       data-slot="dialog-footer"
       className={cn(
-        '-mx-6 -mb-6 flex flex-col-reverse gap-2 rounded-b-xl border-t border-border bg-surface-subtle p-6 sm:flex-row sm:flex-wrap sm:justify-end',
+        'border-border bg-surface-subtle -mx-6 -mb-6 flex flex-col-reverse gap-2 rounded-b-xl border-t p-6 sm:flex-row sm:flex-wrap sm:justify-end',
         className,
       )}
       {...props}
@@ -332,49 +346,11 @@ export function DialogFooter({
 }
 
 /** Title used to give the parent {@link DialogContent} an accessible name. */
-export function DialogTitle({
-  className,
-  ...props
-}: Omit<React.ComponentProps<typeof Heading>, 'slot'>) {
-  return (
-    <Heading
-      slot="title"
-      data-slot="dialog-title"
-      className={cn(
-        'font-heading text-lg leading-snug font-semibold tracking-tight break-words',
-        className,
-      )}
-      {...props}
-    />
-  )
+export function DialogTitle(props: React.ComponentProps<typeof OverlayTitle>) {
+  return <OverlayTitle data-slot="dialog-title" {...props} />
 }
 
 /** Supporting text announced alongside the parent {@link DialogTitle}. */
-export function DialogDescription({
-  className,
-  id,
-  ...props
-}: Omit<React.ComponentProps<typeof Text>, 'slot'>) {
-  const generatedId = React.useId()
-  const descriptionId = id ?? generatedId
-  const context = React.useContext(DialogDescriptionContext)
-  const setDescriptionId = context?.setDescriptionId
-
-  React.useEffect(() => {
-    setDescriptionId?.(descriptionId)
-    return () => setDescriptionId?.((current) => (current === descriptionId ? undefined : current))
-  }, [descriptionId, setDescriptionId])
-
-  return (
-    <Text
-      slot="description"
-      id={descriptionId}
-      data-slot="dialog-description"
-      className={cn(
-        'text-sm leading-relaxed break-words text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground',
-        className,
-      )}
-      {...props}
-    />
-  )
+export function DialogDescription(props: React.ComponentProps<typeof OverlayDescription>) {
+  return <OverlayDescription data-slot="dialog-description" {...props} />
 }

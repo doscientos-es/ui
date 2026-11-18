@@ -4,7 +4,6 @@ import { type ModalOverlayProps } from 'react-aria-components'
 import { cn } from '../../lib/cn'
 import { Button } from '../button/button'
 import {
-  Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
@@ -12,24 +11,30 @@ import {
   DialogHeader,
   DialogOverlay,
   DialogPortal,
+  DialogRoot,
   DialogTitle,
   DialogTrigger,
 } from '../dialog/dialog'
+import { OverlayHeader, type OverlayHeaderProps } from '../overlay-header'
 
 /* oxlint-disable jsx-a11y/no-autofocus -- Focus the safe action inside a focus-managed confirmation modal, not on page load. */
 
-export type AlertDialogProps = {
+export type AlertDialogProps = OverlayHeaderProps & {
   children: React.ReactNode
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
-/** Controlled, composable confirmation dialog for domain-specific destructive actions. */
-export function AlertDialog({ children, open, onOpenChange }: AlertDialogProps) {
+/** Controlled confirmation dialog. Supply a title or compose with {@link AlertDialogContent}. */
+export function AlertDialog({ children, open, onOpenChange, ...headerProps }: AlertDialogProps) {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      {children}
-    </Dialog>
+    <DialogRoot open={open} onOpenChange={onOpenChange}>
+      {'title' in headerProps || 'description' in headerProps ? (
+        <AlertDialogContent {...headerProps}>{children}</AlertDialogContent>
+      ) : (
+        children
+      )}
+    </DialogRoot>
   )
 }
 
@@ -59,7 +64,7 @@ export function AlertDialogOverlay({
   return <DialogOverlay data-slot="alert-dialog-overlay" className={className} {...props} />
 }
 
-export type AlertDialogContentProps = {
+export type AlertDialogContentProps = OverlayHeaderProps & {
   children?: React.ReactNode
   className?: string
   size?: 'default' | 'sm'
@@ -69,6 +74,9 @@ export function AlertDialogContent({
   className,
   size = 'default',
   children,
+  title,
+  description,
+  headerClassName,
 }: AlertDialogContentProps) {
   return (
     <DialogContent
@@ -80,6 +88,12 @@ export function AlertDialogContent({
       size="sm"
       className={cn(size === 'sm' && 'max-w-[20rem]', className)}
     >
+      <OverlayHeader
+        slotPrefix="alert-dialog"
+        title={title}
+        description={description}
+        headerClassName={cn('text-center sm:text-left', headerClassName)}
+      />
       {children}
     </DialogContent>
   )

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { ArrowRight, Plus } from 'lucide-react'
-import { expect, fn, userEvent, within } from 'storybook/test'
+import { useState } from 'react'
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
 
 import { Button, LinkButton } from './button'
 
@@ -8,6 +9,8 @@ const meta = {
   title: 'Components/Actions/Button',
   component: Button,
   tags: ['test:ui'],
+  // React Aria's live announcer is outside the canvas and briefly references the previous story.
+  parameters: { a11y: { context: '.storybook-canvas' } },
   args: { children: 'Guardar cambios', onPress: fn() },
   argTypes: {
     variant: {
@@ -39,6 +42,30 @@ export const Disabled: Story = {
     await expect(button).toBeDisabled()
     button.click()
     await expect(args.onPress).not.toHaveBeenCalled()
+  },
+}
+export const Pending: Story = {
+  render: function PendingButton() {
+    const [pending, setPending] = useState(false)
+    return (
+      <Button
+        isPending={pending}
+        pendingLabel="Guardando cambios…"
+        onPress={() => setPending(true)}
+      >
+        Guardar
+      </Button>
+    )
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const button = canvas.getByRole('button', { name: 'Guardar' })
+    const initialWidth = button.getBoundingClientRect().width
+    await userEvent.click(button)
+    const progress = canvas.getByRole('progressbar', { name: 'Guardando cambios…' })
+    await waitFor(() => expect(progress).toBeVisible())
+    await expect(button.getBoundingClientRect().width).toBe(initialWidth)
+    await expect(button).toHaveFocus()
   },
 }
 export const Variants: Story = {

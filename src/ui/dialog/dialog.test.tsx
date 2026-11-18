@@ -16,15 +16,41 @@ import {
 describe('Dialog', () => {
   it('opens from a default button created from its text trigger', () => {
     render(
-      <Dialog trigger="Editar cliente" triggerProps={{ variant: 'outline' }}>
-        <DialogTitle>Editar cliente</DialogTitle>
+      <Dialog
+        trigger="Editar"
+        triggerProps={{ variant: 'outline' }}
+        title="Editar cliente"
+        description="Actualiza sus datos."
+      >
+        <input aria-label="Nombre" />
       </Dialog>,
     )
 
-    const trigger = screen.getByRole('button', { name: 'Editar cliente' })
+    const trigger = screen.getByRole('button', { name: 'Editar' })
     expect(trigger.className).toContain('border')
     fireEvent.click(trigger)
-    expect(screen.getByRole('dialog', { name: 'Editar cliente' })).toBeTruthy()
+    const dialog = screen.getByRole('dialog', {
+      name: 'Editar cliente',
+      description: 'Actualiza sus datos.',
+    })
+    expect(dialog.firstElementChild?.getAttribute('data-slot')).toBe('dialog-header')
+  })
+
+  it('renders a controlled dialog without a trigger and omits an empty description', () => {
+    const { rerender } = render(
+      <Dialog open title="Perfil" description={<strong>Datos públicos.</strong>}>
+        Contenido
+      </Dialog>,
+    )
+    const dialog = screen.getByRole('dialog', { name: 'Perfil', description: 'Datos públicos.' })
+
+    rerender(
+      <Dialog open title="Perfil" description="  ">
+        Contenido
+      </Dialog>,
+    )
+    expect(screen.getByRole('dialog', { name: 'Perfil' })).toBe(dialog)
+    expect(dialog.hasAttribute('aria-describedby')).toBe(false)
   })
 
   it('opens from a custom trigger element in the simple API', () => {

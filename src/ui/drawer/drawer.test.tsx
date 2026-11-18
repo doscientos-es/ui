@@ -10,14 +10,21 @@ describe('Drawer', () => {
   it('opens an accessible dialog from its text trigger and closes it', async () => {
     const user = userEvent.setup()
     render(
-      <Drawer trigger="Abrir filtros" triggerProps={{ variant: 'outline' }}>
-        <DrawerTitle>Filtros</DrawerTitle>
-        <DrawerDescription>Limita los resultados.</DrawerDescription>
+      <Drawer
+        trigger="Abrir filtros"
+        triggerProps={{ variant: 'outline' }}
+        title="Filtros"
+        description="Limita los resultados."
+      >
+        <input aria-label="Estado" />
       </Drawer>,
     )
     await user.click(screen.getByRole('button', { name: 'Abrir filtros' }))
-    expect(screen.getByRole('dialog', { name: 'Filtros' })).toBeTruthy()
-    expect(screen.getByText('Limita los resultados.')).toBeTruthy()
+    const dialog = screen.getByRole('dialog', {
+      name: 'Filtros',
+      description: 'Limita los resultados.',
+    })
+    expect(dialog.firstElementChild?.getAttribute('data-slot')).toBe('drawer-header')
     await user.click(screen.getByRole('button', { name: 'Cerrar' }))
     expect(screen.queryByRole('dialog', { name: 'Filtros' })).toBeNull()
   })
@@ -41,12 +48,15 @@ describe('Drawer', () => {
         <Button>Abrir filtros</Button>
         <DrawerContent>
           <DrawerTitle>Filtros</DrawerTitle>
+          <DrawerDescription>Elige un estado.</DrawerDescription>
         </DrawerContent>
       </DrawerTrigger>,
     )
 
     await user.click(screen.getByRole('button', { name: 'Abrir filtros' }))
-    expect(screen.getByRole('dialog', { name: 'Filtros' })).toBeTruthy()
+    expect(
+      screen.getByRole('dialog', { name: 'Filtros', description: 'Elige un estado.' }),
+    ).toBeTruthy()
   })
 
   it('keeps a controlled drawer open while interacting with a nested dialog', async () => {

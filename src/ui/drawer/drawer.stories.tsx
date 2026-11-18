@@ -24,11 +24,12 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
-    <Drawer trigger="Editar perfil" triggerProps={{ variant: 'outline' }}>
-      <DrawerHeader>
-        <DrawerTitle>Editar perfil</DrawerTitle>
-        <DrawerDescription>Actualiza los datos públicos de tu cuenta.</DrawerDescription>
-      </DrawerHeader>
+    <Drawer
+      trigger="Editar perfil"
+      triggerProps={{ variant: 'outline' }}
+      title="Editar perfil"
+      description="Actualiza los datos públicos de tu cuenta."
+    >
       <div className="grid gap-3 px-4">
         <label className="grid gap-1 text-sm" htmlFor="drawer-name">
           Nombre

@@ -13,15 +13,18 @@ describe('Avatar', () => {
     expect(screen.getByText('AN')).toBeTruthy()
   })
 
-  it('hides the fallback after the image loads', () => {
+  it('marks the image as loaded while preserving the fallback layer for the transition', () => {
     render(
       <Avatar>
         <AvatarImage src="/ana.jpg" alt="Ana" />
         <AvatarFallback>AN</AvatarFallback>
       </Avatar>,
     )
-    fireEvent.load(screen.getByRole('img', { name: 'Ana' }))
-    expect(screen.queryByText('AN')).toBeNull()
+    const image = screen.getByRole('img', { name: 'Ana' })
+    expect(image.hasAttribute('data-loaded')).toBe(false)
+    fireEvent.load(image)
+    expect(image.hasAttribute('data-loaded')).toBe(true)
+    expect(screen.getByText('AN')).toBeTruthy()
   })
 
   it('shows the fallback when the image fails', () => {
@@ -34,5 +37,22 @@ describe('Avatar', () => {
     fireEvent.error(screen.getByRole('img', { name: 'Ana' }))
     expect(screen.queryByRole('img', { name: 'Ana' })).toBeNull()
     expect(screen.getByText('AN')).toBeTruthy()
+  })
+
+  it('loads a replacement source after the previous image failed', () => {
+    const avatar = (src: string) => (
+      <Avatar>
+        <AvatarImage src={src} alt="Ana" />
+        <AvatarFallback>AN</AvatarFallback>
+      </Avatar>
+    )
+    const { rerender } = render(avatar('/missing.jpg'))
+    fireEvent.error(screen.getByRole('img', { name: 'Ana' }))
+
+    rerender(avatar('/ana.jpg'))
+    const image = screen.getByRole('img', { name: 'Ana' })
+    expect(image.hasAttribute('data-loaded')).toBe(false)
+    fireEvent.load(image)
+    expect(image.hasAttribute('data-loaded')).toBe(true)
   })
 })

@@ -2,22 +2,28 @@
 
 import { XIcon } from 'lucide-react'
 import type * as React from 'react'
+import { useState } from 'react'
 import {
   Dialog as DrawerPrimitive,
   type DialogProps as DrawerPrimitiveProps,
   DialogTrigger as DrawerTriggerPrimitive,
   type DialogTriggerProps as DrawerTriggerPrimitiveProps,
-  Heading,
   ModalOverlay as ModalOverlayPrimitive,
   type ModalOverlayProps as ModalOverlayPrimitiveProps,
   Modal as ModalPrimitive,
   Pressable,
-  Text,
 } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
 import { type OpenStateProps, resolveOpen } from '../../lib/open-state'
 import { Button, type ButtonProps } from '../button/button'
+import {
+  OverlayDescription,
+  OverlayHeader,
+  type OverlayHeaderProps,
+  OverlayTitle,
+} from '../overlay-header'
+import { OverlayDescriptionContext, overlayHeaderClassName } from '../overlay-header-shared'
 
 /** Props for {@link DrawerTrigger}. */
 export type DrawerTriggerProps = Omit<
@@ -62,7 +68,7 @@ function DrawerOverlay({
       data-slot="drawer-overlay"
       isDismissable
       className={cn(
-        'fixed inset-0 z-50 bg-black/10 motion-safe:transition-opacity motion-safe:duration-150 motion-safe:data-entering:opacity-0 motion-safe:data-exiting:opacity-0 motion-reduce:transition-none supports-backdrop-filter:backdrop-blur-xs',
+        'fixed inset-0 z-50 bg-black/10 supports-backdrop-filter:backdrop-blur-xs motion-safe:transition-opacity motion-safe:duration-150 motion-safe:data-entering:opacity-0 motion-safe:data-exiting:opacity-0 motion-reduce:transition-none',
         className,
       )}
       {...props}
@@ -75,9 +81,10 @@ function DrawerOverlay({
 /** Props for a controlled drawer panel. */
 export type DrawerContentProps = Omit<
   ModalOverlayPrimitiveProps,
-  'className' | 'children' | 'isOpen' | 'defaultOpen' | 'onOpenChange'
+  'className' | 'children' | 'isOpen' | 'defaultOpen' | 'onOpenChange' | 'title'
 > &
   OpenStateProps &
+  OverlayHeaderProps &
   Pick<React.ComponentProps<typeof ModalPrimitive>, 'isDismissable'> & {
     className?: string
     /** Props applied to the accessible dialog inside the drawer panel. */
@@ -91,13 +98,18 @@ export type DrawerContentProps = Omit<
 function DrawerContent({
   className,
   children,
+  description,
   dialogProps,
+  headerClassName,
   side = 'right',
   showCloseButton = true,
+  title,
   open,
   isOpen,
   ...props
 }: DrawerContentProps) {
+  const [descriptionId, setDescriptionId] = useState<string>()
+
   return (
     <DrawerOverlay isOpen={resolveOpen({ open, isOpen })} {...props}>
       <ModalPrimitive
@@ -105,16 +117,25 @@ function DrawerContent({
         data-side={side}
         data-close-button={showCloseButton || undefined}
         className={cn(
-          'fixed z-50 flex box-border max-h-dvh flex-col gap-4 overflow-hidden border-border bg-popover bg-clip-padding text-sm text-popover-foreground shadow-[var(--ui-shadow-floating)] motion-safe:transition motion-safe:duration-200 motion-safe:ease-in-out motion-safe:data-entering:opacity-0 motion-safe:data-exiting:opacity-0 motion-reduce:transition-none data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:h-auto data-[side=bottom]:border-t data-[side=bottom]:pb-[env(safe-area-inset-bottom)] motion-safe:data-[side=bottom]:data-entering:translate-y-10 motion-safe:data-[side=bottom]:data-exiting:translate-y-10 data-[side=left]:inset-y-0 data-[side=left]:left-0 data-[side=left]:h-full data-[side=left]:w-3/4 data-[side=left]:max-w-[24rem] data-[side=left]:border-r motion-safe:data-[side=left]:data-entering:-translate-x-10 motion-safe:data-[side=left]:data-exiting:-translate-x-10 data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-full data-[side=right]:w-3/4 data-[side=right]:max-w-[24rem] data-[side=right]:border-l motion-safe:data-[side=right]:data-entering:translate-x-10 motion-safe:data-[side=right]:data-exiting:translate-x-10 data-[side=top]:inset-x-0 data-[side=top]:top-0 data-[side=top]:h-auto data-[side=top]:border-b data-[side=top]:pt-[env(safe-area-inset-top)] motion-safe:data-[side=top]:data-entering:-translate-y-10 motion-safe:data-[side=top]:data-exiting:-translate-y-10',
+          'border-border bg-popover text-popover-foreground fixed z-50 box-border flex max-h-dvh flex-col gap-4 overflow-hidden bg-clip-padding text-sm shadow-[var(--ui-shadow-floating)] data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:h-auto data-[side=bottom]:border-t data-[side=bottom]:pb-[env(safe-area-inset-bottom)] data-[side=left]:inset-y-0 data-[side=left]:left-0 data-[side=left]:h-full data-[side=left]:w-3/4 data-[side=left]:max-w-[24rem] data-[side=left]:border-r data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-full data-[side=right]:w-3/4 data-[side=right]:max-w-[24rem] data-[side=right]:border-l data-[side=top]:inset-x-0 data-[side=top]:top-0 data-[side=top]:h-auto data-[side=top]:border-b data-[side=top]:pt-[env(safe-area-inset-top)] motion-safe:transition motion-safe:duration-200 motion-safe:ease-in-out motion-safe:data-entering:opacity-0 motion-safe:data-exiting:opacity-0 motion-safe:data-[side=bottom]:data-entering:translate-y-10 motion-safe:data-[side=bottom]:data-exiting:translate-y-10 motion-safe:data-[side=left]:data-entering:-translate-x-10 motion-safe:data-[side=left]:data-exiting:-translate-x-10 motion-safe:data-[side=right]:data-entering:translate-x-10 motion-safe:data-[side=right]:data-exiting:translate-x-10 motion-safe:data-[side=top]:data-entering:-translate-y-10 motion-safe:data-[side=top]:data-exiting:-translate-y-10 motion-reduce:transition-none',
           className,
         )}
       >
         <DrawerPrimitive
           data-slot="drawer"
+          aria-describedby={descriptionId}
           className="[display:inherit] h-full max-h-[inherit] min-h-0 [flex-direction:inherit] gap-[inherit] overflow-y-auto overscroll-contain outline-none"
           {...dialogProps}
         >
-          {children}
+          <OverlayDescriptionContext.Provider value={setDescriptionId}>
+            <OverlayHeader
+              slotPrefix="drawer"
+              title={title}
+              description={description}
+              headerClassName={cn('shrink-0 p-4', showCloseButton && 'pr-14', headerClassName)}
+            />
+            {children}
+          </OverlayDescriptionContext.Provider>
           {showCloseButton && (
             <DrawerClose variant="ghost" className="absolute top-3 right-3" size="icon">
               <XIcon aria-hidden="true" />
@@ -177,7 +198,7 @@ function DrawerHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="drawer-header"
-      className={cn('flex shrink-0 flex-col gap-2 p-4', className)}
+      className={cn(overlayHeaderClassName, 'shrink-0 p-4', className)}
       {...props}
     />
   )
@@ -188,7 +209,7 @@ function DrawerFooter({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="drawer-footer"
       className={cn(
-        'mt-auto flex shrink-0 flex-col gap-2 border-t border-border bg-surface-subtle p-4',
+        'border-border bg-surface-subtle mt-auto flex shrink-0 flex-col gap-2 border-t p-4',
         className,
       )}
       {...props}
@@ -196,32 +217,18 @@ function DrawerFooter({ className, ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-function DrawerTitle({ className, ...props }: Omit<React.ComponentProps<typeof Heading>, 'slot'>) {
+function DrawerTitle({ className, ...props }: React.ComponentProps<typeof OverlayTitle>) {
   return (
-    <Heading
-      slot="title"
+    <OverlayTitle
       data-slot="drawer-title"
-      className={cn(
-        'text-lg leading-snug font-semibold tracking-tight break-words text-foreground',
-        className,
-      )}
+      className={cn('text-foreground', className)}
       {...props}
     />
   )
 }
 
-function DrawerDescription({
-  className,
-  ...props
-}: Omit<React.ComponentProps<typeof Text>, 'slot'>) {
-  return (
-    <Text
-      slot="description"
-      data-slot="drawer-description"
-      className={cn('text-sm leading-relaxed break-words text-muted-foreground', className)}
-      {...props}
-    />
-  )
+function DrawerDescription(props: React.ComponentProps<typeof OverlayDescription>) {
+  return <OverlayDescription data-slot="drawer-description" {...props} />
 }
 
 export {

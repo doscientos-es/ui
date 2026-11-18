@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import userEvent from '@testing-library/user-event'
+import { describe, expect, it, vi } from 'vitest'
 
 import { SubmitButton } from './submit-button'
 describe('SubmitButton', () => {
@@ -12,19 +13,37 @@ describe('SubmitButton', () => {
     expect(screen.getByRole('button', { name: 'Guardar' }).getAttribute('type')).toBe('submit')
   })
 
-  it('shows the loading label and prevents another submit while loading', () => {
-    render(
-      <form>
-        <SubmitButton loading loadingLabel="Guardando cambios…">
+  it('announces progress, preserves focus and blocks another activation while loading', async () => {
+    const user = userEvent.setup()
+    const onPress = vi.fn()
+    const form = (loading = false) => (
+      <form onSubmit={(event) => event.preventDefault()}>
+        <SubmitButton loading={loading} loadingLabel="Guardando cambios…" onPress={onPress}>
           Guardar
         </SubmitButton>
-      </form>,
+      </form>
     )
+    const { rerender } = render(form())
+    await user.tab()
+    const button = screen.getByRole('button', { name: 'Guardar' })
+    expect(document.activeElement).toBe(button)
+    expect(screen.queryByRole('progressbar')).toBeNull()
 
-    const button = screen.getByRole('button', { name: 'Guardando cambios…' })
-    expect(button.hasAttribute('disabled')).toBe(true)
-    expect(button.getAttribute('aria-busy')).toBe('true')
-    expect(button.querySelector('svg')?.getAttribute('class')).toContain('motion-safe:animate-spin')
+    rerender(form(true))
+    expect(document.activeElement).toBe(button)
+    expect(button.getAttribute('aria-disabled')).toBe('true')
+    expect(button.getAttribute('type')).toBe('button')
+    const progress = screen.getByRole('progressbar', { name: 'Guardando cambios…' })
+    expect(progress.querySelector('svg')?.getAttribute('class')).toContain(
+      'motion-safe:animate-spin',
+    )
+    await user.keyboard('{Enter}')
+    await user.click(button)
+    expect(onPress).not.toHaveBeenCalled()
+
+    rerender(form())
+    await user.keyboard('{Enter}')
+    expect(onPress).toHaveBeenCalledOnce()
   })
 
   it('keeps pendingLabel as a backwards-compatible alias', () => {
@@ -36,6 +55,6 @@ describe('SubmitButton', () => {
       </form>,
     )
 
-    expect(screen.getByRole('button', { name: 'Enviando…' })).toBeTruthy()
+    expect(screen.getByRole('progressbar', { name: 'Enviando…' })).toBeTruthy()
   })
 })

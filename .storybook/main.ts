@@ -28,6 +28,11 @@ const config: StorybookConfig = {
   viteFinal: async (viteConfig) => {
     const aliases = viteConfig.resolve?.alias
     viteConfig.plugins = [...(viteConfig.plugins ?? []), tailwindcss()]
+    // Prebundle the same React Aria entry used by triggers and overlays.
+    viteConfig.optimizeDeps = {
+      ...viteConfig.optimizeDeps,
+      include: [...new Set([...(viteConfig.optimizeDeps?.include ?? []), 'react-aria-components'])],
+    }
     if (Array.isArray(aliases)) {
       viteConfig.resolve = {
         ...viteConfig.resolve,

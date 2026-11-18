@@ -69,6 +69,21 @@ describe('Switch', () => {
     expect(switchControl).toHaveProperty('checked', true)
   })
 
+  it('forwards a callback inputRef without losing directional keyboard behavior', async () => {
+    const user = userEvent.setup()
+    const cleanup = vi.fn()
+    const inputRef = vi.fn(() => cleanup)
+    const { unmount } = render(<Switch inputRef={inputRef}>Sincronización</Switch>)
+
+    const control = screen.getByRole('switch', { name: 'Sincronización' })
+    expect(inputRef).toHaveBeenCalledWith(control)
+    act(() => control.focus())
+    await act(() => user.keyboard('{ArrowRight}'))
+    expect(control).toHaveProperty('checked', true)
+    unmount()
+    expect(cleanup).toHaveBeenCalledOnce()
+  })
+
   it('lets consumers cancel directional keyboard behavior', async () => {
     const user = userEvent.setup()
     const onKeyDown = vi.fn((event: KeyboardEvent) => event.preventDefault())

@@ -11,15 +11,8 @@ import {
 import { cn } from '../../lib/cn'
 import { Button } from '../button/button'
 import { ConfirmDialog } from '../confirm-dialog/confirm-dialog'
-import {
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogRoot,
-  DialogTitle,
-  type DialogSize,
-} from '../dialog/dialog'
+import { DialogContent, DialogFooter, DialogRoot, type DialogSize } from '../dialog/dialog'
+import { OverlayHeader } from '../overlay-header'
 import { SubmitButton } from '../submit-button/submit-button'
 
 export type FormDialogProps = {
@@ -108,10 +101,12 @@ export function FormDialog({
               if (!loading && !submitDisabled) onSubmit(event)
             }}
           >
-            <DialogHeader className="shrink-0 px-6 pt-6">
-              <DialogTitle>{title}</DialogTitle>
-              {description && <DialogDescription>{description}</DialogDescription>}
-            </DialogHeader>
+            <OverlayHeader
+              slotPrefix="dialog"
+              title={title}
+              description={description}
+              headerClassName="shrink-0 px-6 pt-6"
+            />
             <div
               data-slot="form-dialog-body"
               className={cn(

@@ -13,16 +13,21 @@ describe('AlertDialog', () => {
   it('exposes alertdialog semantics and closes through the cancel action', () => {
     const onOpenChange = vi.fn()
     render(
-      <AlertDialog open onOpenChange={onOpenChange}>
-        <AlertDialogContent>
-          <AlertDialogTitle>Eliminar cliente</AlertDialogTitle>
-          <AlertDialogCancel />
-        </AlertDialogContent>
+      <AlertDialog
+        open
+        onOpenChange={onOpenChange}
+        title="Eliminar cliente"
+        description="No se puede deshacer."
+      >
+        <AlertDialogCancel />
       </AlertDialog>,
     )
 
-    const dialog = screen.getByRole('alertdialog', { name: 'Eliminar cliente' })
-    expect(dialog).toBeTruthy()
+    const dialog = screen.getByRole('alertdialog', {
+      name: 'Eliminar cliente',
+      description: 'No se puede deshacer.',
+    })
+    expect(dialog.firstElementChild?.getAttribute('data-slot')).toBe('alert-dialog-header')
     expect(dialog.classList.contains('max-h-[calc(100dvh-2rem)]')).toBe(true)
     expect(dialog.classList.contains('box-border')).toBe(true)
     expect(dialog.parentElement?.classList.contains('max-h-full')).toBe(true)

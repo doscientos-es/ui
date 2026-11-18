@@ -10,7 +10,7 @@ El criterio visual y de producto está documentado en [DESIGN-GUIDELINES.md](./D
 
 - Foundations: tokens CSS, tema claro/oscuro y utilidades de clases y texto.
 - Controles y formularios: botones, campos, selección, feedback, búsqueda y validación accesible.
-- Navegación y overlays: tabs, menús, breadcrumbs, tooltip, popover, dialogs y drawers.
+- Navegación y overlays: tabs, menús, breadcrumbs, tooltip, popover, dialogs, drawers y bottom sheets.
 - Datos y estados: tablas, cards, avatares, badges, skeletons, alertas y estados vacíos.
 - Patrones de aplicación: shell, sidebar, cabeceras, toolbars, paginación, toasts y carga.
 - Hooks: debounce, cambios no guardados y autosave sin acoplamiento a transporte o datos.
@@ -187,7 +187,7 @@ Las primitivas de composición no conocen rutas, entidades ni transporte: cada f
 - `SelectionToolbar`: muestra selección masiva mediante `count` y recibe las acciones como `children`.
 - `DescriptionList`, `DescriptionItem`, `DescriptionTerm` y `DescriptionDetails`: detalles semánticos de solo lectura con `dl`/`dt`/`dd`.
 - `DataViewState`: estado vacío, de carga o recuperable de una vista de datos; compón título, descripción y acciones.
-- `DetailDrawer`: marco de drawer para fichas; añade `DetailDrawerHeader`, `DetailDrawerBody` y `DetailDrawerFooter`.
+- `DetailDrawer`: marco de drawer para fichas; pasa `title` y `description`, y compón `DetailDrawerBody` y `DetailDrawerFooter` según necesites.
 - `SectionHeader`: cabecera de panel con heading y acciones; `PageHeader` se reserva para el `h1` de una página.
 - `PageStack`: ritmo vertical compartido entre la cabecera y las secciones de una página.
 - `MetricGrid` y `MetricCard`: grid responsive de KPIs. `MetricCard` admite `loading`, `trend`, `delta`, `action`, `visual` y `footer`; el gráfico sigue siendo responsabilidad de la app.
@@ -201,6 +201,46 @@ Las primitivas de composición no conocen rutas, entidades ni transporte: cada f
 La story `Application/Recipes/Workspace dashboard` es la receta de referencia para
 combinar estos componentes en una pantalla completa sin acoplar el paquete a un
 dominio ni a una librería de gráficas.
+
+## Cabeceras de diálogos y paneles flotantes
+
+Pasa `title` y, si aporta contexto, `description` a `Dialog`, `Drawer`, `AlertDialog`,
+`Popover`, `BottomSheet` o `ResponsiveDialog`. El paquete aplica la tipografía y el
+espaciado, y usa la cabecera como nombre y descripción accesibles. Usa
+`headerClassName` si necesitas ajustar la cabecera sin modificar el contenido.
+
+```tsx
+<Dialog trigger="Editar" title="Editar cliente" description="Actualiza sus datos.">
+  <ClientForm />
+</Dialog>
+<Popover trigger="Ver estado" title="Cliente activo" description="Actualizado hace 2 minutos." />
+```
+
+Con `Dialog` también puedes omitir `trigger` y controlar la apertura con `open` y
+`onOpenChange`. Para composición avanzada, pasa esas props de cabecera a
+`DialogContent`, `DrawerContent`, `AlertDialogContent` o `PopoverContent`, o sigue
+componiendo tu propia cabecera con las piezas existentes (sin duplicarla con las props).
+En `Popover`, las props de cabecera activan un diálogo accesible. Omítelas si pasas
+contenido con su propia semántica, como una lista de opciones o un diálogo personalizado.
+
+Usa `ResponsiveDialog` para filtros, detalles y formularios cortos que deben abrirse
+como diálogo centrado en escritorio y `BottomSheet` arrastrable en móvil. Pasa
+`title`, `trigger` (texto o botón) y el contenido una sola vez. Puedes controlar
+la apertura con `open` y `onOpenChange`, o usar `defaultOpen`. La presentación se
+elige al abrir: si cambia el viewport mientras está abierto, no se desmonta el
+contenido ni se pierde el foco. `DialogClose` funciona en ambas presentaciones.
+
+La receta `Application/Recipes/Responsive filters` muestra un `Select` y un
+`Popover` anidados. Usa `size` para configurar el ancho en escritorio y `peekHeight`
+para añadir una altura inicial en móvil (px o longitud CSS); deja visibles el
+título y el botón de cierre a esa altura. Si ocultas el botón de cierre con
+`showCloseButton={false}`, incluye una acción de cierre en el contenido.
+Para un panel exclusivamente móvil, usa `BottomSheet` con `BottomSheetTrigger`
+y `Button` para restaurar el foco al cerrar.
+
+Para acciones asíncronas, usa `Button` con `isPending` y `pendingLabel`: el botón
+reserva espacio para el indicador, conserva el foco y bloquea nuevas pulsaciones.
+`SubmitButton` aplica este patrón automáticamente al enviar un formulario.
 
 ## Estado asíncrono, errores y copia
 

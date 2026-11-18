@@ -1,5 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { useState } from 'react'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 
+import { Button } from '../button/button'
 import {
   Avatar,
   AvatarBadge,
@@ -42,4 +45,39 @@ export const BrokenImage: Story = {
       <AvatarFallback>AN</AvatarFallback>
     </Avatar>
   ),
+}
+
+const localPhoto = `data:image/svg+xml,${encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><rect width="32" height="32" fill="teal"/></svg>',
+)}`
+
+export const ImageTransition: Story = {
+  tags: ['test:ui'],
+  render: function ImageTransitionExample() {
+    const [src, setSrc] = useState<string>()
+    return (
+      <div className="flex items-center gap-3">
+        <Avatar data-testid="avatar">
+          <AvatarImage src={src} alt="Ana" />
+          <AvatarFallback>AN</AvatarFallback>
+          <AvatarBadge />
+        </Avatar>
+        <Button variant="outline" onPress={() => setSrc(localPhoto)}>
+          Cargar foto
+        </Button>
+      </div>
+    )
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const avatar = canvas.getByTestId('avatar')
+    const initial = avatar.getBoundingClientRect()
+    const initials = canvas.getByText('AN')
+    await expect(initials).toBeVisible()
+    await userEvent.click(canvas.getByRole('button', { name: 'Cargar foto' }))
+    await expect(await canvas.findByRole('img', { name: 'Ana' })).toBeVisible()
+    await waitFor(() => expect(initials).not.toBeVisible())
+    const final = avatar.getBoundingClientRect()
+    await expect([final.width, final.height]).toEqual([initial.width, initial.height])
+  },
 }

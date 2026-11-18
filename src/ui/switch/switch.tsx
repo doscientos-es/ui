@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useCallback, useEffect, useRef, type ReactNode } from 'react'
 import { Switch as AriaSwitch, type SwitchProps as AriaSwitchProps } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
@@ -54,8 +54,23 @@ export function Switch({
   ...props
 }: SwitchProps) {
   const styles = switchSizes[size]
-  const fallbackInputRef = useRef<HTMLInputElement>(null)
-  const resolvedInputRef = inputRef ?? fallbackInputRef
+  const internalInputRef = useRef<HTMLInputElement>(null)
+  const resolvedInputRef =
+    typeof inputRef === 'function' ? internalInputRef : (inputRef ?? internalInputRef)
+  const setInputRef = useCallback(
+    (input: HTMLInputElement | null) => {
+      internalInputRef.current = input
+      if (typeof inputRef !== 'function') return
+      const cleanup = inputRef(input)
+      if (typeof cleanup === 'function') {
+        return () => {
+          internalInputRef.current = null
+          cleanup()
+        }
+      }
+    },
+    [inputRef],
+  )
 
   useEffect(() => {
     const input = resolvedInputRef.current
@@ -91,11 +106,11 @@ export function Switch({
     <AriaSwitch
       data-slot="switch"
       data-size={size}
-      inputRef={resolvedInputRef}
+      inputRef={typeof inputRef === 'function' ? setInputRef : resolvedInputRef}
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       className={cn(
-        'group/switch inline-flex cursor-pointer items-center gap-3 text-sm text-foreground outline-none select-none',
+        'group/switch text-foreground inline-flex cursor-pointer items-center gap-3 text-sm outline-none select-none',
         'data-disabled:cursor-not-allowed data-disabled:opacity-50',
         className,
       )}
@@ -115,12 +130,12 @@ export function Switch({
               aria-hidden="true"
               data-slot="switch-control"
               className={cn(
-                'relative inline-flex shrink-0 items-center overflow-hidden rounded-full border border-input bg-input shadow-inner',
+                'border-input bg-input relative inline-flex shrink-0 items-center overflow-hidden rounded-full border shadow-inner',
                 'transition-[background-color,border-color,box-shadow] duration-200 ease-out motion-reduce:transition-none',
                 'group-data-hovered/switch:bg-muted-foreground',
                 'group-data-selected/switch:border-primary group-data-selected/switch:bg-primary',
                 'group-data-selected/switch:group-data-hovered/switch:bg-primary/85',
-                'group-data-focus-visible/switch:ring-3 group-data-focus-visible/switch:ring-ring',
+                'group-data-focus-visible/switch:ring-ring group-data-focus-visible/switch:ring-3',
                 styles.control,
               )}
             >
@@ -131,8 +146,8 @@ export function Switch({
                   width: isThumbPressed ? styles.activeWidth : styles.idleWidth,
                 }}
                 className={cn(
-                  'grid shrink-0 place-items-center rounded-full border border-border/60 bg-background text-[0.625rem] text-muted-foreground shadow-sm',
-                  'will-change-[transform,width] transition-[transform,width,background-color,color,border-color] duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] motion-reduce:transition-none',
+                  'border-border/60 bg-background text-muted-foreground grid shrink-0 place-items-center rounded-full border text-[0.625rem] shadow-sm',
+                  'transition-[transform,width,background-color,color,border-color] duration-[240ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] will-change-[transform,width] motion-reduce:transition-none',
                   'group-data-selected/switch:border-primary-foreground/20',
                   'group-data-selected/switch:bg-primary-foreground group-data-selected/switch:text-primary',
                   styles.thumb,

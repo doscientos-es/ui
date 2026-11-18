@@ -28,11 +28,12 @@ type Story = StoryObj<typeof meta>
 
 export const Information: Story = {
   render: () => (
-    <Dialog trigger="Ver información" triggerProps={{ variant: 'outline' }}>
-      <DialogHeader>
-        <DialogTitle>Factura enviada</DialogTitle>
-        <DialogDescription>El cliente recibirá un enlace seguro por email.</DialogDescription>
-      </DialogHeader>
+    <Dialog
+      trigger="Ver información"
+      triggerProps={{ variant: 'outline' }}
+      title="Factura enviada"
+      description="El cliente recibirá un enlace seguro por email."
+    >
       <p className="text-muted-foreground text-sm">
         Podrás consultar el estado desde el historial.
       </p>
@@ -46,7 +47,10 @@ export const Information: Story = {
     const page = within(canvasElement.ownerDocument.body)
 
     await userEvent.click(canvas.getByRole('button', { name: 'Ver información' }))
-    await waitFor(() => expect(page.getByRole('dialog', { name: 'Factura enviada' })).toBeVisible())
+    const dialog = await page.findByRole('dialog', { name: 'Factura enviada' })
+    await expect(dialog).toHaveAccessibleDescription(
+      'El cliente recibirá un enlace seguro por email.',
+    )
     await userEvent.click(page.getByRole('button', { name: 'Entendido' }))
     await waitFor(() => expect(page.queryByRole('dialog')).not.toBeInTheDocument())
   },
