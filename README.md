@@ -26,15 +26,14 @@ encapsulado para que las APIs, tokens y accesibilidad sean consistentes.
 Instala el paquete y React como dependencia de tu aplicación. Después, importa una sola vez los estilos compilados en el punto de entrada CSS.
 
 ```css
-@layer doscientos, theme, base, components, utilities;
+@layer theme, base, components, utilities;
+@import '@doscientos/ui/styles.css';
 @import 'tailwindcss';
-@import '@doscientos/ui/styles.css' layer(doscientos);
 ```
 
-Declara la capa de la biblioteca antes que las capas de Tailwind. Así las utilidades de la
-aplicación pueden ajustar los estilos de los componentes: por ejemplo, `pl-8` reserva espacio
-para un icono aunque el campo incluya `px-3`. Importar ambos archivos en la misma capa puede hacer
-que el CSS compilado de la biblioteca prevalezca sobre las clases de la aplicación.
+Declara primero el orden de capas y carga los estilos de la biblioteca antes que Tailwind. Así sus utilidades conservan la misma
+prioridad que las de la aplicación y las clases de la aplicación pueden ajustar los componentes:
+por ejemplo, `pl-8` reserva espacio para un icono aunque el campo incluya `px-3`.
 
 ```tsx
 import { Button, Field, FieldLabel, Input } from '@doscientos/ui'
