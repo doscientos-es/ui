@@ -23,6 +23,19 @@ describe('Input', () => {
     expect(input.classList.contains('motion-reduce:transition-none')).toBe(true)
   })
 
+  it('lets icon padding replace the default on either side', () => {
+    const { rerender } = render(<Input aria-label="Buscar" className="pl-8" />)
+    const input = screen.getByRole('textbox')
+    expect(input.classList.contains('pl-8')).toBe(true)
+    expect(input.classList.contains('pl-3')).toBe(false)
+    expect(input.classList.contains('pr-3')).toBe(true)
+
+    rerender(<Input aria-label="Buscar" className="pr-10" />)
+    expect(input.classList.contains('pr-10')).toBe(true)
+    expect(input.classList.contains('pr-3')).toBe(false)
+    expect(input.classList.contains('pl-3')).toBe(true)
+  })
+
   it('does not accept typing when disabled', async () => {
     render(<Input aria-label="Nombre" disabled />)
     const input = screen.getByRole('textbox') as HTMLInputElement
