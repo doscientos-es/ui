@@ -26,8 +26,9 @@ encapsulado para que las APIs, tokens y accesibilidad sean consistentes.
 Instala el paquete y React como dependencia de tu aplicación. Después, importa una sola vez los estilos compilados en el punto de entrada CSS.
 
 ```css
+@layer doscientos, theme, base, components, utilities;
 @import 'tailwindcss';
-@import '@doscientos/ui/styles.css';
+@import '@doscientos/ui/styles.css' layer(doscientos);
 ```
 
 ```tsx
