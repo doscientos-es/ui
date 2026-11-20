@@ -57,6 +57,7 @@
     "hooks:install": "node .githooks/install.mjs"
   },
   "dependencies": {
+    "@tanstack/react-table": "9.3.1",
     "class-variance-authority": "^0.7.1",
     "cn": "0.3.2",
     "lucide-react": "^1.11.0",

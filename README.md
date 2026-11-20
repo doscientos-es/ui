@@ -17,9 +17,10 @@ El criterio visual y de producto está documentado en [DESIGN-GUIDELINES.md](./D
 
 Los componentes de dominio, llamadas API, navegación, toasts y layouts permanecen en cada aplicación.
 
-La única foundation de comportamiento interactivo es `react-aria-components`.
+La base de accesibilidad interactiva es `react-aria-components`.
 Los consumidores importan exclusivamente `@doscientos/ui`: React Aria queda
 encapsulado para que las APIs, tokens y accesibilidad sean consistentes.
+`DataTable` usa TanStack Table como motor de datos; conserva una tabla HTML nativa.
 
 ## Uso en una aplicación React con Tailwind v4
 
@@ -206,6 +207,32 @@ Las primitivas de composición no conocen rutas, entidades ni transporte: cada f
 La story `Application/Recipes/Workspace dashboard` es la receta de referencia para
 combinar estos componentes en una pantalla completa sin acoplar el paquete a un
 dominio ni a una librería de gráficas.
+
+### Tabla de datos y búsqueda global
+
+- **`@doscientos/ui/data-table`**: define `DataTableColumn<T>[]`, prepara el modelo con
+  `useDataTable({ columns, data, getRowId })` y pásalo a `<DataTable table={table} />`.
+  Mantén estables `columns`, `data` y los ID. Proporciona `caption` o `aria-label`.
+- Ordenación, filtros y paginación funcionan en local por defecto. Con datos del servidor,
+  usa `manualSorting`, `manualFiltering` y `manualPagination` según corresponda, controla
+  `state` y sus callbacks `on…Change`, y pasa `rowCount` o `pageCount`. La app resuelve la
+  consulta y decide cuándo volver a la primera página. `renderPagination` sustituye el pie
+  predeterminado, no el modelo de paginación.
+- Compón controles con `table.setGlobalFilter`, `column.toggleVisibility` o
+  `table.setColumnOrder`. `createDataTableSelectionColumn` añade casillas de fila y de la
+  página actual; pasa `getRowId` para conservar la selección al cambiar de página o datos.
+  Los encabezados ordenables deben contener texto, no otros controles interactivos.
+- **`@doscientos/ui/global-search`**: compón `GlobalSearch` dentro de un `Dialog` o en una
+  página. Pasa `items` ya ordenados (`id`, `title` y los campos de tu app), `query`,
+  `onQueryChange` y `onAction`. El componente no vuelve a filtrar. React Aria gestiona el
+  teclado y el foco en la lista; la app gestiona peticiones, permisos, ranking, atajos
+  globales, apertura y navegación. Usa `status`, `loading` y `feedback` para comunicar
+  los resultados y permitir reintentos sin ocultar resultados parciales.
+- **Ábaco** puede sustituir el combobox artesanal del panel por el componente publicado,
+  conservando `useSearchResults`, su diálogo, el pie de atajos y la navegación en `onAction`.
+  Usa `focusOnMount={mode !== 'mobile'}` para enfocar el campo solo al abrir en escritorio.
+
+Storybook: **Components / Data Display / DataTable** y **Components / Navigation / GlobalSearch**.
 
 ## Cabeceras de diálogos y paneles flotantes
 
