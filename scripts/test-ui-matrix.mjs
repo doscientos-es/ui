@@ -4,6 +4,8 @@ import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+// This CLI reports progress and failed tests to the terminal.
+/* oxlint-disable no-console */
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const reports = mkdtempSync(join(tmpdir(), 'doscientos-ui-matrix-'))
 const modes = [

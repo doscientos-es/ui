@@ -161,16 +161,17 @@ describe('Calendar', () => {
           value={date}
           view="day"
           resources={resources}
-          onItemMove={(change) =>
+          onItemMove={(change) => {
+            if (!change.resourceId) throw new Error('Moved item has no resource')
             setItems([
               {
                 ...change.item,
                 start: change.start,
                 end: change.end,
-                resourceId: change.resourceId!,
+                resourceId: change.resourceId,
               },
             ])
-          }
+          }}
         />
       )
     }
@@ -179,7 +180,10 @@ describe('Calendar', () => {
     button.focus()
     fireEvent.keyDown(button, { key: 'ArrowDown', altKey: true })
     expect(screen.getByRole('button', { name: /10:30/ })).toBe(document.activeElement)
-    fireEvent.keyDown(document.activeElement!, { key: 'ArrowRight', altKey: true })
+    fireEvent.keyDown(screen.getByRole('button', { name: /10:30/ }), {
+      key: 'ArrowRight',
+      altKey: true,
+    })
     expect(screen.getByRole('button', { name: /Revisión/ })).toBe(document.activeElement)
     expect(screen.getByRole('status').textContent).toContain('Sala B')
   })
@@ -239,7 +243,8 @@ describe('Calendar', () => {
     const { container, rerender } = render(
       <Calendar items={[item]} value={date} view="week" onItemMove={onItemMove} />,
     )
-    const column = container.querySelectorAll('.dsc-calendar__resource-column')[0]!
+    const column = container.querySelector('.dsc-calendar__resource-column')
+    if (!column) throw new Error('Calendar resource column not found')
     vi.spyOn(column, 'getBoundingClientRect').mockReturnValue({ top: 0, height: 600 } as DOMRect)
     const drop = () => {
       const event = new MouseEvent('drop', { bubbles: true, clientY: 100 })

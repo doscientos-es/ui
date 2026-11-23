@@ -75,7 +75,7 @@ export const ImageTransition: Story = {
     const initials = canvas.getByText('AN')
     await expect(initials).toBeVisible()
     await userEvent.click(canvas.getByRole('button', { name: 'Cargar foto' }))
-    await expect(await canvas.findByRole('img', { name: 'Ana' })).toBeVisible()
+    await waitFor(() => expect(canvas.getByRole('img', { name: 'Ana' })).toBeVisible())
     await waitFor(() => expect(initials).not.toBeVisible())
     const final = avatar.getBoundingClientRect()
     await expect([final.width, final.height]).toEqual([initial.width, initial.height])

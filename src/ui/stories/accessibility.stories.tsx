@@ -13,18 +13,24 @@ export default meta
 type Story = StoryObj<typeof meta>
 type Color = [number, number, number, number]
 
+function required<T>(value: T | null | undefined): T {
+  if (value === null || value === undefined)
+    throw new Error('Required element or color value is missing')
+  return value
+}
+
 // Canvas converts browser-resolved OKLCH and RGB to sRGB, including alpha.
 function colorReader(document: Document) {
   const canvas = document.createElement('canvas')
   canvas.width = canvas.height = 1
-  const context = canvas.getContext('2d')!
+  const context = required(canvas.getContext('2d'))
   return (color: string): Color => {
     if (!CSS.supports('color', color)) throw new Error(`Unresolved CSS color: ${color}`)
     context.clearRect(0, 0, 1, 1)
     context.fillStyle = color
     context.fillRect(0, 0, 1, 1)
     const data = context.getImageData(0, 0, 1, 1).data
-    return [data[0]!, data[1]!, data[2]!, data[3]! / 255]
+    return [required(data[0]), required(data[1]), required(data[2]), required(data[3]) / 255]
   }
 }
 
@@ -47,11 +53,11 @@ function background(element: Element, readColor: ReturnType<typeof colorReader>)
 }
 
 function luminance(color: Color) {
-  const linear = color.slice(0, 3).map((channel) => {
+  const linear = (channel: number) => {
     const value = channel / 255
     return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4
-  })
-  return linear[0]! * 0.2126 + linear[1]! * 0.7152 + linear[2]! * 0.0722
+  }
+  return linear(color[0]) * 0.2126 + linear(color[1]) * 0.7152 + linear(color[2]) * 0.0722
 }
 
 function contrast(color: Color, surface: Color) {
@@ -91,7 +97,7 @@ export const ControlBoundaries: Story = {
     for (const control of boundaries) {
       const border = readColor(getComputedStyle(control).borderTopColor)
       await expect(
-        contrast(border, background(control.parentElement!, readColor)),
+        contrast(border, background(required(control.parentElement), readColor)),
         `${control.getAttribute('data-slot')} outer boundary`,
       ).toBeGreaterThanOrEqual(3)
       if (control.getAttribute('data-slot') !== 'switch-control') {
@@ -101,11 +107,11 @@ export const ControlBoundaries: Story = {
         ).toBeGreaterThanOrEqual(3)
       }
     }
-    const thumb = canvasElement.querySelector('[data-slot="switch-thumb"]')!
+    const thumb = required(canvasElement.querySelector('[data-slot="switch-thumb"]'))
     await expect(
       contrast(
         readColor(getComputedStyle(thumb).backgroundColor),
-        background(thumb.parentElement!, readColor),
+        background(required(thumb.parentElement), readColor),
       ),
     ).toBeGreaterThanOrEqual(3)
     const input = within(canvasElement).getByRole('textbox', { name: 'Nombre' })
@@ -115,11 +121,11 @@ export const ControlBoundaries: Story = {
     await expect(
       contrast(
         readColor(getComputedStyle(input).getPropertyValue('--tw-ring-color')),
-        background(input.parentElement!, readColor),
+        background(required(input.parentElement), readColor),
       ),
     ).toBeGreaterThanOrEqual(3)
     await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(
-      document.defaultView!.innerWidth,
+      required(document.defaultView).innerWidth,
     )
   },
 }

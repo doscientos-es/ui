@@ -13,7 +13,11 @@ export default defineConfig([
   {
     ...shared,
     // Components and hooks need an RSC client boundary in Next.js apps.
-    entry: ['src/index.ts', 'src/generated-entrypoints/*.ts', '!src/generated-entrypoints/utils.ts'],
+    entry: [
+      'src/index.ts',
+      'src/generated-entrypoints/*.ts',
+      '!src/generated-entrypoints/utils.ts',
+    ],
     banner: { js: '"use client";' },
   },
   {

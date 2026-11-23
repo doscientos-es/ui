@@ -53,7 +53,7 @@ export const Day: Story = {
 }
 export const KeyboardEditing: Story = {
   render: function Render(args) {
-    const [events, setEvents] = useState([items[0]!])
+    const [events, setEvents] = useState(items.slice(0, 1))
     return (
       <Calendar
         {...args}

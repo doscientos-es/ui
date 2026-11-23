@@ -8,9 +8,9 @@ const src = resolve(process.cwd(), 'src')
 const ui = resolve(src, 'ui')
 const publicFamilies = [
   ...new Set(
-    [...readFileSync(resolve(src, 'index.ts'), 'utf8').matchAll(/from '\.\/ui\/([^/]+)\//g)].map(
-      (match) => match[1]!,
-    ),
+    [
+      ...readFileSync(resolve(src, 'index.ts'), 'utf8').matchAll(/from '\.\/ui\/([^/]+)\//g),
+    ].flatMap((match) => (match[1] ? [match[1]] : [])),
   ),
 ].sort()
 
@@ -27,7 +27,8 @@ function referencedFamilies(kind: 'stories' | 'test') {
     for (const match of readFileSync(file, 'utf8').matchAll(/from ['"]([^'"]+)['"]/g)) {
       if (!match[1]?.startsWith('.')) continue
       const target = relative(ui, resolve(dirname(file), match[1]))
-      if (!target.startsWith('..')) families.add(target.split(sep)[0]!)
+      const family = target.split(sep)[0]
+      if (!target.startsWith('..') && family) families.add(family)
     }
   }
   return families

@@ -5,6 +5,8 @@ import '../src/styles.css'
 import './preview.css'
 import { doscientosTheme } from './theme'
 
+// Storybook preview files export configuration rather than their decorator components.
+// oxlint-disable-next-line react/only-export-components
 function ThemeCanvas({ dark, children }: { dark: boolean; children: ReactNode }) {
   useEffect(() => {
     // Portals live under body, not inside the canvas. Theme both locations.
