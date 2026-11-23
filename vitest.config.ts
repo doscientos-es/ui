@@ -27,7 +27,8 @@ export default defineConfig({
         test: {
           name: 'unit',
           environment: 'happy-dom',
-          pool: 'threads',
+          // Reuse workers while isolating each test file in its own VM context.
+          pool: 'vmForks',
           maxWorkers: 4,
           include: ['src/**/*.test.{ts,tsx}'],
           setupFiles: ['./src/test/setup.ts'],

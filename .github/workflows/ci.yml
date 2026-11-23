@@ -26,7 +26,8 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm quality
+      # Run unit tests only once, with coverage in the following step.
+      - run: pnpm format:check && pnpm lint && pnpm typecheck && pnpm test:package
       - run: pnpm exec vitest run --project unit --coverage
       - run: pnpm build
       - run: pnpm build-storybook
