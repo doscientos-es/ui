@@ -54,7 +54,7 @@ export function useSignaturePad({ value, defaultValue, onChange, disabled }: Opt
     if (frame.current === null) frame.current = requestAnimationFrame(publish)
   }
 
-  const point = (event: PointerEvent<HTMLDivElement>): SignaturePoint | null => {
+  const point = (event: PointerEvent<HTMLFieldSetElement>): SignaturePoint | null => {
     const rect = event.currentTarget.getBoundingClientRect()
     if (!rect.width || !rect.height) return null
     return {
@@ -69,7 +69,7 @@ export function useSignaturePad({ value, defaultValue, onChange, disabled }: Opt
     }
   }
 
-  const append = (event: PointerEvent<HTMLDivElement>) => {
+  const append = (event: PointerEvent<HTMLFieldSetElement>) => {
     const position = point(event)
     const stroke = strokesRef.current[strokesRef.current.length - 1]
     const previous = stroke?.[stroke.length - 1]
@@ -84,7 +84,7 @@ export function useSignaturePad({ value, defaultValue, onChange, disabled }: Opt
     schedule()
   }
 
-  const onPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+  const onPointerDown = (event: PointerEvent<HTMLFieldSetElement>) => {
     if (
       disabled ||
       pointer.current !== null ||
@@ -105,11 +105,11 @@ export function useSignaturePad({ value, defaultValue, onChange, disabled }: Opt
     schedule()
   }
 
-  const onPointerMove = (event: PointerEvent<HTMLDivElement>) => {
+  const onPointerMove = (event: PointerEvent<HTMLFieldSetElement>) => {
     if (pointer.current === event.pointerId) append(event)
   }
 
-  const finish = (event: PointerEvent<HTMLDivElement>, includePosition: boolean) => {
+  const finish = (event: PointerEvent<HTMLFieldSetElement>, includePosition: boolean) => {
     if (pointer.current !== event.pointerId) return
     if (includePosition) append(event)
     pointer.current = null
@@ -140,9 +140,9 @@ export function useSignaturePad({ value, defaultValue, onChange, disabled }: Opt
     handlers: {
       onPointerDown,
       onPointerMove,
-      onPointerUp: (event: PointerEvent<HTMLDivElement>) => finish(event, true),
-      onPointerCancel: (event: PointerEvent<HTMLDivElement>) => finish(event, false),
-      onLostPointerCapture: (event: PointerEvent<HTMLDivElement>) => finish(event, false),
+      onPointerUp: (event: PointerEvent<HTMLFieldSetElement>) => finish(event, true),
+      onPointerCancel: (event: PointerEvent<HTMLFieldSetElement>) => finish(event, false),
+      onLostPointerCapture: (event: PointerEvent<HTMLFieldSetElement>) => finish(event, false),
     },
   }
 }
