@@ -161,6 +161,20 @@ recibido al menos una vez. `GlobalSearch` recibe resultados ya filtrados.
 />
 ```
 
+Con resultados externos, pasa la consulta y los resultados que gestiona la aplicación:
+
+```tsx
+<AutocompleteCombobox
+  label="Cliente"
+  items={results}
+  getItemKey={(item) => item.id}
+  getItemLabel={(item) => item.name}
+  filterMode="external"
+  inputValue={query}
+  onInputChange={setQuery}
+/>
+```
+
 ## Diálogos y controles cómodos por defecto
 
 `Dialog` y `DialogContent` usan `size="md"` (máximo 32rem / 512px), sin depender de

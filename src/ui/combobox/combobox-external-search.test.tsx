@@ -77,4 +77,6 @@ it('keeps a controlled selection visible after external results change', async (
   await userEvent.click(screen.getByRole('option', { name: 'Bruno' }))
   rerender(<Controlled results={items.slice(1)} />)
   expect((screen.getByRole('combobox') as HTMLInputElement).value).toBe('Bruno')
+  await userEvent.tab()
+  expect((screen.getByRole('combobox') as HTMLInputElement).value).toBe('Bruno')
 })
