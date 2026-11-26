@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState, type ReactNode } from 'react'
+import { Fragment, useEffect, useMemo, useState, type ReactNode } from 'react'
 import {
   ComboBox as AriaComboBox,
   ComboBoxValue,
@@ -172,13 +172,19 @@ export function AutocompleteCombobox<T extends object>({
   onKeyDown,
   ...props
 }: AutocompleteComboboxProps<T>) {
-  const accessibleLabel =
-    typeof label === 'string'
-      ? label
-      : typeof props['aria-label'] === 'string'
-        ? props['aria-label']
-        : undefined
-  const [internalInputValue, setInternalInputValue] = useState('')
+  const [internalValue, setInternalValue] = useState<Key | null>(defaultValue ?? null)
+  const [internalInputValue, setInternalInputValue] = useState(() => {
+    const initialValue = value === undefined ? defaultValue : value
+    const initialItem = items.find((item) => getItemKey(item) === initialValue)
+    return initialItem ? getItemLabel(initialItem) : ''
+  })
+  const selectedItem =
+    value === undefined ? undefined : items.find((item) => getItemKey(item) === value)
+  const selectedLabel = selectedItem ? getItemLabel(selectedItem) : ''
+  useEffect(() => {
+    if (value !== undefined && controlledInputValue === undefined)
+      setInternalInputValue(selectedLabel)
+  }, [value, selectedLabel, controlledInputValue])
   const inputValue = controlledInputValue ?? internalInputValue
   const setInputValue = (value: string) => {
     setInternalInputValue(value)
@@ -204,10 +210,14 @@ export function AutocompleteCombobox<T extends object>({
     [getItemLabel, inputValue.length, items, normalizedQuery, suggestion],
   )
   const suggestionLabel = suggestedItem ? getItemLabel(suggestedItem) : undefined
+  const selectItem = (key: Key | null, item?: T) => {
+    if (value === undefined) setInternalValue(key)
+    onChange?.(key, item)
+  }
   const acceptSuggestion = () => {
     if (!suggestedItem || !suggestionLabel) return false
     setInputValue(suggestionLabel)
-    onChange?.(getItemKey(suggestedItem), suggestedItem)
+    selectItem(getItemKey(suggestedItem), suggestedItem)
     return true
   }
   const handleKeyDown = (event: Parameters<NonNullable<InputProps['onKeyDown']>>[0]) => {
@@ -218,7 +228,6 @@ export function AutocompleteCombobox<T extends object>({
   return (
     <AriaComboBox<T>
       {...props}
-      aria-label={accessibleLabel}
       className={(state) =>
         cn(
           'group/combobox flex w-full flex-col gap-1.5',
@@ -226,14 +235,13 @@ export function AutocompleteCombobox<T extends object>({
         )
       }
       items={filteredItems}
-      selectedKey={value}
-      defaultSelectedKey={defaultValue}
+      selectedKey={value === undefined ? internalValue : value}
       inputValue={inputValue}
       onInputChange={setInputValue}
       onSelectionChange={(key) => {
         const item = filteredItems.find((candidate) => getItemKey(candidate) === key)
         if (item) setInputValue(getItemLabel(item))
-        onChange?.(key, item)
+        selectItem(key, item)
       }}
     >
       {label && <Label className="text-foreground text-sm font-medium">{label}</Label>}
@@ -248,7 +256,7 @@ export function AutocompleteCombobox<T extends object>({
           </span>
         )}
         <ComboboxInput
-          aria-label={accessibleLabel}
+          aria-label={label ? undefined : props['aria-label']}
           aria-autocomplete={suggestionLabel ? 'both' : 'list'}
           placeholder={placeholder}
           onKeyDown={handleKeyDown}

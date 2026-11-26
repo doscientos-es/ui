@@ -83,7 +83,6 @@ export const EntitySearch: Story = {
   render: () => (
     <div className="w-96">
       <AutocompleteCombobox
-        aria-label="Asignar responsable"
         label="Responsable"
         description="Escribe un nombre, email o usa las flechas para navegar."
         placeholder="Busca una persona…"
@@ -121,7 +120,6 @@ export const ContractSearch: Story = {
   render: () => (
     <div className="w-96">
       <AutocompleteCombobox
-        aria-label="Contrato"
         label="Contrato"
         placeholder="Número de contrato…"
         items={contracts}

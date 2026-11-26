@@ -117,6 +117,23 @@ comprueba teclado, estados de carga, error y vacío.
   La selección simple usa una clave o `null`; la múltiple, un array de claves.
   Los componentes de composición conservan también la API de React Aria.
 
+`SelectField`, `AutocompleteCombobox` y `MultiSelectCombobox` comparten `items`,
+`getItemKey`, `getItemLabel`, `label`, `description` y `errorMessage`. Usa
+`SelectField` para una selección simple sin búsqueda; `Select` y sus slots permiten
+personalizar la composición. Activa `isInvalid` para mostrar errores en controles
+compuestos de React Aria.
+
+```tsx
+<SelectField
+  label="Cliente"
+  items={clients}
+  getItemKey={(item) => item.id}
+  getItemLabel={(item) => item.name}
+  value={clientId}
+  onChange={setClientId}
+/>
+```
+
 ## Diálogos y controles cómodos por defecto
 
 `Dialog` y `DialogContent` usan `size="md"` (máximo 32rem / 512px), sin depender de

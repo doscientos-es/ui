@@ -1,8 +1,16 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
-import { Select, SelectContent, SelectItem, SelectList, SelectTrigger, SelectValue } from './select'
+import {
+  Select,
+  SelectContent,
+  SelectField,
+  SelectItem,
+  SelectList,
+  SelectTrigger,
+  SelectValue,
+} from './select'
 
 function Example({ disabled = false }: { disabled?: boolean }) {
   return (
@@ -57,5 +65,39 @@ describe('Select', () => {
     expect(trigger.classList.contains('custom-disabled')).toBe(true)
     await userEvent.click(trigger)
     expect(screen.queryByRole('listbox')).toBeNull()
+  })
+})
+
+describe('SelectField', () => {
+  const items = [
+    { id: 'ana', name: 'Ana' },
+    { id: 'sara', name: 'Sara' },
+  ]
+
+  it('selects with the shared item API and associates its label and feedback', async () => {
+    const onChange = vi.fn()
+    render(
+      <SelectField
+        label="Cliente"
+        description="Selecciona un cliente."
+        errorMessage="Campo obligatorio."
+        isInvalid
+        items={items}
+        getItemKey={(item) => item.id}
+        getItemLabel={(item) => item.name}
+        defaultValue="ana"
+        onChange={onChange}
+      />,
+    )
+    const trigger = screen.getByRole('button', { name: /Cliente/ })
+    expect(trigger.textContent).toContain('Ana')
+    const describedBy = trigger.getAttribute('aria-describedby')?.split(' ') ?? []
+    expect(describedBy).toContain(screen.getByText('Selecciona un cliente.').id)
+    expect(describedBy).toContain(screen.getByText('Campo obligatorio.').id)
+    expect(trigger.closest('[data-invalid]')).toBeTruthy()
+    await userEvent.click(trigger)
+    await userEvent.click(screen.getByRole('option', { name: 'Sara' }))
+    expect(onChange).toHaveBeenLastCalledWith('sara')
+    expect(trigger.textContent).toContain('Sara')
   })
 })

@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { useState } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 
 import {
@@ -72,6 +73,88 @@ describe('AutocompleteCombobox', () => {
     await user.type(input, 'con-2026')
     await user.tab()
     expect(input.getAttribute('value')).toBe('CON-2026-001')
+  })
+
+  it('shows the initial value and emits a selected key and item using onChange', async () => {
+    const onChange = vi.fn()
+    render(
+      <AutocompleteCombobox
+        label="Usuario"
+        items={users}
+        getItemKey={(item) => item.id}
+        getItemLabel={(item) => item.name}
+        defaultValue="1"
+        onChange={onChange}
+      />,
+    )
+    const input = screen.getByRole('combobox', { name: 'Usuario' }) as HTMLInputElement
+    expect(input.value).toBe('Ana García')
+    await userEvent.clear(input)
+    await userEvent.type(input, 'Bruno')
+    await userEvent.click(await screen.findByRole('option', { name: 'Bruno López' }))
+    expect(onChange).toHaveBeenLastCalledWith('2', users[1])
+    expect(input.value).toBe('Bruno López')
+  })
+
+  it('reflects changes to a controlled selection', () => {
+    const field = (value: string | null) => (
+      <AutocompleteCombobox
+        label="Usuario"
+        items={users}
+        getItemKey={(item) => item.id}
+        getItemLabel={(item) => item.name}
+        value={value}
+        onChange={() => {}}
+      />
+    )
+    const { rerender } = render(field('1'))
+    const input = screen.getByRole('combobox', { name: 'Usuario' }) as HTMLInputElement
+    expect(input.value).toBe('Ana García')
+    rerender(field('2'))
+    expect(input.value).toBe('Bruno López')
+    rerender(field(null))
+    expect(input.value).toBe('')
+  })
+
+  it('allows editing a controlled selection before choosing another item', async () => {
+    function Controlled() {
+      const [value, setValue] = useState<string | number | null>('1')
+      return (
+        <AutocompleteCombobox
+          label="Usuario"
+          items={users}
+          getItemKey={(item) => item.id}
+          getItemLabel={(item) => item.name}
+          value={value}
+          onChange={setValue}
+        />
+      )
+    }
+    render(<Controlled />)
+    const input = screen.getByRole('combobox', { name: 'Usuario' }) as HTMLInputElement
+    await userEvent.clear(input)
+    await userEvent.type(input, 'Bruno')
+    expect(input.value).toBe('Bruno')
+    await userEvent.click(await screen.findByRole('option', { name: 'Bruno López' }))
+    expect(input.value).toBe('Bruno López')
+  })
+
+  it('submits an accepted suggestion as the selected key', async () => {
+    render(
+      <form aria-label="Asignación">
+        <AutocompleteCombobox
+          label="Usuario"
+          name="user"
+          items={users}
+          getItemKey={(item) => item.id}
+          getItemLabel={(item) => item.name}
+        />
+      </form>,
+    )
+    const form = screen.getByRole('form') as HTMLFormElement
+    await userEvent.type(screen.getByRole('combobox', { name: 'Usuario' }), 'Ana')
+    await userEvent.tab()
+    expect(new FormData(form).get('user')).toBe('1')
   })
 
   it('preserves a consumer keyboard handler before accepting a suggestion', async () => {
