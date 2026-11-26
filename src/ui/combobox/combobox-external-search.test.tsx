@@ -30,7 +30,10 @@ it('shows external results in the received order and selects an unrelated label'
   const { rerender } = render(<Controlled results={[]} />)
   await userEvent.type(screen.getByRole('combobox'), 'email')
   rerender(<Controlled results={items} />)
-  expect(screen.getAllByRole('option').map((option) => option.textContent)).toEqual(['Bruno', 'Ana'])
+  expect(screen.getAllByRole('option').map((option) => option.textContent)).toEqual([
+    'Bruno',
+    'Ana',
+  ])
   await userEvent.click(screen.getByRole('option', { name: 'Bruno' }))
   expect(onChange).toHaveBeenLastCalledWith('email', items[0])
 })
@@ -52,4 +55,26 @@ it('does not offer or accept an inline suggestion in external mode', async () =>
   expect(input.getAttribute('aria-autocomplete')).toBe('list')
   await userEvent.tab()
   expect(onChange).not.toHaveBeenCalledWith('email', items[0])
+})
+
+it('keeps a controlled selection visible after external results change', async () => {
+  function Controlled({ results }: { results: typeof items }) {
+    const [value, setValue] = useState<string | number | null>(null)
+    return (
+      <AutocompleteCombobox
+        label="Persona"
+        items={results}
+        getItemKey={(item) => item.id}
+        getItemLabel={(item) => item.label}
+        filterMode="external"
+        value={value}
+        onChange={setValue}
+      />
+    )
+  }
+  const { rerender } = render(<Controlled results={items} />)
+  await userEvent.type(screen.getByRole('combobox'), 'email')
+  await userEvent.click(screen.getByRole('option', { name: 'Bruno' }))
+  rerender(<Controlled results={items.slice(1)} />)
+  expect((screen.getByRole('combobox') as HTMLInputElement).value).toBe('Bruno')
 })
