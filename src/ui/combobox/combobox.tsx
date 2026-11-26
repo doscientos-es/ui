@@ -261,6 +261,16 @@ export function AutocompleteCombobox<T extends object>({
       selectedKey={value === undefined ? internalValue : value}
       inputValue={inputValue}
       onInputChange={setInputValue}
+      onBlur={(event) => {
+        props.onBlur?.(event)
+        if (
+          filterMode === 'external' &&
+          inputValue === '' &&
+          currentKey !== null &&
+          !items.some((item) => getItemKey(item) === currentKey)
+        )
+          selectItem(null)
+      }}
       onSelectionChange={(key) => {
         if (
           filterMode === 'external' &&

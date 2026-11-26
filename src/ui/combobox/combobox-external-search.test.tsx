@@ -86,4 +86,7 @@ it('keeps a controlled selection visible after external results change', async (
   await userEvent.tab()
   expect(onChange).toHaveBeenLastCalledWith('email')
   expect((screen.getByRole('combobox') as HTMLInputElement).value).toBe('Bruno')
+  await userEvent.clear(screen.getByRole('combobox'))
+  await userEvent.tab()
+  expect(onChange).toHaveBeenLastCalledWith(null)
 })
