@@ -1,20 +1,29 @@
-import type { ReactNode } from 'react'
+import { useId, type ReactNode } from 'react'
 
 import { cn } from '../../lib/cn'
+
+/** Accessibility props to spread onto the labelled native form control. */
+export type FormRowControlProps = {
+  id: string
+  required?: boolean
+  'aria-describedby'?: string
+  'aria-invalid'?: true
+}
 
 export type FormRowProps = {
   /** Visible label associated with the form control. */
   label: ReactNode
-  /** Identifier of the labelled form control. */
-  htmlFor: string
-  /** Marks the label as required for assistive technology. */
+  /** Control identifier. Generated when omitted; required when passing a plain child. */
+  htmlFor?: string
+  /** Marks the label and, with a render function, the control as required. */
   required?: boolean
   /** Supplementary guidance displayed below the control. */
   hint?: ReactNode
   /** Validation message announced to the user. */
   error?: ReactNode
   className?: string
-  children: ReactNode
+  /** Render function receives the ID and accessibility props for the control. */
+  children: ReactNode | ((controlProps: FormRowControlProps) => ReactNode)
 }
 
 /** Labelled form-control row with optional help text and validation feedback. */
@@ -27,11 +36,19 @@ export function FormRow({
   className,
   children,
 }: FormRowProps) {
-  const hintId = hint ? `${htmlFor}-hint` : undefined
-  const errorId = error ? `${htmlFor}-error` : undefined
+  const generatedId = useId()
+  const controlId = htmlFor ?? generatedId
+  const hintId = hint ? `${controlId}-hint` : undefined
+  const errorId = error ? `${controlId}-error` : undefined
+  const controlProps: FormRowControlProps = {
+    id: controlId,
+    required,
+    'aria-describedby': [hintId, errorId].filter(Boolean).join(' ') || undefined,
+    'aria-invalid': errorId ? true : undefined,
+  }
   return (
     <div data-slot="form-row" className={cn('flex flex-col gap-1.5', className)}>
-      <label htmlFor={htmlFor} className="text-foreground text-sm font-medium">
+      <label htmlFor={controlId} className="text-foreground text-sm font-medium">
         {label}
         {required && (
           <>
@@ -42,7 +59,7 @@ export function FormRow({
           </>
         )}
       </label>
-      {children}
+      {typeof children === 'function' ? children(controlProps) : children}
       {hint && (
         <p id={hintId} className="text-muted-foreground text-xs">
           {hint}

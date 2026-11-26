@@ -13,14 +13,39 @@ export function PageStack({ className, ...props }: React.ComponentProps<'div'>) 
   )
 }
 
-/** Page-level heading layout with optional description and actions. */
-export function PageHeader({ className, ...props }: React.ComponentProps<'header'>) {
+export type PageHeaderProps = React.ComponentProps<'header'> & {
+  /** Page title. Omit when composing the individual heading parts yourself. */
+  heading?: React.ReactNode
+  /** Supporting text shown below the heading. */
+  description?: React.ReactNode
+  /** Primary and secondary page actions. */
+  actions?: React.ReactNode
+}
+
+/** Page-level heading layout; use props for the common case or compose its parts. */
+export function PageHeader({
+  className,
+  heading,
+  description,
+  actions,
+  children,
+  ...props
+}: PageHeaderProps) {
   return (
     <header
       data-slot="page-header"
       className={cn('flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-3', className)}
       {...props}
-    />
+    >
+      {heading != null && (
+        <PageHeaderHeading>
+          <PageHeaderTitle>{heading}</PageHeaderTitle>
+          {description != null && <PageHeaderDescription>{description}</PageHeaderDescription>}
+        </PageHeaderHeading>
+      )}
+      {actions != null && <PageHeaderActions>{actions}</PageHeaderActions>}
+      {children}
+    </header>
   )
 }
 export function PageHeaderHeading({ className, ...props }: React.ComponentProps<'div'>) {
@@ -48,7 +73,7 @@ export function PageHeaderDescription({ className, ...props }: React.ComponentPr
   return (
     <p
       data-slot="page-header-description"
-      className={cn('mt-1 text-sm text-muted-foreground', className)}
+      className={cn('text-muted-foreground mt-1 text-sm', className)}
       {...props}
     />
   )
@@ -58,7 +83,7 @@ export function PageHeaderMeta({ className, ...props }: React.ComponentProps<'di
     <div
       data-slot="page-header-meta"
       className={cn(
-        'mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground',
+        'text-muted-foreground mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs',
         className,
       )}
       {...props}
@@ -103,7 +128,7 @@ export function SectionHeaderDescription({ className, ...props }: React.Componen
   return (
     <p
       data-slot="section-header-description"
-      className={cn('mt-1 text-sm text-muted-foreground', className)}
+      className={cn('text-muted-foreground mt-1 text-sm', className)}
       {...props}
     />
   )

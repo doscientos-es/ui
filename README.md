@@ -70,6 +70,41 @@ que cada aplicación reconstruya el mismo dashboard: `canvas`, `sidebar`,
 monocroma; una marca puede redefinirlos mediante `--canvas`, `--sidebar`,
 `--surface-subtle` y `--border-strong`.
 
+## Recetas para pantallas y agentes
+
+Empieza por los ejemplos interactivos de Storybook: **Application / Recipes / Interactive list**
+(búsqueda, vacío y creación), **Settings form** (validación y guardado) y
+**Workspace dashboard** (navegación y métricas). Sus datos son ficticios: cada aplicación
+debe conectar sus propias consultas, guardado, permisos y estados asíncronos.
+
+Para una cabecera habitual, `PageHeader` acepta título, descripción y acciones sin
+componer todos sus slots. Para una estructura especial, siguen disponibles
+`PageHeaderHeading`, `PageHeaderTitle`, `PageHeaderDescription` y `PageHeaderActions`.
+
+```tsx
+<PageHeader
+  heading="Clientes"
+  description="Consulta y añade clientes."
+  actions={<Button onPress={openCreate}>Nuevo cliente</Button>}
+/>
+```
+
+`FormRow` puede generar el ID y proporcionar al control `required`, `aria-invalid` y
+`aria-describedby` para la ayuda y el error. Distribuye las props sobre el control
+etiquetable, no sobre un contenedor. Si necesitas un ID estable, pasa `htmlFor`.
+
+```tsx
+<FormRow label="Nombre" required hint="Nombre legal." error={error}>
+  {(controlProps) => <Input {...controlProps} name="name" />}
+</FormRow>
+```
+
+También admite el child habitual con `htmlFor`, pero en ese caso la app debe pasar
+el mismo `id` y conectar manualmente `aria-describedby`, `aria-invalid` y `required`.
+Para controles compuestos como `Select`, usa su API de etiquetado propia, no esta
+función para un input nativo. En cualquier receta conserva nombres accesibles y
+comprueba teclado, estados de carga, error y vacío.
+
 ## Diálogos y controles cómodos por defecto
 
 `Dialog` y `DialogContent` usan `size="md"` (máximo 32rem / 512px), sin depender de

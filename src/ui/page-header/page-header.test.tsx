@@ -21,6 +21,19 @@ describe('PageHeader', () => {
     expect(screen.getByRole('heading', { name: 'Clientes' })).toBeTruthy()
     expect(screen.getByText('Gestiona tus clientes')).toBeTruthy()
   })
+
+  it('renders the concise heading, description and actions with the same semantics', () => {
+    render(
+      <PageHeader
+        heading="Clientes"
+        description="Gestiona tus clientes"
+        actions={<button type="button">Crear cliente</button>}
+      />,
+    )
+    expect(screen.getByRole('heading', { level: 1, name: 'Clientes' })).toBeTruthy()
+    expect(screen.getByText('Gestiona tus clientes')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Crear cliente' })).toBeTruthy()
+  })
 })
 
 it('uses a section-level heading without another page h1', () => {

@@ -18,8 +18,13 @@ export const Default: Story = {
 }
 export const Invalid: Story = {
   render: () => (
-    <FormRow label="Email" htmlFor="form-row-email" required error="Introduce un email válido.">
-      <Input id="form-row-email" aria-invalid="true" />
+    <FormRow
+      label="Email"
+      required
+      hint="Usa tu correo de trabajo."
+      error="Introduce un email válido."
+    >
+      {(props) => <Input {...props} type="email" />}
     </FormRow>
   ),
 }

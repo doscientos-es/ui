@@ -15,6 +15,15 @@ export default meta
 type Story = StoryObj<typeof meta>
 export const Default: Story = {
   render: () => (
+    <PageHeader
+      heading="Clientes"
+      description="Gestiona las cuentas y contactos de tu workspace."
+      actions={<Button>Nuevo cliente</Button>}
+    />
+  ),
+}
+export const Composed: Story = {
+  render: () => (
     <PageHeader>
       <PageHeaderHeading>
         <PageHeaderTitle>Clientes</PageHeaderTitle>
