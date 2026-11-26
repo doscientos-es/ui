@@ -58,6 +58,7 @@ it('does not offer or accept an inline suggestion in external mode', async () =>
 })
 
 it('keeps a controlled selection visible after external results change', async () => {
+  const onChange = vi.fn()
   function Controlled({ results }: { results: typeof items }) {
     const [value, setValue] = useState<string | number | null>(null)
     return (
@@ -68,7 +69,10 @@ it('keeps a controlled selection visible after external results change', async (
         getItemLabel={(item) => item.label}
         filterMode="external"
         value={value}
-        onChange={setValue}
+        onChange={(key) => {
+          onChange(key)
+          setValue(key)
+        }}
       />
     )
   }
@@ -77,6 +81,9 @@ it('keeps a controlled selection visible after external results change', async (
   await userEvent.click(screen.getByRole('option', { name: 'Bruno' }))
   rerender(<Controlled results={items.slice(1)} />)
   expect((screen.getByRole('combobox') as HTMLInputElement).value).toBe('Bruno')
+  await userEvent.clear(screen.getByRole('combobox'))
+  await userEvent.type(screen.getByRole('combobox'), 'otra búsqueda')
   await userEvent.tab()
+  expect(onChange).toHaveBeenLastCalledWith('email')
   expect((screen.getByRole('combobox') as HTMLInputElement).value).toBe('Bruno')
 })

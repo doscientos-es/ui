@@ -22,6 +22,7 @@ import { rankSearchItems } from '../../lib/fuzzy-search'
 import { textControlClassName } from '../../lib/text-control'
 import { getTextMatchParts } from '../../lib/text-match'
 import type { ComboboxFilterMode } from './combobox-filter-mode'
+import { useSelectedLabel } from './use-selected-label'
 
 export type { ComboboxFilterMode } from './combobox-filter-mode'
 
@@ -208,6 +209,8 @@ export function AutocompleteCombobox<T extends object>({
       setInternalInputValue(selectedLabel)
   }
   const inputValue = controlledInputValue ?? internalInputValue
+  const currentKey = value === undefined ? internalValue : value
+  const cachedSelectedLabel = useSelectedLabel(items, currentKey, getItemKey, getItemLabel)
   const setInputValue = (value: string) => {
     setInternalInputValue(value)
     onInputChange?.(value)
@@ -259,6 +262,17 @@ export function AutocompleteCombobox<T extends object>({
       inputValue={inputValue}
       onInputChange={setInputValue}
       onSelectionChange={(key) => {
+        if (
+          filterMode === 'external' &&
+          key === null &&
+          currentKey !== null &&
+          inputValue !== '' &&
+          !items.some((item) => getItemKey(item) === currentKey)
+        ) {
+          if (cachedSelectedLabel !== undefined && cachedSelectedLabel !== inputValue)
+            setInputValue(cachedSelectedLabel)
+          return
+        }
         const item = filteredItems.find((candidate) => getItemKey(candidate) === key)
         if (item) setInputValue(getItemLabel(item))
         selectItem(key, item)
