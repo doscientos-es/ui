@@ -31,11 +31,18 @@ it('shows external results in order, ignores local filters and selects an unrela
   const { rerender } = render(<Controlled results={[]} />)
   await userEvent.type(screen.getByRole('combobox'), 'email')
   rerender(<Controlled results={items} />)
-  expect(screen.getAllByRole('option').map((option) => option.textContent)).toEqual(['Bruno', 'Ana'])
+  expect(screen.getAllByRole('option').map((option) => option.textContent)).toEqual([
+    'Bruno',
+    'Ana',
+  ])
   await userEvent.click(screen.getByRole('option', { name: 'Bruno' }))
   expect(onChange).toHaveBeenLastCalledWith(['email'])
   await userEvent.keyboard('{Escape}')
   expect(screen.getByRole('button', { name: 'Quitar Bruno' })).toBeTruthy()
-  rerender(<Controlled results={[items[1]]} />)
+  rerender(<Controlled results={items.slice(1)} />)
+  await userEvent.type(screen.getByRole('combobox'), 'test')
+  await userEvent.click(screen.getByRole('option', { name: 'Ana' }))
+  expect(onChange).toHaveBeenLastCalledWith(['email', 'name'])
+  await userEvent.keyboard('{Escape}')
   expect(screen.getByRole('button', { name: 'Quitar Bruno' })).toBeTruthy()
 })

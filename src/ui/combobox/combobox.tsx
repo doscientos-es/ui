@@ -249,6 +249,7 @@ export function AutocompleteCombobox<T extends object>({
         )
       }
       items={filteredItems}
+      allowsEmptyCollection={props.allowsEmptyCollection ?? filterMode === 'external'}
       selectedKey={value === undefined ? internalValue : value}
       inputValue={inputValue}
       onInputChange={setInputValue}
