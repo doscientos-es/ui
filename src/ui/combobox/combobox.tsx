@@ -200,7 +200,12 @@ export function AutocompleteCombobox<T extends object>({
     previousSelection.isInputControlled !== isInputControlled
   ) {
     setPreviousSelection({ value, selectedLabel, isInputControlled })
-    if (value !== undefined && !isInputControlled) setInternalInputValue(selectedLabel)
+    if (
+      value !== undefined &&
+      !isInputControlled &&
+      (filterMode !== 'external' || selectedItem || previousSelection.value !== value)
+    )
+      setInternalInputValue(selectedLabel)
   }
   const inputValue = controlledInputValue ?? internalInputValue
   const setInputValue = (value: string) => {
