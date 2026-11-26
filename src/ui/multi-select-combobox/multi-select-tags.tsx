@@ -1,6 +1,12 @@
 import { XIcon } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { Tag, TagGroup, TagList, type ComboBoxValueRenderProps, type Key } from 'react-aria-components'
+import { useState } from 'react'
+import {
+  Tag,
+  TagGroup,
+  TagList,
+  type ComboBoxValueRenderProps,
+  type Key,
+} from 'react-aria-components'
 
 import { Button } from '../button/button'
 
@@ -22,28 +28,23 @@ export function MultiSelectTags<T>({
 }) {
   const [cache, setCache] = useState(() => new Map<Key, SelectionItem<T>>())
   const keys = Array.isArray(state.value) ? state.value : []
-  useEffect(() => {
-    setCache((previous) => {
-      const current = new Map(selectedItems.filter((item) => item !== null).map((item) => [item.id, item]))
-      const next = new Map<Key, SelectionItem<T>>()
-      for (const key of keys) {
-        const item = current.get(key) ?? previous.get(key)
-        if (item) next.set(key, item)
-      }
-      if (next.size === previous.size && [...next].every(([key, item]) => previous.get(key) === item))
-        return previous
-      return next
-    })
-  }, [keys, selectedItems])
-  const current = new Map(selectedItems.filter((item) => item !== null).map((item) => [item.id, item]))
-  const visible = keys.flatMap((key) => {
+  const current = new Map(
+    selectedItems.filter((item) => item !== null).map((item) => [item.id, item]),
+  )
+  const next = new Map<Key, SelectionItem<T>>()
+  for (const key of keys) {
     const item = current.get(key) ?? cache.get(key)
-    return item ? [item] : []
-  })
+    if (item) next.set(key, item)
+  }
+  if (next.size !== cache.size || [...next].some(([key, item]) => cache.get(key) !== item))
+    setCache(next)
+  const visible = [...next.values()]
   return (
     <TagGroup
       aria-label={selectedLabel}
-      onRemove={locked ? undefined : (removed) => state.setValue(keys.filter((key) => !removed.has(key)))}
+      onRemove={
+        locked ? undefined : (removed) => state.setValue(keys.filter((key) => !removed.has(key)))
+      }
     >
       <TagList items={visible} className="flex flex-wrap gap-1.5 empty:hidden">
         {(option) => (
