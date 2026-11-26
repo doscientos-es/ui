@@ -49,7 +49,7 @@ function FieldFrame({
 
 export type TextFieldProps = Omit<InputProps, 'children' | 'className' | 'onChange'> &
   FieldPresentation & {
-    inputClassName?: InputProps['className']
+    inputClassName?: string
     onChange?: (value: string) => void
   }
 
@@ -85,7 +85,7 @@ export function TextField({
 
 export type TextareaFieldProps = Omit<TextareaProps, 'children' | 'className' | 'onChange'> &
   FieldPresentation & {
-    inputClassName?: TextareaProps['className']
+    inputClassName?: string
     onChange?: (value: string) => void
   }
 

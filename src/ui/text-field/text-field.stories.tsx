@@ -26,12 +26,19 @@ export const Default: Story = {
 }
 
 export const Invalid: Story = {
-  args: { label: 'Email', type: 'email', defaultValue: 'incorrecto', errorMessage: 'Email inválido.' },
+  args: {
+    label: 'Email',
+    type: 'email',
+    defaultValue: 'incorrecto',
+    errorMessage: 'Email inválido.',
+  },
 }
 
 export const Multiline: Story = {
   args: { label: 'Observaciones' },
-  render: () => <TextareaField label="Observaciones" description="Información para el equipo." rows={4} />,
+  render: () => (
+    <TextareaField label="Observaciones" description="Información para el equipo." rows={4} />
+  ),
 }
 
 export const Disabled: Story = {

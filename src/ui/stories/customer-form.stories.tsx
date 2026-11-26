@@ -58,7 +58,10 @@ function CustomerForm() {
               description="Nombre de la persona o empresa."
               errorMessage={nameError}
               value={name}
-              onChange={(value) => { setName(value); setSaved(undefined) }}
+              onChange={(value) => {
+                setName(value)
+                setSaved(undefined)
+              }}
             />
             <SelectField
               label="Prioridad"
@@ -68,7 +71,10 @@ function CustomerForm() {
               getItemKey={(item) => item.id}
               getItemLabel={(item) => item.label}
               value={priority}
-              onChange={(value) => { setPriority(value); setSaved(undefined) }}
+              onChange={(value) => {
+                setPriority(value)
+                setSaved(undefined)
+              }}
             />
             <TextareaField
               label="Observaciones"
@@ -76,9 +82,14 @@ function CustomerForm() {
               description="Comparte información útil para el equipo."
               rows={3}
               value={notes}
-              onChange={(value) => { setNotes(value); setSaved(undefined) }}
+              onChange={(value) => {
+                setNotes(value)
+                setSaved(undefined)
+              }}
             />
-            <div><Button type="submit">Guardar cliente</Button></div>
+            <div>
+              <Button type="submit">Guardar cliente</Button>
+            </div>
             {saved && (
               <output>
                 Cliente guardado: {saved.name}. Prioridad: {saved.priority}.
@@ -106,7 +117,11 @@ export const Formulario: Story = {
     await userEvent.click(await page.findByRole('option', { name: 'Alta' }))
     await userEvent.type(canvas.getByRole('textbox', { name: 'Observaciones' }), 'Llamar mañana')
     await userEvent.click(canvas.getByRole('button', { name: 'Guardar cliente' }))
-    await waitFor(() => expect(canvas.getByRole('status')).toHaveTextContent('Cliente guardado: Ana García. Prioridad: Alta. Observaciones: Llamar mañana.'))
+    await waitFor(() =>
+      expect(canvas.getByRole('status')).toHaveTextContent(
+        'Cliente guardado: Ana García. Prioridad: Alta. Observaciones: Llamar mañana.',
+      ),
+    )
     await expect(name).not.toHaveAttribute('aria-invalid')
   },
 }
