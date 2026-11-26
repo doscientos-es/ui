@@ -38,7 +38,8 @@ function FieldFrame({
       {(props) =>
         children({
           ...props,
-          'aria-describedby': [props['aria-describedby'], describedBy].filter(Boolean).join(' ') || undefined,
+          'aria-describedby':
+            [props['aria-describedby'], describedBy].filter(Boolean).join(' ') || undefined,
           'aria-invalid': props['aria-invalid'] || invalid,
         })
       }
@@ -54,11 +55,22 @@ export type TextFieldProps = Omit<InputProps, 'children' | 'className' | 'onChan
 
 /** A labelled single-line input with accessible description and validation feedback. */
 export function TextField({
-  label, description, errorMessage, className, inputClassName, id, required, onChange,
-  'aria-describedby': describedBy, 'aria-invalid': invalid, ...props
+  label,
+  description,
+  errorMessage,
+  className,
+  inputClassName,
+  id,
+  required,
+  onChange,
+  'aria-describedby': describedBy,
+  'aria-invalid': invalid,
+  ...props
 }: TextFieldProps) {
   return (
-    <FieldFrame {...{ label, description, errorMessage, className, id, required, describedBy, invalid }}>
+    <FieldFrame
+      {...{ label, description, errorMessage, className, id, required, describedBy, invalid }}
+    >
       {(controlProps) => (
         <Input
           {...props}
@@ -79,11 +91,22 @@ export type TextareaFieldProps = Omit<TextareaProps, 'children' | 'className' | 
 
 /** A labelled multi-line input with accessible description and validation feedback. */
 export function TextareaField({
-  label, description, errorMessage, className, inputClassName, id, required, onChange,
-  'aria-describedby': describedBy, 'aria-invalid': invalid, ...props
+  label,
+  description,
+  errorMessage,
+  className,
+  inputClassName,
+  id,
+  required,
+  onChange,
+  'aria-describedby': describedBy,
+  'aria-invalid': invalid,
+  ...props
 }: TextareaFieldProps) {
   return (
-    <FieldFrame {...{ label, description, errorMessage, className, id, required, describedBy, invalid }}>
+    <FieldFrame
+      {...{ label, description, errorMessage, className, id, required, describedBy, invalid }}
+    >
       {(controlProps) => (
         <Textarea
           {...props}
