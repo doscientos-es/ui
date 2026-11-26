@@ -141,9 +141,12 @@ ni tildes. A partir de cuatro caracteres toleran una inserción, omisión, susti
 intercambio de letras adyacentes. Ordenan primero coincidencias exactas, prefijos y
 fragmentos, y después las aproximadas, conservando el orden original en cada grupo.
 La sugerencia aceptable con Tab solo utiliza un prefijo literal, no una coincidencia
-aproximada. `MultiSelectCombobox` admite un `defaultFilter` personalizado. Para datos
-remotos o listas grandes, el filtrado y la clasificación corresponden al servidor o a
-una composición propia con `Combobox`. `GlobalSearch` recibe resultados ya filtrados.
+aproximada. `MultiSelectCombobox` admite un `defaultFilter` personalizado en modo fuzzy.
+Para resultados filtrados por la aplicación o el servidor, usa `filterMode="external"`:
+se muestran sin filtrar ni reordenar y se desactiva la sugerencia automática. Controla
+la consulta con `inputValue` y `onInputChange`; la aplicación gestiona las peticiones,
+los estados de carga y las respuestas obsoletas. El modo externo tiene prioridad sobre
+`defaultFilter`. `GlobalSearch` recibe resultados ya filtrados.
 
 ```tsx
 <SelectField

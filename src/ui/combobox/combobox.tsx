@@ -21,6 +21,9 @@ import { floatingSurfaceClassName } from '../../lib/floating-surface'
 import { rankSearchItems } from '../../lib/fuzzy-search'
 import { textControlClassName } from '../../lib/text-control'
 import { getTextMatchParts } from '../../lib/text-match'
+import type { ComboboxFilterMode } from './combobox-filter-mode'
+
+export type { ComboboxFilterMode } from './combobox-filter-mode'
 
 export const Combobox = AriaComboBox
 export { ComboBoxValue as ComboboxValue }
@@ -144,6 +147,8 @@ export type AutocompleteComboboxProps<T extends object> = Omit<
   description?: ReactNode
   errorMessage?: ReactNode
   emptyState?: ReactNode
+  /** Use external for results already filtered and ordered by the caller. Defaults to fuzzy. */
+  filterMode?: ComboboxFilterMode
   suggestion?: boolean
   placeholder?: string
   /** Keyboard handler for the underlying text input. */
@@ -167,6 +172,7 @@ export function AutocompleteCombobox<T extends object>({
   emptyState = (
     <p className="text-muted-foreground px-3 py-7 text-center text-sm">No hay resultados.</p>
   ),
+  filterMode = 'fuzzy',
   suggestion = true,
   placeholder,
   className,
@@ -203,19 +209,19 @@ export function AutocompleteCombobox<T extends object>({
   }
   const normalizedQuery = inputValue.trim().toLocaleLowerCase()
   const filteredItems = useMemo(
-    () => rankSearchItems(items, inputValue, getItemLabel),
-    [getItemLabel, items, inputValue],
+    () => (filterMode === 'external' ? items : rankSearchItems(items, inputValue, getItemLabel)),
+    [filterMode, getItemLabel, items, inputValue],
   )
   const suggestedItem = useMemo(
     () =>
-      !suggestion || !normalizedQuery
+      filterMode === 'external' || !suggestion || !normalizedQuery
         ? undefined
         : items.find(
             (item) =>
               getItemLabel(item).toLocaleLowerCase().startsWith(normalizedQuery) &&
               getItemLabel(item).length > inputValue.length,
           ),
-    [getItemLabel, inputValue.length, items, normalizedQuery, suggestion],
+    [filterMode, getItemLabel, inputValue.length, items, normalizedQuery, suggestion],
   )
   const suggestionLabel = suggestedItem ? getItemLabel(suggestedItem) : undefined
   const selectItem = (key: Key | null, item?: T) => {

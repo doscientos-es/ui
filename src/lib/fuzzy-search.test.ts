@@ -23,10 +23,17 @@ describe('fuzzy search', () => {
   it('prioritizes exact, prefix and substring matches before fuzzy matches', () => {
     const labels = ['García', 'La garcia', 'Garcia Ruiz', 'garcia', 'García Soto', 'Otro']
     expect(rankSearchItems(labels, 'garcia', (label) => label)).toEqual([
-      'García', 'garcia', 'Garcia Ruiz', 'García Soto', 'La garcia',
+      'García',
+      'garcia',
+      'Garcia Ruiz',
+      'García Soto',
+      'La garcia',
     ])
-    expect(rankSearchItems(['garica', 'La garcia', 'garcia'], 'garcia', (label) => label))
-      .toEqual(['garcia', 'La garcia', 'garica'])
+    expect(rankSearchItems(['garica', 'La garcia', 'garcia'], 'garcia', (label) => label)).toEqual([
+      'garcia',
+      'La garcia',
+      'garica',
+    ])
     expect(rankSearchItems(labels, ' ', (label) => label)).toEqual(labels)
   })
 })

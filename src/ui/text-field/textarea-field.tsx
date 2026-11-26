@@ -9,11 +9,22 @@ export type TextareaFieldProps = Omit<TextareaProps, 'children' | 'className' | 
 
 /** A labelled multi-line input with accessible description and validation feedback. */
 export function TextareaField({
-  label, description, errorMessage, className, inputClassName, id, required, onChange,
-  'aria-describedby': describedBy, 'aria-invalid': invalid, ...props
+  label,
+  description,
+  errorMessage,
+  className,
+  inputClassName,
+  id,
+  required,
+  onChange,
+  'aria-describedby': describedBy,
+  'aria-invalid': invalid,
+  ...props
 }: TextareaFieldProps) {
   return (
-    <FieldFrame {...{ label, description, errorMessage, className, id, required, describedBy, invalid }}>
+    <FieldFrame
+      {...{ label, description, errorMessage, className, id, required, describedBy, invalid }}
+    >
       {(controlProps) => (
         <Textarea
           {...props}

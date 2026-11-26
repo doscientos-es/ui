@@ -7,9 +7,11 @@ function isOneEditAway(left: string, right: string) {
   while (index < left.length && left[index] === right[index]) index += 1
   if (index === left.length || index === right.length) return true
   if (left.length === right.length) {
-    return left.slice(index + 1) === right.slice(index + 1) || (
-      left[index] === right[index + 1] && left[index + 1] === right[index] &&
-      left.slice(index + 2) === right.slice(index + 2)
+    return (
+      left.slice(index + 1) === right.slice(index + 1) ||
+      (left[index] === right[index + 1] &&
+        left[index + 1] === right[index] &&
+        left.slice(index + 2) === right.slice(index + 2))
     )
   }
   return left.length > right.length
@@ -29,7 +31,10 @@ export function searchScore(text: string, query: string): number | null {
 
   for (let start = 0; start < label.length; start += 1) {
     for (const length of [term.length - 1, term.length, term.length + 1]) {
-      if (start + length <= label.length && isOneEditAway(label.slice(start, start + length), term)) {
+      if (
+        start + length <= label.length &&
+        isOneEditAway(label.slice(start, start + length), term)
+      ) {
         return 3
       }
     }
@@ -38,7 +43,11 @@ export function searchScore(text: string, query: string): number | null {
 }
 
 /** Return matches in relevance order, keeping the original order for equal scores. */
-export function rankSearchItems<T>(items: readonly T[], query: string, getLabel: (item: T) => string): T[] {
+export function rankSearchItems<T>(
+  items: readonly T[],
+  query: string,
+  getLabel: (item: T) => string,
+): T[] {
   return items
     .map((item, index) => ({ item, index, score: searchScore(getLabel(item), query) }))
     .filter((entry): entry is typeof entry & { score: number } => entry.score !== null)

@@ -23,6 +23,7 @@ import {
   ComboboxItem,
   ComboboxList,
   ComboboxValue,
+  type ComboboxFilterMode,
 } from '../combobox/combobox'
 
 type SelectionItem<T> = { id: Key; label: string; item: T }
@@ -40,6 +41,8 @@ export type MultiSelectComboboxProps<T extends object> = Omit<
   errorMessage?: ReactNode
   placeholder?: string
   emptyState?: ReactNode
+  /** Use external for results already filtered and ordered by the caller. Defaults to fuzzy. */
+  filterMode?: ComboboxFilterMode
   selectedLabel?: string
   /** Verb for the remove action; React Aria appends the tag's accessible name. */
   removeLabel?: string
@@ -56,6 +59,7 @@ export function MultiSelectCombobox<T extends object>({
   errorMessage,
   placeholder = 'Buscar…',
   emptyState = 'No hay resultados.',
+  filterMode = 'fuzzy',
   selectedLabel = 'Opciones seleccionadas',
   removeLabel = 'Quitar',
   className,
@@ -69,7 +73,7 @@ export function MultiSelectCombobox<T extends object>({
   const inputValue = controlledInputValue ?? internalInputValue
   const options = useMemo(() => {
     const mapped = items.map((item) => ({ id: getItemKey(item), label: getItemLabel(item), item }))
-    if (defaultFilter || !inputValue.trim()) return mapped
+    if (filterMode === 'external' || defaultFilter || !inputValue.trim()) return mapped
     return mapped
       .map((option, index) => ({ option, index, score: searchScore(option.label, inputValue) }))
       .sort(
@@ -77,7 +81,7 @@ export function MultiSelectCombobox<T extends object>({
           (left.score ?? Infinity) - (right.score ?? Infinity) || left.index - right.index,
       )
       .map(({ option }) => option)
-  }, [items, getItemKey, getItemLabel, inputValue, defaultFilter])
+  }, [items, getItemKey, getItemLabel, inputValue, defaultFilter, filterMode])
   const locked = props.isDisabled || props.isReadOnly
 
   return (
@@ -91,7 +95,11 @@ export function MultiSelectCombobox<T extends object>({
         setInternalInputValue(value)
         onInputChange?.(value)
       }}
-      defaultFilter={defaultFilter ?? ((text, query) => searchScore(text, query) !== null)}
+      defaultFilter={
+        filterMode === 'external'
+          ? () => true
+          : (defaultFilter ?? ((text, query) => searchScore(text, query) !== null))
+      }
       allowsEmptyCollection
       className={(state) =>
         cn(

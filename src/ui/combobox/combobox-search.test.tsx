@@ -13,10 +13,20 @@ const items = [
 
 it('ranks accent-insensitive and fuzzy results and selects the intended item', async () => {
   const onChange = vi.fn()
-  render(<AutocompleteCombobox label="Persona" items={items} getItemKey={(item) => item.id} getItemLabel={(item) => item.label} onChange={onChange} />)
+  render(
+    <AutocompleteCombobox
+      label="Persona"
+      items={items}
+      getItemKey={(item) => item.id}
+      getItemLabel={(item) => item.label}
+      onChange={onChange}
+    />,
+  )
   await userEvent.type(screen.getByRole('combobox'), 'garcia')
   expect(screen.getAllByRole('option').map((option) => option.textContent)).toEqual([
-    'García', 'Ana García', 'Garica',
+    'García',
+    'Ana García',
+    'Garica',
   ])
   await userEvent.click(screen.getByRole('option', { name: 'Garica' }))
   expect(onChange).toHaveBeenLastCalledWith('typo', items[0])
@@ -24,10 +34,19 @@ it('ranks accent-insensitive and fuzzy results and selects the intended item', a
 
 it('does not accept a fuzzy-only result as an inline suggestion with Tab', async () => {
   const onChange = vi.fn()
-  render(<AutocompleteCombobox label="Persona" items={[items[1]!]} getItemKey={(item) => item.id} getItemLabel={(item) => item.label} onChange={onChange} />)
+  const item = { id: 'substring', label: 'Ana García' }
+  render(
+    <AutocompleteCombobox
+      label="Persona"
+      items={[item]}
+      getItemKey={(item) => item.id}
+      getItemLabel={(item) => item.label}
+      onChange={onChange}
+    />,
+  )
   const input = screen.getByRole('combobox') as HTMLInputElement
   await userEvent.type(input, 'garica')
   expect(screen.getByRole('option', { name: 'Ana García' })).toBeTruthy()
   await userEvent.tab()
-  expect(onChange).not.toHaveBeenCalledWith('substring', items[1])
+  expect(onChange).not.toHaveBeenCalledWith('substring', item)
 })
