@@ -6,12 +6,23 @@ import { Button } from '../button/button'
 import { Card, CardContent } from '../card/card'
 import { FormRow } from '../form-row/form-row'
 import { Input } from '../input/input'
-import { PageHeader, PageStack, SectionHeader, SectionHeaderDescription, SectionHeaderHeading, SectionHeaderTitle } from '../page-header/page-header'
+import {
+  PageHeader,
+  PageStack,
+  SectionHeader,
+  SectionHeaderDescription,
+  SectionHeaderHeading,
+  SectionHeaderTitle,
+} from '../page-header/page-header'
 
 const meta = {
   title: 'Application/Recipes/Settings form',
   tags: ['test:ui'],
-  parameters: { docs: { description: { component: 'Formulario con validación y guardado local de ejemplo, sin API.' } } },
+  parameters: {
+    docs: {
+      description: { component: 'Formulario con validación y guardado local de ejemplo, sin API.' },
+    },
+  },
 } satisfies Meta
 
 export default meta
@@ -44,13 +55,32 @@ function SettingsForm() {
             <SectionHeader>
               <SectionHeaderHeading>
                 <SectionHeaderTitle>Datos generales</SectionHeaderTitle>
-                <SectionHeaderDescription>Información visible para el equipo.</SectionHeaderDescription>
+                <SectionHeaderDescription>
+                  Información visible para el equipo.
+                </SectionHeaderDescription>
               </SectionHeaderHeading>
             </SectionHeader>
-            <FormRow label="Nombre del espacio" required hint="Se muestra a los miembros del equipo." error={error}>
-              {(props) => <Input {...props} name="name" value={name} onChange={(event) => { setName(event.target.value); setSavedName(undefined) }} />}
+            <FormRow
+              label="Nombre del espacio"
+              required
+              hint="Se muestra a los miembros del equipo."
+              error={error}
+            >
+              {(props) => (
+                <Input
+                  {...props}
+                  name="name"
+                  value={name}
+                  onChange={(event) => {
+                    setName(event.target.value)
+                    setSavedName(undefined)
+                  }}
+                />
+              )}
             </FormRow>
-            <div><Button type="submit">Guardar cambios</Button></div>
+            <div>
+              <Button type="submit">Guardar cambios</Button>
+            </div>
             {savedName && <p role="status">Cambios guardados: {savedName}.</p>}
           </form>
         </CardContent>
