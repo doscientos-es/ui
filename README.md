@@ -73,8 +73,8 @@ monocroma; una marca puede redefinirlos mediante `--canvas`, `--sidebar`,
 ## Recetas para pantallas y agentes
 
 Empieza por los ejemplos interactivos de Storybook: **Application / Recipes / Interactive list**
-(búsqueda, vacío y creación), **Settings form** (validación y guardado) y
-**Workspace dashboard** (navegación y métricas). Sus datos son ficticios: cada aplicación
+(búsqueda, vacío y creación), **Settings form** y **Customer form** (validación y guardado),
+y **Workspace dashboard** (navegación y métricas). Sus datos son ficticios: cada aplicación
 debe conectar sus propias consultas, guardado, permisos y estados asíncronos.
 
 Para una cabecera habitual, `PageHeader` acepta título, descripción y acciones sin
@@ -89,7 +89,18 @@ componer todos sus slots. Para una estructura especial, siguen disponibles
 />
 ```
 
-`FormRow` puede generar el ID y proporcionar al control `required`, `aria-invalid` y
+Para los campos habituales, `TextField` y `TextareaField` incluyen etiqueta, descripción y
+error accesibles. `value` / `onChange` trabajan con strings; también admiten `defaultValue`,
+`name`, `required`, `disabled`, `readOnly`, `ref` y demás atributos nativos. `className` se
+aplica al contenedor e `inputClassName` al control. Los `aria-describedby` adicionales se
+combinan con la descripción y el error del campo.
+
+```tsx
+<TextField label="Nombre" name="name" required value={name} onChange={setName} errorMessage={error} />
+<TextareaField label="Notas" name="notes" value={notes} onChange={setNotes} />
+```
+
+Para una composición personalizada, `FormRow` puede generar el ID y proporcionar al control `required`, `aria-invalid` y
 `aria-describedby` para la ayuda y el error. Distribuye las props sobre el control
 etiquetable, no sobre un contenedor. Si necesitas un ID estable, pasa `htmlFor`.
 
@@ -110,7 +121,9 @@ comprueba teclado, estados de carga, error y vacío.
 - La ayuda de un campo es `description` y el mensaje de validación `errorMessage`.
 - En acciones y diálogos, `isPending` y `pendingLabel` indican una operación en curso;
   para controles interactivos, `isDisabled` e `isInvalid` describen su estado.
-  Los inputs HTML nativos conservan sus atributos `disabled`, `required` y eventos nativos.
+  Los campos de texto y los inputs HTML nativos conservan `disabled`, `required` y `readOnly`;
+  `Input` y `Textarea` conservan los eventos nativos, mientras que `TextField` y
+  `TextareaField` entregan el string directamente en `onChange`.
 - En `Select`, `Combobox`, `AutocompleteCombobox`, `MultiSelectCombobox` y
   `SegmentedControl`, la selección usa `value` / `onChange` o `defaultValue`.
   En comboboxes, `inputValue` / `onInputChange` controla por separado el texto buscado.
