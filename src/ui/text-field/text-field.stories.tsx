@@ -44,3 +44,7 @@ export const Multiline: Story = {
 export const Disabled: Story = {
   args: { label: 'Nombre', defaultValue: 'No editable', disabled: true },
 }
+
+export const PrefixAndSuffix: Story = {
+  args: { label: 'Precio', prefix: '€', suffix: 'por hora', defaultValue: '25' },
+}

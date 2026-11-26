@@ -6,6 +6,8 @@ Requiere React y React DOM 19 o superior.
 
 El criterio visual y de producto está documentado en [DESIGN-GUIDELINES.md](./DESIGN-GUIDELINES.md). Ese documento es parte del contrato del paquete: explica cómo combinar las primitives para que una aplicación Doscientos se sienta premium, no solo qué componentes existen.
 
+Para elegir componentes y patrones rápidamente, consulta la [guía para agentes](./AGENT-GUIDE.md).
+
 ## Alcance
 
 - Foundations: tokens CSS, tema claro/oscuro y utilidades de clases y texto.
@@ -94,10 +96,24 @@ error accesibles. `value` / `onChange` trabajan con strings; también admiten `d
 `name`, `required`, `disabled`, `readOnly`, `ref` y demás atributos nativos. `className` se
 aplica al contenedor e `inputClassName` al control. Los `aria-describedby` adicionales se
 combinan con la descripción y el error del campo.
+`TextField` admite `prefix` y `suffix` para contenido estático, como divisas o unidades;
+se vinculan como descripción del input. Los iconos decorativos deben llevar `aria-hidden`.
 
 ```tsx
 <TextField label="Nombre" name="name" required value={name} onChange={setName} errorMessage={error} />
 <TextareaField label="Notas" name="notes" value={notes} onChange={setNotes} />
+<TextField label="Precio" prefix="€" suffix="por hora" />
+```
+
+`SearchField` ofrece búsqueda accesible con icono y botón de limpieza. Usa `label`,
+`aria-label` o `aria-labelledby` para identificar la búsqueda; `clearLabel` permite
+personalizar el nombre del botón. Admite `value` / `onChange`, `defaultValue`, `name`,
+`inputRef`, `isDisabled` e `isReadOnly`. Para mostrar un error, combina `isInvalid` y
+`errorMessage`. El componente no filtra ni consulta datos; usa `useDebouncedValue` en
+la app si necesitas retrasar las peticiones.
+
+```tsx
+<SearchField aria-label="Buscar clientes" value={query} onChange={setQuery} />
 ```
 
 Para una composición personalizada, `FormRow` puede generar el ID y proporcionar al control `required`, `aria-invalid` y

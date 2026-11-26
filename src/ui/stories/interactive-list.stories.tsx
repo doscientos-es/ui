@@ -13,6 +13,7 @@ import { FormDialog } from '../form-dialog/form-dialog'
 import { FormRow } from '../form-row/form-row'
 import { Input } from '../input/input'
 import { PageHeader, PageStack } from '../page-header/page-header'
+import { SearchField } from '../search-field/search-field'
 import {
   Table,
   TableBody,
@@ -56,12 +57,11 @@ function CustomerList() {
       <Card>
         <CardContent>
           <div className="grid gap-4">
-            <Input
-              type="search"
+            <SearchField
               aria-label="Buscar clientes"
               placeholder="Buscar clientes…"
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
+              onChange={setQuery}
             />
             {visible.length ? (
               <Table>

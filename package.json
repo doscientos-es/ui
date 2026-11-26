@@ -9,7 +9,8 @@
     "url": "https://github.com/doscientos-es/ui"
   },
   "files": [
-    "dist"
+    "dist",
+    "AGENT-GUIDE.md"
   ],
   "type": "module",
   "sideEffects": [
