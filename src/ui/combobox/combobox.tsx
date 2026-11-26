@@ -18,6 +18,7 @@ import {
 
 import { cn } from '../../lib/cn'
 import { floatingSurfaceClassName } from '../../lib/floating-surface'
+import { rankSearchItems } from '../../lib/fuzzy-search'
 import { textControlClassName } from '../../lib/text-control'
 import { getTextMatchParts } from '../../lib/text-match'
 
@@ -202,11 +203,8 @@ export function AutocompleteCombobox<T extends object>({
   }
   const normalizedQuery = inputValue.trim().toLocaleLowerCase()
   const filteredItems = useMemo(
-    () =>
-      normalizedQuery
-        ? items.filter((item) => getItemLabel(item).toLocaleLowerCase().includes(normalizedQuery))
-        : [...items],
-    [getItemLabel, items, normalizedQuery],
+    () => rankSearchItems(items, inputValue, getItemLabel),
+    [getItemLabel, items, inputValue],
   )
   const suggestedItem = useMemo(
     () =>

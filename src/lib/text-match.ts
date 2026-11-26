@@ -1,13 +1,8 @@
+import { normalizeSearchText } from './normalize-search-text'
+
 export type TextMatchPart = {
   text: string
   match: boolean
-}
-
-function normalize(value: string) {
-  return value
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLocaleLowerCase()
 }
 
 function normalizedTextWithRanges(value: string) {
@@ -18,7 +13,7 @@ function normalizedTextWithRanges(value: string) {
   for (const character of value) {
     const start = sourceIndex
     sourceIndex += character.length
-    const normalizedCharacter = normalize(character)
+    const normalizedCharacter = normalizeSearchText(character)
     normalized += normalizedCharacter
     for (let index = 0; index < normalizedCharacter.length; index += 1) {
       ranges.push({ start, end: sourceIndex })
@@ -33,7 +28,7 @@ function normalizedTextWithRanges(value: string) {
  * accent-insensitive while preserving the original text for rendering.
  */
 export function getTextMatchParts(text: string, query: string): TextMatchPart[] {
-  const term = normalize(query.trim())
+  const term = normalizeSearchText(query.trim())
   if (!term) return [{ text, match: false }]
 
   const { normalized, ranges } = normalizedTextWithRanges(text)

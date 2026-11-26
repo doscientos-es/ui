@@ -1,7 +1,7 @@
 'use client'
 
 import { CheckIcon, XIcon } from 'lucide-react'
-import { useMemo, type ReactNode } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import {
   FieldError,
   Label,
@@ -14,6 +14,7 @@ import {
 } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
+import { searchScore } from '../../lib/fuzzy-search'
 import { Button } from '../button/button'
 import {
   Combobox,
@@ -58,12 +59,25 @@ export function MultiSelectCombobox<T extends object>({
   selectedLabel = 'Opciones seleccionadas',
   removeLabel = 'Quitar',
   className,
+  inputValue: controlledInputValue,
+  defaultInputValue,
+  onInputChange,
+  defaultFilter,
   ...props
 }: MultiSelectComboboxProps<T>) {
-  const options = useMemo(
-    () => items.map((item) => ({ id: getItemKey(item), label: getItemLabel(item), item })),
-    [items, getItemKey, getItemLabel],
-  )
+  const [internalInputValue, setInternalInputValue] = useState(defaultInputValue ?? '')
+  const inputValue = controlledInputValue ?? internalInputValue
+  const options = useMemo(() => {
+    const mapped = items.map((item) => ({ id: getItemKey(item), label: getItemLabel(item), item }))
+    if (defaultFilter || !inputValue.trim()) return mapped
+    return mapped
+      .map((option, index) => ({ option, index, score: searchScore(option.label, inputValue) }))
+      .sort(
+        (left, right) =>
+          (left.score ?? Infinity) - (right.score ?? Infinity) || left.index - right.index,
+      )
+      .map(({ option }) => option)
+  }, [items, getItemKey, getItemLabel, inputValue, defaultFilter])
   const locked = props.isDisabled || props.isReadOnly
 
   return (
@@ -72,6 +86,12 @@ export function MultiSelectCombobox<T extends object>({
       data-slot="multi-select-combobox"
       selectionMode="multiple"
       defaultItems={options}
+      inputValue={inputValue}
+      onInputChange={(value) => {
+        setInternalInputValue(value)
+        onInputChange?.(value)
+      }}
+      defaultFilter={defaultFilter ?? ((text, query) => searchScore(text, query) !== null)}
       allowsEmptyCollection
       className={(state) =>
         cn(
