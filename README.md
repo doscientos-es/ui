@@ -146,7 +146,9 @@ Para resultados filtrados por la aplicación o el servidor, usa `filterMode="ext
 se muestran sin filtrar ni reordenar y se desactiva la sugerencia automática. Controla
 la consulta con `inputValue` y `onInputChange`; la aplicación gestiona las peticiones,
 los estados de carga y las respuestas obsoletas. El modo externo tiene prioridad sobre
-`defaultFilter`. `GlobalSearch` recibe resultados ya filtrados.
+`defaultFilter`. En selección múltiple, las etiquetas elegidas se conservan aunque ya no
+aparezcan en los resultados; para mostrar valores iniciales, sus items deben haberse
+recibido al menos una vez. `GlobalSearch` recibe resultados ya filtrados.
 
 ```tsx
 <SelectField

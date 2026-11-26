@@ -1,21 +1,11 @@
 'use client'
 
-import { CheckIcon, XIcon } from 'lucide-react'
+import { CheckIcon } from 'lucide-react'
 import { useMemo, useState, type ReactNode } from 'react'
-import {
-  FieldError,
-  Label,
-  Tag,
-  TagGroup,
-  TagList,
-  Text,
-  type ComboBoxProps,
-  type Key,
-} from 'react-aria-components'
+import { FieldError, Label, Text, type ComboBoxProps, type Key } from 'react-aria-components'
 
 import { cn } from '../../lib/cn'
 import { searchScore } from '../../lib/fuzzy-search'
-import { Button } from '../button/button'
 import {
   Combobox,
   ComboboxContent,
@@ -25,8 +15,7 @@ import {
   ComboboxValue,
   type ComboboxFilterMode,
 } from '../combobox/combobox'
-
-type SelectionItem<T> = { id: Key; label: string; item: T }
+import { MultiSelectTags, type SelectionItem } from './multi-select-tags'
 
 export type MultiSelectComboboxProps<T extends object> = Omit<
   ComboBoxProps<SelectionItem<T>, 'multiple'>,
@@ -111,45 +100,14 @@ export function MultiSelectCombobox<T extends object>({
       {label && <Label className="text-foreground text-sm font-medium">{label}</Label>}
       <ComboboxInput placeholder={placeholder} />
       <ComboboxValue<SelectionItem<T>>>
-        {({ selectedItems, state }) => (
-          <TagGroup
-            aria-label={selectedLabel}
-            onRemove={
-              locked
-                ? undefined
-                : (keys) => {
-                    if (Array.isArray(state.value))
-                      state.setValue(state.value.filter((key) => !keys.has(key)))
-                  }
-            }
-          >
-            <TagList
-              items={selectedItems.filter((item) => item !== null)}
-              className="flex flex-wrap gap-1.5 empty:hidden"
-            >
-              {(option) => (
-                <Tag
-                  id={option.id}
-                  textValue={option.label}
-                  isDisabled={props.isDisabled}
-                  className="bg-muted text-foreground data-focus-visible:ring-ring/50 flex min-w-0 items-center gap-1 rounded-md py-1 pr-1 pl-2 text-sm outline-none data-disabled:opacity-50 data-focus-visible:ring-3"
-                >
-                  <span className="min-w-0 wrap-break-word">{option.label}</span>
-                  {!locked && (
-                    <Button
-                      slot="remove"
-                      variant="ghost"
-                      size="icon-sm"
-                      className="[@media(pointer:coarse)]:min-h-11 [@media(pointer:coarse)]:min-w-11"
-                      aria-label={removeLabel}
-                    >
-                      <XIcon aria-hidden="true" />
-                    </Button>
-                  )}
-                </Tag>
-              )}
-            </TagList>
-          </TagGroup>
+        {(valueProps) => (
+          <MultiSelectTags
+            {...valueProps}
+            locked={locked}
+            isDisabled={props.isDisabled}
+            selectedLabel={selectedLabel}
+            removeLabel={removeLabel}
+          />
         )}
       </ComboboxValue>
       {description && (

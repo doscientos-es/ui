@@ -39,6 +39,8 @@ it('shows external results in order, ignores local filters and selects an unrela
   expect(onChange).toHaveBeenLastCalledWith(['email'])
   await userEvent.keyboard('{Escape}')
   expect(screen.getByRole('button', { name: 'Quitar Bruno' })).toBeTruthy()
+  await userEvent.click(screen.getByRole('button', { name: 'Quitar Bruno' }))
+  expect(onChange).toHaveBeenLastCalledWith(['name'])
   rerender(<Controlled results={items.slice(1)} />)
   await userEvent.type(screen.getByRole('combobox'), 'test')
   await userEvent.click(screen.getByRole('option', { name: 'Ana' }))
