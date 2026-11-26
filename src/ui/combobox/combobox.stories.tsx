@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
-import { expect, userEvent, within } from 'storybook/test'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 
 import {
   AutocompleteCombobox,
@@ -66,7 +66,7 @@ export const Suggestions: Story = {
     await userEvent.type(input, 'melo')
 
     const listbox = within(canvasElement.ownerDocument.body)
-    await expect(listbox.getByRole('option', { name: 'Melocotón' })).toBeVisible()
+    await waitFor(() => expect(listbox.getByRole('option', { name: 'Melocotón' })).toBeVisible())
     await expect(listbox.queryByRole('option', { name: 'Manzana' })).not.toBeInTheDocument()
 
     await userEvent.keyboard('{ArrowDown}{Enter}')
