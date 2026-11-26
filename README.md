@@ -136,6 +136,15 @@ comprueba teclado, estados de carga, error y vacío.
 personalizar la composición. Activa `isInvalid` para mostrar errores en controles
 compuestos de React Aria.
 
+Los dos autocompletados buscan localmente por `getItemLabel`, sin distinguir mayúsculas
+ni tildes. A partir de cuatro caracteres toleran una inserción, omisión, sustitución o
+intercambio de letras adyacentes. Ordenan primero coincidencias exactas, prefijos y
+fragmentos, y después las aproximadas, conservando el orden original en cada grupo.
+La sugerencia aceptable con Tab solo utiliza un prefijo literal, no una coincidencia
+aproximada. `MultiSelectCombobox` admite un `defaultFilter` personalizado. Para datos
+remotos o listas grandes, el filtrado y la clasificación corresponden al servidor o a
+una composición propia con `Combobox`. `GlobalSearch` recibe resultados ya filtrados.
+
 ```tsx
 <SelectField
   label="Cliente"
@@ -197,7 +206,7 @@ Tres patrones de bajo coste componiendo las primitives existentes, sin dependenc
   el segmented control se reserva para pocas opciones como vista o periodo.
 - `MultiSelectCombobox`: recibe `items`, `getItemKey` y `getItemLabel`; selección
   controlada con `value` / `onChange` o inicial con `defaultValue` (arrays de claves).
-  Reutiliza los slots del combobox y delega filtrado, teclado y selección a React Aria.
+  Reutiliza los slots del combobox; React Aria gestiona teclado y selección.
 - Los seleccionados se muestran como tags eliminables con teclado y botones;
   `label` o `aria-label`, `description`, `errorMessage`, `emptyState`, `selectedLabel`
   y `removeLabel` adaptan contexto y copy. `removeLabel` es el verbo («Quitar»);

@@ -84,7 +84,7 @@ export const EntitySearch: Story = {
     <div className="w-96">
       <AutocompleteCombobox
         label="Responsable"
-        description="Escribe un nombre, email o usa las flechas para navegar."
+        description="Escribe un nombre, incluso con una letra equivocada, o usa las flechas para navegar."
         placeholder="Busca una persona…"
         items={users}
         getItemKey={(user) => user.id}
