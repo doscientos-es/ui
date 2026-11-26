@@ -38,8 +38,8 @@ export function TextField({
   ...props
 }: TextFieldProps) {
   const adornmentId = useId()
-  const prefixId = prefix != null ? `${adornmentId}-prefix` : undefined
-  const suffixId = suffix != null ? `${adornmentId}-suffix` : undefined
+  const prefixId = prefix !== null && prefix !== undefined ? `${adornmentId}-prefix` : undefined
+  const suffixId = suffix !== null && suffix !== undefined ? `${adornmentId}-suffix` : undefined
   return (
     <FieldFrame
       {...{ label, description, errorMessage, className, id, required, describedBy, invalid }}
