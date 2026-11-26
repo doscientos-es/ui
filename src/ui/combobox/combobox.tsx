@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { Fragment, useMemo, useState, type ReactNode } from 'react'
 import {
   ComboBox as AriaComboBox,
   ComboBoxValue,
@@ -181,10 +181,20 @@ export function AutocompleteCombobox<T extends object>({
   const selectedItem =
     value === undefined ? undefined : items.find((item) => getItemKey(item) === value)
   const selectedLabel = selectedItem ? getItemLabel(selectedItem) : ''
-  useEffect(() => {
-    if (value !== undefined && controlledInputValue === undefined)
-      setInternalInputValue(selectedLabel)
-  }, [value, selectedLabel, controlledInputValue])
+  const isInputControlled = controlledInputValue !== undefined
+  const [previousSelection, setPreviousSelection] = useState({
+    value,
+    selectedLabel,
+    isInputControlled,
+  })
+  if (
+    previousSelection.value !== value ||
+    previousSelection.selectedLabel !== selectedLabel ||
+    previousSelection.isInputControlled !== isInputControlled
+  ) {
+    setPreviousSelection({ value, selectedLabel, isInputControlled })
+    if (value !== undefined && !isInputControlled) setInternalInputValue(selectedLabel)
+  }
   const inputValue = controlledInputValue ?? internalInputValue
   const setInputValue = (value: string) => {
     setInternalInputValue(value)

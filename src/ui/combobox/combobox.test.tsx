@@ -116,6 +116,30 @@ describe('AutocompleteCombobox', () => {
     expect(input.value).toBe('')
   })
 
+  it('updates a controlled selection when its label becomes available', () => {
+    const field = (items: typeof users, inputValue?: string) => (
+      <AutocompleteCombobox
+        label="Usuario"
+        items={items}
+        getItemKey={(item) => item.id}
+        getItemLabel={(item) => item.name}
+        value="1"
+        inputValue={inputValue}
+        onInputChange={() => {}}
+      />
+    )
+    const { rerender } = render(field([]))
+    const input = screen.getByRole('combobox', { name: 'Usuario' }) as HTMLInputElement
+    expect(input.value).toBe('')
+
+    rerender(field(users))
+    expect(input.value).toBe('Ana García')
+    rerender(field(users, 'Búsqueda externa'))
+    expect(input.value).toBe('Búsqueda externa')
+    rerender(field(users))
+    expect(input.value).toBe('Ana García')
+  })
+
   it('allows editing a controlled selection before choosing another item', async () => {
     function Controlled() {
       const [value, setValue] = useState<string | number | null>('1')
