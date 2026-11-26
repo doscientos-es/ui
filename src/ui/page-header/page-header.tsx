@@ -37,13 +37,17 @@ export function PageHeader({
       className={cn('flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-3', className)}
       {...props}
     >
-      {heading != null && (
+      {heading !== null && heading !== undefined && (
         <PageHeaderHeading>
           <PageHeaderTitle>{heading}</PageHeaderTitle>
-          {description != null && <PageHeaderDescription>{description}</PageHeaderDescription>}
+          {description !== null && description !== undefined && (
+            <PageHeaderDescription>{description}</PageHeaderDescription>
+          )}
         </PageHeaderHeading>
       )}
-      {actions != null && <PageHeaderActions>{actions}</PageHeaderActions>}
+      {actions !== null && actions !== undefined && (
+        <PageHeaderActions>{actions}</PageHeaderActions>
+      )}
       {children}
     </header>
   )

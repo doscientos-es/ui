@@ -54,36 +54,38 @@ function CustomerList() {
         actions={<Button onPress={() => setOpen(true)}>Nuevo cliente</Button>}
       />
       <Card>
-        <CardContent className="grid gap-4">
-          <Input
-            type="search"
-            aria-label="Buscar clientes"
-            placeholder="Buscar clientes…"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-          />
-          {visible.length ? (
-            <Table>
-              <TableCaption>Clientes disponibles</TableCaption>
-              <TableHeader>
-                <TableRow>
-                  <TableHead scope="col">Nombre</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {visible.map((customer, index) => (
-                  <TableRow key={`${customer}-${index}`}>
-                    <TableCell>{customer}</TableCell>
+        <CardContent>
+          <div className="grid gap-4">
+            <Input
+              type="search"
+              aria-label="Buscar clientes"
+              placeholder="Buscar clientes…"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+            />
+            {visible.length ? (
+              <Table>
+                <TableCaption>Clientes disponibles</TableCaption>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead scope="col">Nombre</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          ) : (
-            <DataViewState>
-              <DataViewStateTitle>Sin resultados</DataViewStateTitle>
-              <DataViewStateDescription>Prueba con otra búsqueda.</DataViewStateDescription>
-            </DataViewState>
-          )}
+                </TableHeader>
+                <TableBody>
+                  {visible.map((customer, index) => (
+                    <TableRow key={`${customer}-${index}`}>
+                      <TableCell>{customer}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+              <DataViewState>
+                <DataViewStateTitle>Sin resultados</DataViewStateTitle>
+                <DataViewStateDescription>Prueba con otra búsqueda.</DataViewStateDescription>
+              </DataViewState>
+            )}
+          </div>
         </CardContent>
       </Card>
       <FormDialog
@@ -92,7 +94,8 @@ function CustomerList() {
         title="Nuevo cliente"
         description="Añade un nombre al listado de ejemplo."
         onSubmit={(event) => {
-          const name = String(new FormData(event.currentTarget).get('name') ?? '').trim()
+          const value = new FormData(event.currentTarget).get('name')
+          const name = typeof value === 'string' ? value.trim() : ''
           if (!name) return
           setCustomers((current) => [...current, name])
           setQuery('')

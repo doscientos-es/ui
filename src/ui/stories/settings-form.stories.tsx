@@ -81,7 +81,7 @@ function SettingsForm() {
             <div>
               <Button type="submit">Guardar cambios</Button>
             </div>
-            {savedName && <p role="status">Cambios guardados: {savedName}.</p>}
+            {savedName && <output>Cambios guardados: {savedName}.</output>}
           </form>
         </CardContent>
       </Card>
