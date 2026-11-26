@@ -18,9 +18,9 @@ export type FormRowProps = {
   /** Marks the label and, with a render function, the control as required. */
   required?: boolean
   /** Supplementary guidance displayed below the control. */
-  hint?: ReactNode
+  description?: ReactNode
   /** Validation message announced to the user. */
-  error?: ReactNode
+  errorMessage?: ReactNode
   className?: string
   /** Render function receives the ID and accessibility props for the control. */
   children: ReactNode | ((controlProps: FormRowControlProps) => ReactNode)
@@ -31,19 +31,19 @@ export function FormRow({
   label,
   htmlFor,
   required,
-  hint,
-  error,
+  description,
+  errorMessage,
   className,
   children,
 }: FormRowProps) {
   const generatedId = useId()
   const controlId = htmlFor ?? generatedId
-  const hintId = hint ? `${controlId}-hint` : undefined
-  const errorId = error ? `${controlId}-error` : undefined
+  const descriptionId = description ? `${controlId}-description` : undefined
+  const errorId = errorMessage ? `${controlId}-error` : undefined
   const controlProps: FormRowControlProps = {
     id: controlId,
     required,
-    'aria-describedby': [hintId, errorId].filter(Boolean).join(' ') || undefined,
+    'aria-describedby': [descriptionId, errorId].filter(Boolean).join(' ') || undefined,
     'aria-invalid': errorId ? true : undefined,
   }
   return (
@@ -60,14 +60,14 @@ export function FormRow({
         )}
       </label>
       {typeof children === 'function' ? children(controlProps) : children}
-      {hint && (
-        <p id={hintId} className="text-muted-foreground text-xs">
-          {hint}
+      {description && (
+        <p id={descriptionId} className="text-muted-foreground text-xs">
+          {description}
         </p>
       )}
-      {error && (
+      {errorMessage && (
         <p id={errorId} role="alert" className="text-destructive text-xs font-medium">
-          {error}
+          {errorMessage}
         </p>
       )}
     </div>

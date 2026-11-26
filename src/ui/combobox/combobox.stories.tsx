@@ -33,7 +33,7 @@ export const Suggestions: Story = {
         items={matchingFruits}
         inputValue={query}
         onInputChange={setQuery}
-        onSelectionChange={(key) => {
+        onChange={(key) => {
           const selectedFruit = fruits.find((fruit) => fruit.id === key)
           if (selectedFruit) setQuery(selectedFruit.name)
         }}

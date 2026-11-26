@@ -13,12 +13,12 @@ describe('SubmitButton', () => {
     expect(screen.getByRole('button', { name: 'Guardar' }).getAttribute('type')).toBe('submit')
   })
 
-  it('announces progress, preserves focus and blocks another activation while loading', async () => {
+  it('announces progress, preserves focus and blocks another activation while pending', async () => {
     const user = userEvent.setup()
     const onPress = vi.fn()
-    const form = (loading = false) => (
+    const form = (isPending = false) => (
       <form onSubmit={(event) => event.preventDefault()}>
-        <SubmitButton loading={loading} loadingLabel="Guardando cambios…" onPress={onPress}>
+        <SubmitButton isPending={isPending} pendingLabel="Guardando cambios…" onPress={onPress}>
           Guardar
         </SubmitButton>
       </form>
@@ -46,15 +46,13 @@ describe('SubmitButton', () => {
     expect(onPress).toHaveBeenCalledOnce()
   })
 
-  it('keeps pendingLabel as a backwards-compatible alias', () => {
+  it('provides a default pending label', () => {
     render(
       <form>
-        <SubmitButton loading pendingLabel="Enviando…">
-          Enviar
-        </SubmitButton>
+        <SubmitButton isPending>Enviar</SubmitButton>
       </form>,
     )
 
-    expect(screen.getByRole('progressbar', { name: 'Enviando…' })).toBeTruthy()
+    expect(screen.getByRole('progressbar', { name: 'Guardando…' })).toBeTruthy()
   })
 })

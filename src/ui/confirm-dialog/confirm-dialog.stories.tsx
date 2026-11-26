@@ -33,7 +33,7 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {}
-export const Pending: Story = { args: { pending: true, confirmLabel: 'Eliminando…' } }
+export const Pending: Story = { args: { isPending: true, pendingLabel: 'Eliminando…' } }
 export const ConfirmationFlow: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement)

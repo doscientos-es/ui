@@ -68,7 +68,7 @@ export const Default: Story = {
 }
 
 export const Loading: Story = {
-  args: { loading: true, loadingLabel: 'Creando registro…' },
+  args: { isPending: true, pendingLabel: 'Creando registro…' },
   render: (args) => (
     <FormDialog {...args}>
       <label htmlFor="pending-name" className="grid gap-2 text-sm">
@@ -94,7 +94,7 @@ export const Error: Story = {
 }
 
 export const SubmitDisabled: Story = {
-  args: { submitDisabled: true },
+  args: { isSubmitDisabled: true },
   render: (args) => (
     <FormDialog {...args} description="Completa los datos obligatorios.">
       <label htmlFor="disabled-name" className="grid gap-2 text-sm">

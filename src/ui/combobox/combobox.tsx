@@ -41,7 +41,7 @@ export function ComboboxContent({ className, ...props }: React.ComponentProps<ty
       className={(state) =>
         cn(
           floatingSurfaceClassName,
-          'max-h-72 w-(--trigger-width) overflow-hidden rounded-xl border border-border bg-background p-1.5 text-foreground',
+          'border-border bg-background text-foreground max-h-72 w-(--trigger-width) overflow-hidden rounded-xl border p-1.5',
           typeof className === 'function' ? className(state) : className,
         )
       }
@@ -78,7 +78,7 @@ export function ComboboxItem<T extends object>({
       data-slot="combobox-item"
       className={(state) =>
         cn(
-          'flex w-full cursor-default items-center justify-between rounded-md px-2 py-2 text-sm outline-none transition-colors data-focused:bg-muted data-focused:text-foreground data-hovered:bg-muted data-disabled:pointer-events-none data-disabled:opacity-50',
+          'data-focused:bg-muted data-focused:text-foreground data-hovered:bg-muted flex w-full cursor-default items-center justify-between rounded-md px-2 py-2 text-sm transition-colors outline-none data-disabled:pointer-events-none data-disabled:opacity-50',
           typeof className === 'function' ? className(state) : className,
         )
       }
@@ -122,7 +122,11 @@ export type AutocompleteComboboxProps<T extends object> = Omit<
   | 'inputValue'
   | 'onInputChange'
   | 'selectedKey'
+  | 'defaultSelectedKey'
   | 'onSelectionChange'
+  | 'value'
+  | 'defaultValue'
+  | 'onChange'
   | 'defaultFilter'
   | 'onKeyDown'
 > & {
@@ -132,8 +136,9 @@ export type AutocompleteComboboxProps<T extends object> = Omit<
   renderItem?: (item: T, query: string) => ReactNode
   inputValue?: string
   onInputChange?: (value: string) => void
-  selectedKey?: Key | null
-  onSelectionChange?: (key: Key | null, item?: T) => void
+  value?: Key | null
+  defaultValue?: Key | null
+  onChange?: (value: Key | null, item?: T) => void
   label?: ReactNode
   description?: ReactNode
   errorMessage?: ReactNode
@@ -152,8 +157,9 @@ export function AutocompleteCombobox<T extends object>({
   renderItem,
   inputValue: controlledInputValue,
   onInputChange,
-  selectedKey,
-  onSelectionChange,
+  value,
+  defaultValue,
+  onChange,
   label,
   description,
   errorMessage,
@@ -201,7 +207,7 @@ export function AutocompleteCombobox<T extends object>({
   const acceptSuggestion = () => {
     if (!suggestedItem || !suggestionLabel) return false
     setInputValue(suggestionLabel)
-    onSelectionChange?.(getItemKey(suggestedItem), suggestedItem)
+    onChange?.(getItemKey(suggestedItem), suggestedItem)
     return true
   }
   const handleKeyDown = (event: Parameters<NonNullable<InputProps['onKeyDown']>>[0]) => {
@@ -220,15 +226,14 @@ export function AutocompleteCombobox<T extends object>({
         )
       }
       items={filteredItems}
-      selectedKey={selectedKey}
+      selectedKey={value}
+      defaultSelectedKey={defaultValue}
       inputValue={inputValue}
       onInputChange={setInputValue}
       onSelectionChange={(key) => {
-        const item = filteredItems.find(
-          (candidate) => String(getItemKey(candidate)) === String(key),
-        )
+        const item = filteredItems.find((candidate) => getItemKey(candidate) === key)
         if (item) setInputValue(getItemLabel(item))
-        onSelectionChange?.(key, item)
+        onChange?.(key, item)
       }}
     >
       {label && <Label className="text-foreground text-sm font-medium">{label}</Label>}

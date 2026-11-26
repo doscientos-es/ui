@@ -11,7 +11,11 @@ export default meta
 type Story = StoryObj<typeof meta>
 export const Default: Story = {
   render: () => (
-    <FormRow label="Nombre" htmlFor="form-row-name" hint="Usa el nombre legal de la empresa.">
+    <FormRow
+      label="Nombre"
+      htmlFor="form-row-name"
+      description="Usa el nombre legal de la empresa."
+    >
       <Input id="form-row-name" placeholder="Acme S.L." />
     </FormRow>
   ),
@@ -21,8 +25,8 @@ export const Invalid: Story = {
     <FormRow
       label="Email"
       required
-      hint="Usa tu correo de trabajo."
-      error="Introduce un email válido."
+      description="Usa tu correo de trabajo."
+      errorMessage="Introduce un email válido."
     >
       {(props) => <Input {...props} type="email" />}
     </FormRow>

@@ -102,7 +102,7 @@ function CustomerList() {
           setOpen(false)
         }}
       >
-        <FormRow label="Nombre" required hint="Usa el nombre completo.">
+        <FormRow label="Nombre" required description="Usa el nombre completo.">
           {(props) => <Input {...props} name="name" />}
         </FormRow>
       </FormDialog>

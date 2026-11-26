@@ -13,7 +13,8 @@ export type ConfirmDialogProps = {
   confirmLabel?: string
   cancelLabel?: string
   destructive?: boolean
-  pending?: boolean
+  isPending?: boolean
+  pendingLabel?: string
   onConfirm: () => void
 }
 
@@ -26,7 +27,8 @@ export function ConfirmDialog({
   confirmLabel = 'Confirmar',
   cancelLabel = 'Cancelar',
   destructive = false,
-  pending = false,
+  isPending = false,
+  pendingLabel,
   onConfirm,
 }: ConfirmDialogProps) {
   return (
@@ -35,21 +37,22 @@ export function ConfirmDialog({
       title={title}
       description={description}
       onOpenChange={(nextOpen) => {
-        if (!pending || nextOpen) onOpenChange(nextOpen)
+        if (!isPending || nextOpen) onOpenChange(nextOpen)
       }}
     >
       <AlertDialogFooter>
         <Button
           variant="outline"
           autoFocus
-          isDisabled={pending}
+          isDisabled={isPending}
           onPress={() => onOpenChange(false)}
         >
           {cancelLabel}
         </Button>
         <Button
           variant={destructive ? 'destructive' : 'default'}
-          isPending={pending}
+          isPending={isPending}
+          pendingLabel={pendingLabel}
           onPress={onConfirm}
         >
           {confirmLabel}

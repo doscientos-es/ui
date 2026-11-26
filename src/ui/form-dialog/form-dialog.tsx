@@ -25,10 +25,10 @@ export type FormDialogProps = {
   onSubmit: FormEventHandler<HTMLFormElement>
   submitLabel?: string
   cancelLabel?: string
-  loadingLabel?: string
+  pendingLabel?: string
   /** Blocks submission and every dismissal path while the app is saving. */
-  loading?: boolean
-  submitDisabled?: boolean
+  isPending?: boolean
+  isSubmitDisabled?: boolean
   /** Ask before dismissing edits that the application has not saved. */
   isDirty?: boolean
   /** Override the copy used when confirming the dismissal of unsaved edits. */
@@ -58,9 +58,9 @@ export function FormDialog({
   onSubmit,
   submitLabel = 'Guardar',
   cancelLabel = 'Cancelar',
-  loadingLabel,
-  loading = false,
-  submitDisabled = false,
+  pendingLabel,
+  isPending = false,
+  isSubmitDisabled = false,
   isDirty = false,
   discardConfirmation,
   size = 'md',
@@ -72,11 +72,11 @@ export function FormDialog({
   const [discardOpen, setDiscardOpen] = useState(false)
 
   useEffect(() => {
-    if (!open || !isDirty || loading) setDiscardOpen(false)
-  }, [open, isDirty, loading])
+    if (!open || !isDirty || isPending) setDiscardOpen(false)
+  }, [open, isDirty, isPending])
 
   function requestOpenChange(nextOpen: boolean) {
-    if (loading && !nextOpen) return
+    if (isPending && !nextOpen) return
     if (!nextOpen && isDirty) setDiscardOpen(true)
     else onOpenChange(nextOpen)
   }
@@ -87,18 +87,18 @@ export function FormDialog({
         <DialogContent
           size={size}
           className={cn('grid-rows-[minmax(0,1fr)] gap-0 overflow-hidden p-0', className)}
-          isDismissable={isDismissable && !loading}
-          isKeyboardDismissDisabled={loading}
-          showCloseButton={!loading}
+          isDismissable={isDismissable && !isPending}
+          isKeyboardDismissDisabled={isPending}
+          showCloseButton={!isPending}
         >
           <form
             {...formProps}
             data-slot="form-dialog"
-            aria-busy={loading || undefined}
+            aria-busy={isPending || undefined}
             className={cn('flex min-h-0 flex-col', formProps?.className)}
             onSubmit={(event) => {
               event.preventDefault()
-              if (!loading && !submitDisabled) onSubmit(event)
+              if (!isPending && !isSubmitDisabled) onSubmit(event)
             }}
           >
             <OverlayHeader
@@ -119,16 +119,16 @@ export function FormDialog({
             <DialogFooter className="m-0 shrink-0">
               <Button
                 variant="outline"
-                isDisabled={loading}
+                isDisabled={isPending}
                 onPress={() => requestOpenChange(false)}
               >
                 {cancelLabel}
               </Button>
               <SubmitButton
                 size="default"
-                loading={loading}
-                loadingLabel={loadingLabel}
-                isDisabled={submitDisabled}
+                isPending={isPending}
+                pendingLabel={pendingLabel}
+                isDisabled={isSubmitDisabled}
               >
                 {submitLabel}
               </SubmitButton>
@@ -137,7 +137,7 @@ export function FormDialog({
         </DialogContent>
       </DialogRoot>
       <ConfirmDialog
-        open={open && isDirty && !loading && discardOpen}
+        open={open && isDirty && !isPending && discardOpen}
         onOpenChange={setDiscardOpen}
         title={discardConfirmation?.title ?? '¿Descartar los cambios?'}
         description={
@@ -148,7 +148,7 @@ export function FormDialog({
         cancelLabel={discardConfirmation?.cancelLabel ?? 'Seguir editando'}
         destructive
         onConfirm={() => {
-          if (loading) return
+          if (isPending) return
           setDiscardOpen(false)
           onOpenChange(false)
         }}

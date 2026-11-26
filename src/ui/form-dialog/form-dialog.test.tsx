@@ -157,11 +157,11 @@ describe('FormDialog', () => {
     render(
       <FormDialog
         {...defaults}
-        loading
+        isPending
         isDismissable
         onOpenChange={onOpenChange}
         onSubmit={onSubmit}
-        loadingLabel="Creando…"
+        pendingLabel="Creando…"
       >
         Campos
       </FormDialog>,
@@ -180,11 +180,11 @@ describe('FormDialog', () => {
     expect(onOpenChange).not.toHaveBeenCalled()
   })
 
-  it('disables only submission when submitDisabled is set', async () => {
+  it('disables only submission when isSubmitDisabled is set', async () => {
     const onSubmit = vi.fn()
     const onOpenChange = vi.fn()
     render(
-      <FormDialog {...defaults} submitDisabled onSubmit={onSubmit} onOpenChange={onOpenChange}>
+      <FormDialog {...defaults} isSubmitDisabled onSubmit={onSubmit} onOpenChange={onOpenChange}>
         Campos
       </FormDialog>,
     )
@@ -194,11 +194,11 @@ describe('FormDialog', () => {
     expect(onOpenChange).toHaveBeenCalledWith(false)
   })
 
-  it('re-enables dismissal and submission when loading finishes', async () => {
+  it('re-enables dismissal and submission when the pending operation finishes', async () => {
     const onSubmit = vi.fn()
     const onOpenChange = vi.fn()
     const { rerender } = render(
-      <FormDialog {...defaults} loading onSubmit={onSubmit} onOpenChange={onOpenChange}>
+      <FormDialog {...defaults} isPending onSubmit={onSubmit} onOpenChange={onOpenChange}>
         Campos
       </FormDialog>,
     )

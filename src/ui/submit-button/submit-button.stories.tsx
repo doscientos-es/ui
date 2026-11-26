@@ -7,4 +7,4 @@ const meta = { title: 'Components/Forms/Submit Button', component: SubmitButton 
 export default meta
 type Story = StoryObj<typeof meta>
 export const Default: Story = { args: { children: 'Guardar cambios' } }
-export const Loading: Story = { args: { children: 'Guardar cambios', loading: true } }
+export const Loading: Story = { args: { children: 'Guardar cambios', isPending: true } }

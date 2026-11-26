@@ -63,8 +63,8 @@ function SettingsForm() {
             <FormRow
               label="Nombre del espacio"
               required
-              hint="Se muestra a los miembros del equipo."
-              error={error}
+              description="Se muestra a los miembros del equipo."
+              errorMessage={error}
             >
               {(props) => (
                 <Input

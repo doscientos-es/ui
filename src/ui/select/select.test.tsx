@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectList, SelectTrigger, SelectVal
 
 function Example({ disabled = false }: { disabled?: boolean }) {
   return (
-    <Select aria-label="Cliente" defaultSelectedKey="ana" isDisabled={disabled}>
+    <Select aria-label="Cliente" defaultValue="ana" isDisabled={disabled}>
       <SelectTrigger
         className={(state) => (state.isDisabled ? 'custom-disabled' : 'custom-trigger')}
       >

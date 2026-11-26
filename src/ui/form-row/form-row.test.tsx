@@ -5,7 +5,7 @@ import { FormRow } from './form-row'
 describe('FormRow', () => {
   it('associates label and error text', () => {
     render(
-      <FormRow label="Nombre" htmlFor="name" error="Campo obligatorio">
+      <FormRow label="Nombre" htmlFor="name" errorMessage="Campo obligatorio">
         <input id="name" />
       </FormRow>,
     )
@@ -15,7 +15,7 @@ describe('FormRow', () => {
 
   it('connects a generated id, hint, validation and required state to the rendered control', () => {
     const { rerender } = render(
-      <FormRow label="Nombre" hint="Nombre legal" error="Campo obligatorio" required>
+      <FormRow label="Nombre" description="Nombre legal" errorMessage="Campo obligatorio" required>
         {(props) => <input {...props} />}
       </FormRow>,
     )
@@ -23,24 +23,24 @@ describe('FormRow', () => {
     const id = input.id
     expect(input.required).toBe(true)
     expect(input.getAttribute('aria-invalid')).toBe('true')
-    expect(input.getAttribute('aria-describedby')).toBe(`${id}-hint ${id}-error`)
-    expect(screen.getByText('Nombre legal').id).toBe(`${id}-hint`)
+    expect(input.getAttribute('aria-describedby')).toBe(`${id}-description ${id}-error`)
+    expect(screen.getByText('Nombre legal').id).toBe(`${id}-description`)
     expect(screen.getByRole('alert').id).toBe(`${id}-error`)
 
     rerender(
-      <FormRow label="Nombre" hint="Nombre legal">
+      <FormRow label="Nombre" description="Nombre legal">
         {(props) => <input {...props} />}
       </FormRow>,
     )
     expect(input.id).toBe(id)
-    expect(input.getAttribute('aria-describedby')).toBe(`${id}-hint`)
+    expect(input.getAttribute('aria-describedby')).toBe(`${id}-description`)
     expect(input.hasAttribute('aria-invalid')).toBe(false)
     expect(input.required).toBe(false)
   })
 
   it('uses an explicit id in the render function', () => {
     render(
-      <FormRow label="Email" htmlFor="email" error="Email inválido">
+      <FormRow label="Email" htmlFor="email" errorMessage="Email inválido">
         {(props) => <input {...props} />}
       </FormRow>,
     )

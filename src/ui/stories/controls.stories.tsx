@@ -36,14 +36,9 @@ export const Selection: Story = {
 
 export const SelectField: Story = {
   render: function Render() {
-    const [selectedKey, setSelectedKey] = useState('medium')
+    const [value, setValue] = useState<string | number | null>('medium')
     return (
-      <Select
-        aria-label="Prioridad"
-        selectedKey={selectedKey}
-        onSelectionChange={(key) => setSelectedKey(String(key ?? 'medium'))}
-        className="w-72"
-      >
+      <Select aria-label="Prioridad" value={value} onChange={setValue} className="w-72">
         <SelectTrigger>
           <SelectValue />
         </SelectTrigger>

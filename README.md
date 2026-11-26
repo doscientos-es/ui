@@ -94,7 +94,7 @@ componer todos sus slots. Para una estructura especial, siguen disponibles
 etiquetable, no sobre un contenedor. Si necesitas un ID estable, pasa `htmlFor`.
 
 ```tsx
-<FormRow label="Nombre" required hint="Nombre legal." error={error}>
+<FormRow label="Nombre" required description="Nombre legal." errorMessage={error}>
   {(controlProps) => <Input {...controlProps} name="name" />}
 </FormRow>
 ```
@@ -104,6 +104,18 @@ el mismo `id` y conectar manualmente `aria-describedby`, `aria-invalid` y `requi
 Para controles compuestos como `Select`, usa su API de etiquetado propia, no esta
 función para un input nativo. En cualquier receta conserva nombres accesibles y
 comprueba teclado, estados de carga, error y vacío.
+
+### Convenciones de API
+
+- La ayuda de un campo es `description` y el mensaje de validación `errorMessage`.
+- En acciones y diálogos, `isPending` y `pendingLabel` indican una operación en curso;
+  para controles interactivos, `isDisabled` e `isInvalid` describen su estado.
+  Los inputs HTML nativos conservan sus atributos `disabled`, `required` y eventos nativos.
+- En `Select`, `Combobox`, `AutocompleteCombobox`, `MultiSelectCombobox` y
+  `SegmentedControl`, la selección usa `value` / `onChange` o `defaultValue`.
+  En comboboxes, `inputValue` / `onInputChange` controla por separado el texto buscado.
+  La selección simple usa una clave o `null`; la múltiple, un array de claves.
+  Los componentes de composición conservan también la API de React Aria.
 
 ## Diálogos y controles cómodos por defecto
 
@@ -135,8 +147,8 @@ Tres patrones de bajo coste componiendo las primitives existentes, sin dependenc
   Recibe `open`, `onOpenChange`, `onSubmit` y los campos como `children`.
   Previene la navegación del submit, conserva validación HTML y entrega el evento
   para leer `FormData`. La app guarda, muestra errores y cierra **solo tras el éxito**.
-- `loading` bloquea submit, cancelación, cierre, Escape y clicks fuera mientras se
-  guarda. `submitDisabled` solo bloquea el submit; `loadingLabel`, `submitLabel` y
+- `isPending` bloquea submit, cancelación, cierre, Escape y clicks fuera mientras se
+  guarda. `isSubmitDisabled` solo bloquea el submit; `pendingLabel`, `submitLabel` y
   `cancelLabel` permiten adaptar el copy. Pasa el estado pendiente de tu acción.
 - Conserva el ancho compacto de `Dialog`; usa `size` y `bodyClassName` para ampliar
   o distribuir campos. `formProps` permite `ref`, `id`, `noValidate` y atributos
