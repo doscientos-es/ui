@@ -39,15 +39,26 @@ function LoginRecipe() {
             <FieldGroup>
               <label className="grid gap-1.5 text-sm font-medium">
                 Email
-                <Input type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                />
               </label>
               <label className="grid gap-1.5 text-sm font-medium">
                 Contraseña
-                <PasswordInput value={password} onChange={(event) => setPassword(event.target.value)} />
+                <PasswordInput
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                />
               </label>
             </FieldGroup>
-            <AuthMessage tone="info">Puedes recuperar la contraseña desde el enlace de acceso.</AuthMessage>
-            <Button type="submit" isDisabled={!email || !password}>Entrar</Button>
+            <AuthMessage tone="info">
+              Puedes recuperar la contraseña desde el enlace de acceso.
+            </AuthMessage>
+            <Button type="submit" isDisabled={!email || !password}>
+              Entrar
+            </Button>
           </form>
         </CardContent>
       </AuthCard>

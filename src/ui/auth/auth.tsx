@@ -31,18 +31,33 @@ export function AuthShell({
   contentClassName,
 }: AuthShellProps) {
   return (
-    <main className={cn('relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10', className)}>
-      {background ? <div className="pointer-events-none absolute inset-0" aria-hidden="true">{background}</div> : null}
+    <main
+      className={cn(
+        'relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10',
+        className,
+      )}
+    >
+      {background ? (
+        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+          {background}
+        </div>
+      ) : null}
       <div className={cn('relative z-10 w-full max-w-sm', contentClassName)}>
         {logo ? <div className="mb-8 flex justify-center">{logo}</div> : null}
         {title || description ? (
           <header className="mb-6 text-center">
-            {title ? <h1 className="text-xl font-semibold tracking-tight text-foreground">{title}</h1> : null}
-            {description ? <p className="mt-1.5 text-sm text-muted-foreground">{description}</p> : null}
+            {title ? (
+              <h1 className="text-xl font-semibold tracking-tight text-foreground">{title}</h1>
+            ) : null}
+            {description ? (
+              <p className="mt-1.5 text-sm text-muted-foreground">{description}</p>
+            ) : null}
           </header>
         ) : null}
         {children}
-        {footer ? <footer className="mt-6 text-center text-xs text-muted-foreground">{footer}</footer> : null}
+        {footer ? (
+          <footer className="mt-6 text-center text-xs text-muted-foreground">{footer}</footer>
+        ) : null}
       </div>
     </main>
   )
@@ -59,19 +74,38 @@ export type AuthProviderButtonProps = Omit<ButtonProps, 'children'> & {
 }
 
 /** Consistent OAuth/provider action without knowing which provider is being used. */
-export function AuthProviderButton({ children, provider, variant = 'outline', className, ...props }: AuthProviderButtonProps) {
+export function AuthProviderButton({
+  children,
+  provider,
+  variant = 'outline',
+  className,
+  ...props
+}: AuthProviderButtonProps) {
   return (
     <Button variant={variant} className={cn('w-full', className)} {...props}>
-      {provider ? <span className="flex size-4 shrink-0 items-center justify-center" aria-hidden="true">{provider}</span> : null}
+      {provider ? (
+        <span className="flex size-4 shrink-0 items-center justify-center" aria-hidden="true">
+          {provider}
+        </span>
+      ) : null}
       {children}
     </Button>
   )
 }
 
 /** Accessible visual separator between provider and password/email actions. */
-export function AuthDivider({ children = 'o', className }: { children?: ReactNode; className?: string }) {
+export function AuthDivider({
+  children = 'o',
+  className,
+}: {
+  children?: ReactNode
+  className?: string
+}) {
   return (
-    <div className={cn('flex items-center gap-3 text-xs text-muted-foreground', className)} role="separator">
+    <div
+      className={cn('flex items-center gap-3 text-xs text-muted-foreground', className)}
+      role="separator"
+    >
       <span className="h-px flex-1 bg-border" />
       <span>{children}</span>
       <span className="h-px flex-1 bg-border" />
@@ -129,7 +163,11 @@ export function AuthPasswordRequirements({
     <ul aria-label={label} className={cn('grid gap-1 text-xs text-muted-foreground', className)}>
       {items.map((item) => (
         <li key={item.id} className={cn('flex items-center gap-1.5', item.met && 'text-success')}>
-          {item.met ? <Check className="size-3.5" aria-hidden="true" /> : <span className="size-1.5 rounded-full bg-current" aria-hidden="true" />}
+          {item.met ? (
+            <Check className="size-3.5" aria-hidden="true" />
+          ) : (
+            <span className="size-1.5 rounded-full bg-current" aria-hidden="true" />
+          )}
           <span>{item.label}</span>
         </li>
       ))}
