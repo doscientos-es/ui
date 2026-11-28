@@ -2,11 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 import { expect, userEvent, within } from 'storybook/test'
 
-import { Button } from '../ui/button/button'
-import { CardContent } from '../ui/card/card'
-import { FieldGroup } from '../ui/field/field'
-import { Input } from '../ui/input/input'
-import { PasswordInput } from '../ui/password-input/password-input'
 import {
   AuthCard,
   AuthDivider,
@@ -15,6 +10,11 @@ import {
   AuthProviderButton,
   AuthShell,
 } from '../ui/auth/auth'
+import { Button } from '../ui/button/button'
+import { CardContent } from '../ui/card/card'
+import { FieldGroup } from '../ui/field/field'
+import { Input } from '../ui/input/input'
+import { PasswordInput } from '../ui/password-input/password-input'
 
 function GoogleMark() {
   return <span className="text-xs font-bold">G</span>

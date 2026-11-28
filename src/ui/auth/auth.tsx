@@ -47,16 +47,16 @@ export function AuthShell({
         {title || description ? (
           <header className="mb-6 text-center">
             {title ? (
-              <h1 className="text-xl font-semibold tracking-tight text-foreground">{title}</h1>
+              <h1 className="text-foreground text-xl font-semibold tracking-tight">{title}</h1>
             ) : null}
             {description ? (
-              <p className="mt-1.5 text-sm text-muted-foreground">{description}</p>
+              <p className="text-muted-foreground mt-1.5 text-sm">{description}</p>
             ) : null}
           </header>
         ) : null}
         {children}
         {footer ? (
-          <footer className="mt-6 text-center text-xs text-muted-foreground">{footer}</footer>
+          <footer className="text-muted-foreground mt-6 text-center text-xs">{footer}</footer>
         ) : null}
       </div>
     </main>
@@ -106,9 +106,9 @@ export function AuthDivider({
       className={cn('flex items-center gap-3 text-xs text-muted-foreground', className)}
       role="separator"
     >
-      <span className="h-px flex-1 bg-border" />
+      <span className="bg-border h-px flex-1" />
       <span>{children}</span>
-      <span className="h-px flex-1 bg-border" />
+      <span className="bg-border h-px flex-1" />
     </div>
   )
 }
